@@ -1,27 +1,28 @@
 import db from '../utils/db.js'
-
 import Account from '../models/Account.model.js'
 
 export default class AccountDAO {
     async getAccountAll(){
-        const rows = await db('users').select('*');
+        const rows = await db('account').select('*');
         return rows.map(Account.fromRow);
     }
     async getAccount(userName, passWord) {
-        const rows = await db('users').where({ userName,passWord }).select('*');
-        if (rows.length === 0) {
-            return false;
-        }
-        return true;
+        const row = await db('account')
+            .where({
+                username: userName,
+                password: passWord
+            })
+            .first();
+        return row ? Account.fromRow(row) : null;
     }
     async createAccount(userName, passWord, name) {
         const account = new Account(null, userName, passWord, name);
-        const [id] = await db('users').insert({userName, passWord, name});
+        const [id] = await db('account').insert({userName, passWord, name});
         account.id = id;
         return account;
     }
     async updateAccount(id, passWord) {
-        const rows = await db('users')
+        const rows = await db('account')
             .where({ id })
             .update({ password:passWord });
         if (rows === 0) {
@@ -30,7 +31,7 @@ export default class AccountDAO {
         return this.getAccountById(id);
     }
     async deleteAccount(id) {
-        const rows = await db('users').where({ id }).del();
+        const rows = await db('account').where({ id }).del();
         return rows > 0;
     }
 }

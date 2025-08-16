@@ -1,13 +1,14 @@
 export default class Account{
 
-    constructor(id,userName, passWord, name)
+    constructor(id, username, email, password, classroomLimit)
     {
         this.id = id;
-        this.userName = userName;
-        this.passWord = passWord;
-        this.name = name;
+        this.userName = username;
+        this.email = email;
+        this.passWord = password;
+        this.classroomLimit = classroomLimit;
     }
     static fromRow(row) {
-        return new Account(row.id, row.userName, row.passWord, row.name);
+        return new Account(row.id, row.username, row.email, row.password, row.classroomLimit);
     }
 }
