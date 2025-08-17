@@ -17,6 +17,8 @@ export default defineConfig({
       '#services': resolve(__dirname, 'src/services'),
       '#routes': resolve(__dirname, 'src/routes'),
       '#pages': resolve(__dirname, 'src/pages'),
+      '#publics': resolve(__dirname,'public'),
+      '#utils': resolve(__dirname,'src/utils')
     }
   },
   server:{
