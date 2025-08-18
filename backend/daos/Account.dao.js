@@ -6,10 +6,10 @@ export default class AccountDAO {
         const rows = await db('account').select('*');
         return rows.map(Account.fromRow);
     }
-    async getAccount(userName, passWord) {
+    async getAccount(email, passWord) {
         const row = await db('account')
             .where({
-                username: userName,
+                email: email,
                 password: passWord
             })
             .first();

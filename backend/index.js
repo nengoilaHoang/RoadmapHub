@@ -9,7 +9,10 @@ const app = express()
 app.get('/', (req, res) => {
   res.send('Hello World')
 })
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000", // FE port
+  credentials: true
+}));
 app.use(express.json())
 // app.use('/api/accounts', auRoutes)
 app.use('/api/auth', auRoutes)

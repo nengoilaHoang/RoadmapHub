@@ -8,8 +8,8 @@ export default class AccountService {
         return await this.accountDAO.getAccountAll();
     }
 
-    async login(userName, passWord) {
-        return await this.accountDAO.getAccount(userName, passWord);
+    async login(email, passWord) {
+        return await this.accountDAO.getAccount(email, passWord);
     }
 
     async createAccount(userName, passWord, name) {
