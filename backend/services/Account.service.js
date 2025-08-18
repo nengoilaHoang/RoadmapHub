@@ -23,4 +23,12 @@ export default class AccountService {
     async deleteAccount(id) {
         return await this.accountDAO.deleteAccount(id);
     }
+
+    async getRefreshTokenById(accountId) {
+        return await this.accountDAO.getRefreshTokenById(accountId);
+    }
+
+    async setRefreshToken(accountId, refreshToken) {
+        return await this.accountDAO.setRefreshToken(accountId, refreshToken);
+    }
 }
