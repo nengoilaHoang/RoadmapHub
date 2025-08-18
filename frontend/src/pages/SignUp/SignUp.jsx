@@ -1,18 +1,31 @@
 
 import {GoogleLogin} from '@react-oauth/google'
+import AlertError from '#components/SignUp/AlertError.jsx';
 import {jwtDecode} from "jwt-decode"
 import { useState } from 'react';
 import api from '#utils/api.js'
+import { useNavigate } from 'react-router-dom';
 export default function SignUp() {
 
     const [email,setEmail] = useState("");
-    const [fullName,setFullName] = useState("");
-    const [password,setPassWord] = useState("")
-    // const navigate = useNav
+    const [fullname,setFullName] = useState("");
+    const [password,setPassWord] = useState("");
+    const [alertEmail,setAlertEmail] = useState(false);
+    const [contentError,setContentError] = useState("")
+    const navigate = useNavigate();
     // const clientSecret = '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'
-    const handleGoogleSuccess = (credentialResponse) => {
+    const handleGoogleSuccess = async (credentialResponse) => {
         console.log(credentialResponse);
         console.log(jwtDecode(credentialResponse.credential));
+        const decode = jwtDecode(credentialResponse.credential);
+        const response = await api.post("/accounts/signup-google",{email:decode.email,password:decode.sub,fullname:decode.name})
+        console.log(response)
+        if(!response.data.success){
+            navigate('/login');
+        }
+        else{
+            navigate('/');
+        }
         // Xử lý đăng nhập thành công
     };
 
@@ -20,10 +33,30 @@ export default function SignUp() {
         console.log('Login Failed');
         // Xử lý đăng nhập thất bại
     };
-    const handleSubmit =(e)=>{
+    const handleSubmit =async (e)=>{
         e.preventDefault();
-        console.log(email,password,fullName)
-        axios.post("/accounts/login",{email:email,password:password,fullName:fullName})
+        // console.log(email,password,fullname)
+       
+        try {
+            const response = await api.post("/accounts/verify-email",{email:email,password:password,fullname:fullname});
+            if(response.data.success)
+            {
+                 navigate(`/verify/${email}`,{
+                    state:{
+                    email:email,
+                    password:password,
+                    fullname:fullname
+                }
+                })
+            }
+            else{
+                setAlertEmail(true);
+                setContentError(response.data.message)
+            }
+            // console.log(response)
+        } catch (err) {
+            console.log(err)}
+      
     }
 
     return (
@@ -50,17 +83,19 @@ export default function SignUp() {
                     <div className="flex-grow-1 border-bottom"></div>
                 </div>
 
-                <div class="mb-3">
-                    <label for="fullName" class="form-label fs-4 fw-bold">Full Name</label>
-                    <input type="text" onChange={(e)=>setFullName(e.target.value)} class="form-control form-control-lg" id="fullName" placeholder="full name" required/>
+                <div className="mb-3">
+                    <label htmlFor="fullName" className="form-label fs-4 fw-bold">Full Name</label>
+                    <input type="text" onChange={(e)=>setFullName(e.target.value)} className="form-control form-control-lg" id="fullName" placeholder="full name" required/>
                 </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label fs-4 fw-bold">Email address</label>
-                    <input type="email" onChange={(e)=>setEmail(e.target.value)} class="form-control form-control-lg" id="email" placeholder="email" required/>
+               
+                <div className="mb-3">
+                    <label htmlFor="email" className="form-label fs-4 fw-bold">Email address</label>
+                    <input type="email" onChange={(e)=>setEmail(e.target.value)} className="form-control form-control-lg" id="email" placeholder="email" required/>
                 </div>
-                <div class="mb-3 ">
-                    <label for="password" class="form-label fs-4 fw-bold">Password</label>
-                    <input type="password" onChange={(e)=>setPassWord(e.target.value)} class="form-control form-control-lg" id="password" placeholder="password" required />
+                {alertEmail?<AlertError content={contentError}/>:""}
+                <div className="mb-3 ">
+                    <label htmlFor="password" className="form-label fs-4 fw-bold">Password</label>
+                    <input type="password" onChange={(e)=>setPassWord(e.target.value)} className="form-control form-control-lg" id="password" placeholder="password" required />
                 </div>
                 <button type="submit" className="btn btn-dark fs-4 fw-bold">Verify Email</button>
                 <div className="mt-3">Already have an account? <a href='/login' className="fw-bold text-decoration-none">Login</a></div>
