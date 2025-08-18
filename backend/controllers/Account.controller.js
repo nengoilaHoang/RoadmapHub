@@ -85,4 +85,16 @@ export default class AccountController {
         }
         return res.status(401).json({ status: false, message: "Invalid refresh token"});
     };
+
+    static checkLogin = async (req, res, next) => {
+        console.log(req.headers.authorization);
+        console.log("Check login request received", req.user);
+        if (req.user) {
+            console.log("User is logged in", req.user);
+            return res.status(200).json({ status: true, message: "User is logged in", user: req.user });
+        }
+        else {
+            return res.status(401).json({ status: false, message: "User is not logged in" });
+        }
+    }
 }
