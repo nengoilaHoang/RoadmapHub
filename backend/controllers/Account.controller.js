@@ -2,6 +2,7 @@ import AccountService from "../services/Account.service.js";
 import AccountDAO from "../daos/Account.dao.js";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import bcrypt from "bcrypt";
 dotenv.config();
 const accountService = new AccountService(new AccountDAO());
 export default class AccountController {
@@ -24,7 +25,10 @@ export default class AccountController {
             };
              // Ký token (expiresIn = thời hạn, ví dụ 1h)
             const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
-            return res.status(200).json({status: true, message: "Login successful", account, token});
+            //tạo và hashed mã pin
+            const pin = Math.floor(100000 + Math.random() * 900000).toString();
+            const hashedPin = await bcrypt.hash(pin, parseInt(process.env.BCRYPT_SALT_ROUNDS));
+            return res.status(200).json({status: true, message: "Login successful", account, token, pin, hashedPin});
         }
     }
 }

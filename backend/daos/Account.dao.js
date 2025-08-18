@@ -34,4 +34,17 @@ export default class AccountDAO {
         const rows = await db('account').where({ id }).del();
         return rows > 0;
     }
+    async savePinForAccount(accountId, hashedPin, pinExpire) {
+        const rows = await db('account')
+            .where({ id: accountId })
+            .update({ pin: hashedPin, pinExpire: pinExpire });
+        return rows > 0;
+    }
+    async getHashedPinForAccount(accountId) {
+        const row = await db('account')
+            .where({ id: accountId })
+            .select('pin')
+            .first();
+        return row ? row.pin : null;
+    }
 }
