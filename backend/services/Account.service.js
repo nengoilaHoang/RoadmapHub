@@ -1,26 +1,30 @@
 import AccountDAO from '../daos/Account.dao.js';
-export default class AccountService {
+class AccountService {
     constructor(accountDAO) {
-        this.accountDAO = accountDAO;
+        this.AccountDAO = accountDAO;
     }
 
     async getAllAccounts() {
-        return await this.accountDAO.getAccountAll();
+        return await AccountDAO.getAccountAll();
     }
 
     async login(userName, passWord) {
-        return await this.accountDAO.getAccount(userName, passWord);
+        return await AccountDAO.getAccount(userName, passWord);
     }
 
-    async createAccount(userName, passWord, name) {
-        return await this.accountDAO.createAccount(userName, passWord, name);
+    async createAccount (email, username, password){
+        return await AccountDAO.createAccount(email,username,password);
+    }
+    async checkExitAccount(email){
+        return await AccountDAO.checkExitAccount(email);
     }
 
     async updateAccount(id, passWord) {
-        return await this.accountDAO.updateAccount(id,passWord);
+        return await AccountDAO.updateAccount(id,passWord);
     }
 
     async deleteAccount(id) {
-        return await this.accountDAO.deleteAccount(id);
+        return await AccountDAO.deleteAccount(id);
     }
 }
+export default new AccountService(AccountDAO)
