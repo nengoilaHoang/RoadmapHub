@@ -10,44 +10,50 @@ dotenv.config();
 const accountService = new AccountService(new AccountDAO());
 export default class AccountController {
     static login = async (req,res,next)=>{
-        console.log("Login request received", req.body);
-        const {email, passWord, type} = req.body;
-        let account;
-        if(type === 'normal'){
-                if(!email || !passWord) {
-                return res.status(400).json({status: false, message: "Email and password are required"});
+        if(req.user) {
+            console.log("User is already logged in");
+            return res.status(200).json({status: true, message: "User is already logged in"});
+        }
+        else{
+            console.log("Login request received", req.body);
+            const {email, passWord, type} = req.body;
+            let account;
+            if(type === 'normal'){
+                    if(!email || !passWord) {
+                    return res.status(400).json({status: false, message: "Email and password are required"});
+                }
+                account = await accountService.login(email, passWord)
             }
-            account = await accountService.login(email, passWord)
-        }
-        else if(type === 'google') {
-            // Handle Google login
-        }
-        if(!account) {
-            return res.status(401).json({status: false, message: "Invalid username or password"});
-        }
-        else {
-            // Tạo payload cho token
-            const payload = {
-                id: account.id,
-                userName: account.userName,
-                email: account.email
-            };
-            // Ký token (expiresIn = thời hạn, ví dụ 1h)
-            const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
-            let encodeToken = CryptoJS.AES.encrypt(token, process.env.CRYPTO_SECRET).toString();
-            const refreshToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
-            // Lưu refreshToken vào cơ sở dữ liệu
-            const result = await accountService.setRefreshToken(account.id, refreshToken);
-            console.log("Update Refresh Token result:", result);
-            let encodeRefreshToken = CryptoJS.AES.encrypt(refreshToken, process.env.CRYPTO_SECRET).toString();
-            //tạo và hashed mã pin
-            const pin = Math.floor(100000 + Math.random() * 900000).toString();
-            let hashedPin = await bcrypt.hash(pin, parseInt(process.env.BCRYPT_SALT_ROUNDS));
-            // gửi pin qua mail
-            const text = `Hi! There, this is your pin code: ${pin}. Please use this pin to verify your login. The pin is valid for 10 minutes. If you did not request this, please ignore this email.`;
-            SendEmail(account.email, text);
-            //return
-            return res.status(200).json({status: true, message: "Login successful", account, hashedPin, encodeToken, encodeRefreshToken});
+            else if(type === 'google') {
+                // Handle Google login
+            }
+            if(!account) {
+                return res.status(401).json({status: false, message: "Invalid username or password"});
+            }
+            else {
+                // Tạo payload cho token
+                const payload = {
+                    id: account.id,
+                    userName: account.userName,
+                    email: account.email
+                };
+                // Ký token (expiresIn = thời hạn, ví dụ 1h)
+                const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
+                let encodeToken = CryptoJS.AES.encrypt(token, process.env.CRYPTO_SECRET).toString();
+                const refreshToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
+                // Lưu refreshToken vào cơ sở dữ liệu
+                const result = await accountService.setRefreshToken(account.id, refreshToken);
+                console.log("Update Refresh Token result:", result);
+                let encodeRefreshToken = CryptoJS.AES.encrypt(refreshToken, process.env.CRYPTO_SECRET).toString();
+                //tạo và hashed mã pin
+                const pin = Math.floor(100000 + Math.random() * 900000).toString();
+                let hashedPin = await bcrypt.hash(pin, parseInt(process.env.BCRYPT_SALT_ROUNDS));
+                // gửi pin qua mail
+                const text = `Hi! There, this is your pin code: ${pin}. Please use this pin to verify your login. The pin is valid for 10 minutes. If you did not request this, please ignore this email.`;
+                SendEmail(account.email, text);
+                //return
+                return res.status(200).json({status: true, message: "Login successful", account, hashedPin, encodeToken, encodeRefreshToken});
+            }
         }
     };
     static loginVerify = async (req, res, next) => {
