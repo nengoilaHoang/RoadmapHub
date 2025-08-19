@@ -6,7 +6,7 @@ const authenticate = (req, res, next) => {
     const token = authHeader.split(' ')[1];
     try {
       const payload = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = payload; // Set user nếu token hợp lệ
+      req.authenticate = payload; // Set user nếu token hợp lệ
     } catch (e) {
       // Token sai hoặc hết hạn, bỏ qua không lỗi
     }

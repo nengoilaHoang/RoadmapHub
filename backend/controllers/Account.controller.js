@@ -10,7 +10,7 @@ dotenv.config();
 const accountService = new AccountService(new AccountDAO());
 export default class AccountController {
     static login = async (req,res,next)=>{
-        if(req.user) {
+        if(req.authenticate) {
             console.log("User is already logged in");
             return res.status(200).json({status: true, message: "User is already logged in"});
         }
