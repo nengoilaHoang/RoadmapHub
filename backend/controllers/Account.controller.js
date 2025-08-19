@@ -7,9 +7,9 @@ import CryptoJS from "crypto-js";
 import nodemailer from 'nodemailer';
 import { SendEmail } from "../middlewares/SendEmailMiddleWare.js";
 dotenv.config();
-const accountService = new AccountService(new AccountDAO());
+//const accountService = new AccountService(new AccountDAO());
 class AccountController {
-    static login = async (req,res,next)=>{
+    login = async (req,res,next)=>{
         if(req.authenticate) {
             console.log("User is already logged in");
             return res.status(200).json({status: true, message: "User is already logged in"});
@@ -22,7 +22,7 @@ class AccountController {
                     if(!email || !passWord) {
                     return res.status(400).json({status: false, message: "Email and password are required"});
                 }
-                account = await accountService.login(email, passWord)
+                account = await AccountService.login(email, passWord)
             }
             else if(type === 'google') {
                 // Handle Google login
@@ -42,7 +42,7 @@ class AccountController {
                 let encodeToken = CryptoJS.AES.encrypt(token, process.env.CRYPTO_SECRET).toString();
                 const refreshToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
                 // Lưu refreshToken vào cơ sở dữ liệu
-                const result = await accountService.setRefreshToken(account.id, refreshToken);
+                const result = await AccountService.setRefreshToken(account.id, refreshToken);
                 console.log("Update Refresh Token result:", result);
                 let encodeRefreshToken = CryptoJS.AES.encrypt(refreshToken, process.env.CRYPTO_SECRET).toString();
                 //tạo và hashed mã pin
@@ -56,7 +56,7 @@ class AccountController {
             }
         }
     };
-    static loginVerify = async (req, res, next) => {
+    loginVerify = async (req, res, next) => {
         const { hashedPin, encodeToken, encodeRefreshToken, pin } = req.body;
         // Verify the hashedPin
         let validPin = await bcrypt.compare(pin, hashedPin);
@@ -69,14 +69,14 @@ class AccountController {
         }
         // If invalid, return an error response
     };
-    static refreshToken = async (req, res, next) => {
+    refreshToken = async (req, res, next) => {
         const { refreshToken } = req.body;
         //const payload = jwt.decode(refreshToken);
         const payload = jwt.verify(refreshToken, process.env.JWT_SECRET);
         //const idString = payload.id;
         const bufData = payload.id.data;
         const idString = Buffer.from(bufData).toString('utf-8');
-        const refreshTokenFromDB = await accountService.getRefreshTokenById(idString);
+        const refreshTokenFromDB = await AccountService.getRefreshTokenById(idString);
         //Verify the refresh token and issue a new access token
         if (refreshToken === refreshTokenFromDB) {
             const { id, userName, email } = payload;
@@ -86,12 +86,12 @@ class AccountController {
         return res.status(401).json({ status: false, message: "Invalid refresh token"});
     };
 
-    static checkLogin = async (req, res, next) => {
+    checkLogin = async (req, res, next) => {
         console.log(req.headers.authorization);
-        console.log("Check login request received", req.user);
-        if (req.user) {
-            console.log("User is logged in", req.user);
-            return res.status(200).json({ status: true, message: "User is logged in", user: req.user });
+        console.log("Check login request received", req.authenticate);
+        if (req.authenticate) {
+            console.log("User is logged in", req.authenticate);
+            return res.status(200).json({ status: true, message: "User is logged in", user: req.authenticate });
         }
         else {
             return res.status(401).json({ status: false, message: "User is not logged in" });

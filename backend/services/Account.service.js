@@ -9,7 +9,7 @@ class AccountService {
     }
 
     async login(email, passWord) {
-        return await this.accountDAO.getAccount(email, passWord);
+        return await this.AccountDAO.getAccount(email, passWord);
     }
 
     async createAccount (email, username, password){
@@ -27,11 +27,11 @@ class AccountService {
         return await AccountDAO.deleteAccount(id);
     }
     async getRefreshTokenById(accountId) {
-        return await this.accountDAO.getRefreshTokenById(accountId);
+        return await this.AccountDAO.getRefreshTokenById(accountId);
     }
 
     async setRefreshToken(accountId, refreshToken) {
-        return await this.accountDAO.setRefreshToken(accountId, refreshToken);
+        return await this.AccountDAO.setRefreshToken(accountId, refreshToken);
     }
 }
 export default new AccountService(AccountDAO)
