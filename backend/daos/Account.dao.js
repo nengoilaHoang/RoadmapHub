@@ -5,15 +5,17 @@ import Account from '../models/Account.model.js';
 
 class AccountDAO {
     async getAccountAll(){
-        const rows = await db('users').select('*');
+        const rows = await db('account').select('*');
         return rows.map(Account.fromRow);
     }
-    async getAccount(userName, passWord) {
-        const rows = await db('users').where({ userName,passWord }).select('*');
-        if (rows.length === 0) {
-            return false;
-        }
-        return true;
+    async getAccount(email, passWord) {
+        const row = await db('account')
+            .where({
+                email: email,
+                password: passWord
+            })
+            .first();
+        return row ? Account.fromRow(row) : null;
     }
     async createAccount(email,username, password) {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -41,7 +43,7 @@ class AccountDAO {
         }
     }
     async updateAccount(id, passWord) {
-        const rows = await db('users')
+        const rows = await db('account')
             .where({ id })
             .update({ password:passWord });
         if (rows === 0) {
@@ -50,7 +52,20 @@ class AccountDAO {
         return this.getAccountById(id);
     }
     async deleteAccount(id) {
-        const rows = await db('users').where({ id }).del();
+        const rows = await db('account').where({ id }).del();
+        return rows > 0;
+    }
+    async getRefreshTokenById(accountId) {
+        const row = await db('account')
+            .where({ id: accountId })
+            .select('refreshToken')
+            .first();
+        return row ? row.refreshToken : null;
+    }
+    async setRefreshToken(accountId, refreshToken) {
+        const rows = await db('account')
+            .where({ id: accountId })
+            .update({ refreshToken });
         return rows > 0;
     }
 }

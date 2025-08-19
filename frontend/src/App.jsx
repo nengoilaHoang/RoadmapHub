@@ -4,6 +4,10 @@ import HomeLayout from '#layouts/HomeLayout.jsx'
 import NavbarLayout from '#layouts/NavbarLayout.jsx'
 import SignUp from '#pages/SignUp/SignUp.jsx'
 import VerifyEmail from '#pages/SignUp/VerifyEmail.jsx'
+import Login from '#pages/Login/loginPage/Login.jsx'
+import LoginVerify from '#pages/Login/LoginVerify/LoginVerify.jsx'
+import ForgotPassword from '#pages/ForgotPassword/forgotPassword.jsx'
+import RefreshToken from '#pages/Login/RefreshTokenPage/RefreshToken.jsx'
 function App() {
   const router = createBrowserRouter(
   [
@@ -20,7 +24,11 @@ function App() {
       element:<NavbarLayout/>,
       children:[
         {path:'signup',element:<SignUp/>},
-        {path:'verify/:email',element:<VerifyEmail/>}
+        {path:'verify/:email',element:<VerifyEmail/>},
+        {path:'login',element:<Login/>},
+        {path:'login/verify',element:<LoginVerify/>},
+        {path:'forgot-password',element:<ForgotPassword/>},
+        {path:'refresh-token', element: <RefreshToken />}
       ]
     }
   ]

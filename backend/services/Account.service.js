@@ -8,8 +8,8 @@ class AccountService {
         return await AccountDAO.getAccountAll();
     }
 
-    async login(userName, passWord) {
-        return await AccountDAO.getAccount(userName, passWord);
+    async login(email, passWord) {
+        return await this.accountDAO.getAccount(email, passWord);
     }
 
     async createAccount (email, username, password){
@@ -25,6 +25,13 @@ class AccountService {
 
     async deleteAccount(id) {
         return await AccountDAO.deleteAccount(id);
+    }
+    async getRefreshTokenById(accountId) {
+        return await this.accountDAO.getRefreshTokenById(accountId);
+    }
+
+    async setRefreshToken(accountId, refreshToken) {
+        return await this.accountDAO.setRefreshToken(accountId, refreshToken);
     }
 }
 export default new AccountService(AccountDAO)

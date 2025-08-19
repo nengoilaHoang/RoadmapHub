@@ -1,14 +1,14 @@
 import knex from 'knex'
+import dotenv from "dotenv";
+dotenv.config();
 export default knex({
-    client:'mysql2',
+    client:process.env.DB_CLIENT,
     connection:{
-        host:'localhost',
-        port:3306,
-        user:'root',
-        password:'',
-        database:'roadmap'
-
-
+        host:process.env.DB_HOST,
+        port:process.env.DB_PORT,
+        user:process.env.DB_USER,
+        password:process.env.DB_PASS,
+        database:process.env.DB_NAME
     },
     pool:{min:0,max:7}
 })
