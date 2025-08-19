@@ -19,9 +19,11 @@ RoadmapHub là một nền tảng hỗ trợ xây dựng và quản lý lộ tr�
 | Họ và tên               | MSSV      | Vai trò               |
 |-------------------------|-----------|-----------------------|
 | Mai Đức Kiên            | 22110046  | Backend, Cấu hình dự án |
-| Lê Văn Việt Hoàng       | 22110027  | Frontend, UI/UX       |
+| Lê Văn Việt Hoàng       | 22110027  | Fe, Be, UI/UX       |
 
 ## 🚀 Cách chạy dự án
+### 0. Setup project
+- run 
 
 ### 1. Clone repository
 ```bash
