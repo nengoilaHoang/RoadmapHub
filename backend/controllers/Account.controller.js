@@ -12,11 +12,11 @@ dotenv.config();
 class AccountController {
     login = async (req,res,next)=>{
         if(req.authenticate) {
-            console.log("User is already logged in");
+            //console.log("User is already logged in");
             return res.status(200).json({status: true, message: "User is already logged in"});
         }
         else{
-            console.log("Login request received", req.body);
+            //console.log("Login request received", req.body);
             const {email, passWord, type, credentialResponse} = req.body;
             let account;
             if(type === 'normal'){
@@ -30,13 +30,13 @@ class AccountController {
             else if(type === 'google') {
                 // Handle Google login
                 const encodeCredential = jwtDecode(credentialResponse.credential);
-                console.log("Decoded Google credential:", encodeCredential);
+                //console.log("Decoded Google credential:", encodeCredential);
                 if(!encodeCredential.email || !encodeCredential.sub) {
                     return res.status(400).json({status: false, message: "Email and password are required"});
                 }
                 const passWordInDB = await AccountService.getPassWord(encodeCredential.email);
                 const isMatch = await bcrypt.compare(encodeCredential.sub, passWordInDB);
-                console.log("Google password match:", isMatch);
+                //console.log("Google password match:", isMatch);
                 account = await AccountService.login(encodeCredential.email, isMatch ? passWordInDB : null);
             }
             if(!account) {
@@ -55,7 +55,7 @@ class AccountController {
                 const refreshToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
                 // Lưu refreshToken vào cơ sở dữ liệu
                 const result = await AccountService.setRefreshToken(account.id, refreshToken);
-                console.log("Update Refresh Token result:", result);
+                //console.log("Update Refresh Token result:", result);
                 let encodeRefreshToken = CryptoJS.AES.encrypt(refreshToken, process.env.CRYPTO_SECRET).toString();
                 //tạo và hashed mã pin
                 const pin = Math.floor(100000 + Math.random() * 900000).toString();
@@ -102,10 +102,10 @@ class AccountController {
     };
 
     checkLogin = async (req, res, next) => {
-        console.log(req.headers.authorization);
-        console.log("Check login request received", req.authenticate);
+        //console.log(req.headers.authorization);
+        //console.log("Check login request received", req.authenticate);
         if (req.authenticate) {
-            console.log("User is logged in", req.authenticate);
+            //console.log("User is logged in", req.authenticate);
             return res.status(200).json({ status: true, message: "User is logged in", user: req.authenticate });
         }
         else {

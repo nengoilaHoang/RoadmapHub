@@ -10,6 +10,7 @@ import {GoogleLogin} from '@react-oauth/google'
 const Login = () => {
     const [email, setEmail] = useState("");
     const [passWord, setPassWord] = useState("");
+    const [error, setError] = useState("");
     const navigate = useNavigate();
     const { isLoggedIn } = useCheckLogin();
 
@@ -36,9 +37,14 @@ const Login = () => {
                     state: { hashedPin: hashedPin, encodeToken: encodeToken, encodeRefreshToken: encodeRefreshToken }
                 });
             }
+            else{
+                console.log("Login failed:", res.data?.message);
+                setError(res.data?.message || "Login failed");
+            }
             // xử lý lưu token hoặc chuyển trang ở đây
             } catch (err) {
             console.error("Login error:", err.response?.data || err.message);
+            setError(err.response?.data?.message || "Login failed");
         }
     };
 
@@ -48,7 +54,8 @@ const Login = () => {
             console.log(response)
             console.log("Google login response:", response.data);
             if(!response.data.status){
-                navigate('/login');
+                console.log("Google login failed:", response.data?.message);
+                setError(response.data?.message || "Login failed");
             }
             else{
                 localStorage.setItem("token", response.data?.token);
@@ -86,7 +93,7 @@ const Login = () => {
             <p>OR</p>
             <span></span>
             </div>
-
+            {error && <span className="error">{error}</span>}
             {/* Form */}
             <form className="login-form" onSubmit={handleSubmit}>
             <input type="email" placeholder="Email Address" onChange={(e) => setEmail(e.target.value)}/>
