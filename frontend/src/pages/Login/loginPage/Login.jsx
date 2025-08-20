@@ -5,6 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useCheckLogin } from "../../../hooks/userCheckLogin";
+import {GoogleLogin} from '@react-oauth/google'
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -41,6 +42,26 @@ const Login = () => {
         }
     };
 
+    const handleGoogleSuccess = async (credentialResponse) => {
+            console.log(credentialResponse);
+            const response = await axios.post("http://localhost:5000/api/auth/login",{credentialResponse: credentialResponse, type: "google"})
+            console.log(response)
+            console.log("Google login response:", response.data);
+            if(!response.data.status){
+                navigate('/login');
+            }
+            else{
+                localStorage.setItem("token", response.data?.token);
+                navigate('/');
+            }
+            // Xử lý đăng nhập thành công
+        };
+    
+        const handleGoogleError = () => {
+            console.log('Login Failed');
+            // Xử lý đăng nhập thất bại
+        };
+
     return (
         <div className="login-container">
         <div className="login-box">
@@ -50,10 +71,14 @@ const Login = () => {
             </p>
 
             {/* Google button */}
-            <button className="google-btn">
-            <FcGoogle className="google-icon" />
-            Continue with Google
-            </button>
+            <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+                theme="outline"
+                size="large"
+                text="continue_with"
+                shape="rectangular"
+            />
 
             {/* Divider */}
             <div className="divider">

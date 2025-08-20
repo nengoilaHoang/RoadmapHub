@@ -6,6 +6,7 @@ import bcrypt from "bcrypt";
 import CryptoJS from "crypto-js";
 import nodemailer from 'nodemailer';
 import { SendEmail } from "../middlewares/SendEmailMiddleWare.js";
+import { jwtDecode } from "jwt-decode";
 dotenv.config();
 //const accountService = new AccountService(new AccountDAO());
 class AccountController {
@@ -16,16 +17,27 @@ class AccountController {
         }
         else{
             console.log("Login request received", req.body);
-            const {email, passWord, type} = req.body;
+            const {email, passWord, type, credentialResponse} = req.body;
             let account;
             if(type === 'normal'){
-                    if(!email || !passWord) {
+                if(!email || !passWord) {
                     return res.status(400).json({status: false, message: "Email and password are required"});
                 }
-                account = await AccountService.login(email, passWord)
+                const passWordInDB = await AccountService.getPassWord(email);
+                const isMatch = await bcrypt.compare(passWord, passWordInDB);
+                account = await AccountService.login(email, isMatch ? passWordInDB : null);
             }
             else if(type === 'google') {
                 // Handle Google login
+                const encodeCredential = jwtDecode(credentialResponse.credential);
+                console.log("Decoded Google credential:", encodeCredential);
+                if(!encodeCredential.email || !encodeCredential.sub) {
+                    return res.status(400).json({status: false, message: "Email and password are required"});
+                }
+                const passWordInDB = await AccountService.getPassWord(encodeCredential.email);
+                const isMatch = await bcrypt.compare(encodeCredential.sub, passWordInDB);
+                console.log("Google password match:", isMatch);
+                account = await AccountService.login(encodeCredential.email, isMatch ? passWordInDB : null);
             }
             if(!account) {
                 return res.status(401).json({status: false, message: "Invalid username or password"});
@@ -49,10 +61,13 @@ class AccountController {
                 const pin = Math.floor(100000 + Math.random() * 900000).toString();
                 let hashedPin = await bcrypt.hash(pin, parseInt(process.env.BCRYPT_SALT_ROUNDS));
                 // gửi pin qua mail
-                const text = `Hi! There, this is your pin code: ${pin}. Please use this pin to verify your login. The pin is valid for 10 minutes. If you did not request this, please ignore this email.`;
-                SendEmail(account.email, text);
-                //return
-                return res.status(200).json({status: true, message: "Login successful", account, hashedPin, encodeToken, encodeRefreshToken});
+                if(type==="normal") {
+                    const text = `Hi! There, this is your pin code: ${pin}. Please use this pin to verify your login. The pin is valid for 10 minutes. If you did not request this, please ignore this email.`;
+                    SendEmail(account.email, text);
+                    return res.status(200).json({status: true, message: "Login successful", account, hashedPin, encodeToken, encodeRefreshToken});
+                }
+                return res.status(200).json({status: true, message: "Login successful", account, token});
+
             }
         }
     };
@@ -186,7 +201,8 @@ class AccountController {
         console.log(req.body);
         const resultCheckAccount = await AccountService.checkExitAccount(email);
         if(resultCheckAccount.success){
-            await AccountService.createAccount(email,fullname,password);
+            //console.log('Google password:',password);
+            await AccountService.createAccount(fullname,email,password);
             res.json ({
                 success:true,
                 message:'Sign up with google successfully'

@@ -8,6 +8,10 @@ class AccountService {
         return await AccountDAO.getAccountAll();
     }
 
+    async getPassWord(email) {
+        return await this.AccountDAO.getPassWord(email);
+    }
+
     async login(email, passWord) {
         return await this.AccountDAO.getAccount(email, passWord);
     }

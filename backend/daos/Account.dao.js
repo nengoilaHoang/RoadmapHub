@@ -17,6 +17,15 @@ class AccountDAO {
             .first();
         return row ? Account.fromRow(row) : null;
     }
+
+    async getPassWord(email) {
+        const row = await db('account')
+            .where({ email })
+            .select('password')
+            .first();
+        return row ? row.password : null;
+    }
+
     async createAccount(email,username, password) {
         const hashedPassword = await bcrypt.hash(password, 10);
         const account = new Account(Buffer.from(uuidv4().replace(/-/g, ''), 'hex'), email, username, hashedPassword, 1);
