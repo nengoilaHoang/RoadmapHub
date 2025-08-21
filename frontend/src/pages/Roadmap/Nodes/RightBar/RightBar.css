@@ -1,0 +1,18 @@
+.right-bar {
+  width: 220px;
+  background: #f4f6f8;
+  border-left: 1px solid #ddd;
+  padding: 12px;
+  box-sizing: border-box;
+}
+
+.right-bar h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.right-bar-content {
+  font-size: 14px;
+  color: #555;
+}

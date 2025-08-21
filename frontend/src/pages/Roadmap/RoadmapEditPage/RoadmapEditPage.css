@@ -1,0 +1,13 @@
+.roadmap-edit {
+  display: flex;
+  width: 80vw;
+  height: 80vh;
+  border: 1px solid #ddd;
+  background: #fafafa;
+}
+
+.flow-area {
+  flex-grow: 1;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}

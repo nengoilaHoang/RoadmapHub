@@ -8,6 +8,7 @@ import Login from '#pages/Login/loginPage/Login.jsx'
 import LoginVerify from '#pages/Login/LoginVerify/LoginVerify.jsx'
 import ForgotPassword from '#pages/ForgotPassword/forgotPassword.jsx'
 import RefreshToken from '#pages/Login/RefreshTokenPage/RefreshToken.jsx'
+import RoadmapEditPage from '#pages/Roadmap/RoadmapEditPage/RoadmapEditPage.jsx'
 function App() {
   const router = createBrowserRouter(
   [
@@ -28,7 +29,8 @@ function App() {
         {path:'login',element:<Login/>},
         {path:'login/verify',element:<LoginVerify/>},
         {path:'forgot-password',element:<ForgotPassword/>},
-        {path:'refresh-token', element: <RefreshToken />}
+        {path:'refresh-token', element: <RefreshToken />},
+        {path:'roadmap/edit', element: <RoadmapEditPage />}
       ]
     }
   ]
