@@ -5,12 +5,14 @@ import dotenv from 'dotenv';
 import bcrypt from "bcrypt";
 import CryptoJS from "crypto-js";
 import nodemailer from 'nodemailer';
-import { SendEmail } from "../middlewares/SendEmailMiddleWare.js";
+import { SendEmail } from "../Helps/SendEmail.js";
 import { jwtDecode } from "jwt-decode";
+import e from "express";
 dotenv.config();
 //const accountService = new AccountService(new AccountDAO());
 class AccountController {
     login = async (req,res,next)=>{
+        console.log("Login request received cookie", req.headers.cookie);
         if(req.authenticate) {
             //console.log("User is already logged in");
             return res.status(200).json({status: true, message: "User is already logged in"});
@@ -35,6 +37,7 @@ class AccountController {
                     return res.status(400).json({status: false, message: "Email and password are required"});
                 }
                 const passWordInDB = await AccountService.getPassWord(encodeCredential.email);
+                console.log("data to compare: ", encodeCredential.sub, passWordInDB)
                 const isMatch = await bcrypt.compare(encodeCredential.sub, passWordInDB);
                 //console.log("Google password match:", isMatch);
                 account = await AccountService.login(encodeCredential.email, isMatch ? passWordInDB : null);
@@ -54,7 +57,7 @@ class AccountController {
                 let encodeToken = CryptoJS.AES.encrypt(token, process.env.CRYPTO_SECRET).toString();
                 const refreshToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
                 // Lưu refreshToken vào cơ sở dữ liệu
-                const result = await AccountService.setRefreshToken(account.id, refreshToken);
+                //const result = await AccountService.setRefreshToken(account.id, refreshToken);
                 //console.log("Update Refresh Token result:", result);
                 let encodeRefreshToken = CryptoJS.AES.encrypt(refreshToken, process.env.CRYPTO_SECRET).toString();
                 //tạo và hashed mã pin
@@ -114,19 +117,10 @@ class AccountController {
     }
     verifyEmail = async (req, res, nex) => {
 
-        console.log("ggg", req.body)
         const {email,password,fullname} = req.body;
-        const resultCheckAccount = await AccountService.checkExitAccount(email);
-        if(resultCheckAccount.success){
-        
-        const transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-                user: process.env.EMAIL_USERNAME,
-                pass: process.env.EMAIL_PASSWORD
-            }
-        });
-
+        const resultCheckAccountEmail = await AccountService.checkExitAccountEmail(email);
+        const resultCheckAccountUsername = await AccountService.checkExitAccountUsername(fullname)
+        if(resultCheckAccountEmail.success && resultCheckAccountUsername.success){
         const token = jwt.sign(
             {
                 email,
@@ -136,41 +130,77 @@ class AccountController {
             process.env.JWT_SECRET || 'ourSecretKey', 
             { expiresIn: '10m' }
         );
-        const mailConfigurations = {
-
-            // It should be a string of sender/server email
-            from: process.env.EMAIL_USERNAME,
-
-            to: email,
-
-            // Subject of Email
-            subject: 'Email Verification',
-
-            // This would be the text of email body
-            html: `
+            const html = `
                     <h1>Email Verification</h1>
                     <p>Hi! You have recently registered on our website.</p>
                     <p>Please click the link below to verify your email:</p>
                     <a href="http://localhost:5000/api/accounts/verify/${token}">Verify Email</a>
                     <p>This link will expire in 10 minutes.</p>
                 `
-        };
+            const success = SendEmail({to:email,html:html});
+            console.log("Send email success:", success);
+            if(success) return res.json({success:true,message:'Email Sent Successfully'});
+            else return res.json({success:false,message:'Failed to send email'});
+        
+        // const transporter = nodemailer.createTransport({
+        //     service: 'gmail',
+        //     auth: {
+        //         user: process.env.EMAIL_USERNAME,
+        //         pass: process.env.EMAIL_PASSWORD
+        //     }
+        // });
 
-        transporter.sendMail(mailConfigurations, function (error, info) {
-            if (error) 
-            {
-                    // throw Error(error);
-                    return res.json({success:false,message:'Failed to send email'})
-            }
-            console.log('Email Sent Successfully');
-            console.log(info);
-            return res.json({
-                    success:true,message:'Email Sent Successfully'
-                })
-        });
+        // const token = jwt.sign(
+        //     {
+        //         email,
+        //         fullname,
+        //         password
+        //     },
+        //     process.env.JWT_SECRET || 'ourSecretKey', 
+        //     { expiresIn: '10m' }
+        // );
+        // const mailConfigurations = {
+
+        //     // It should be a string of sender/server email
+        //     from: process.env.EMAIL_USERNAME,
+
+        //     to: email,
+
+        //     // Subject of Email
+        //     subject: 'Email Verification',
+
+        //     // This would be the text of email body
+        //     html: `
+        //             <h1>Email Verification</h1>
+        //             <p>Hi! You have recently registered on our website.</p>
+        //             <p>Please click the link below to verify your email:</p>
+        //             <a href="http://localhost:5000/api/accounts/verify/${token}">Verify Email</a>
+        //             <p>This link will expire in 10 minutes.</p>
+        //         `
+        // };
+
+        // transporter.sendMail(mailConfigurations, function (error, info) {
+        //     if (error) 
+        //     {
+        //             // throw Error(error);
+        //             return res.json({success:false,message:'Failed to send email'})
+        //     }
+        //     console.log('Email Sent Successfully');
+        //     console.log(info);
+        //     return res.json({
+        //             success:true,message:'Email Sent Successfully'
+        //         })
+        // });
         }
         else {
-            return res.json(resultCheckAccount)
+            let errors = {};
+            if(!resultCheckAccountEmail.success) errors.email = resultCheckAccountEmail.message;
+            if(!resultCheckAccountUsername.success) errors.username = resultCheckAccountUsername.message;
+
+            return res.json({
+                success:false,
+                errors:errors
+            })
         }
     }
     verify = async (req,res,next)=>{    
@@ -189,7 +219,8 @@ class AccountController {
         else {
             const { email, password, fullname } = decoded;
             await AccountService.createAccount(email,fullname,password);
-            res.redirect('http://localhost:3000/login')
+            res.cookie("token", token, { httpOnly: true,sameSite: "lax" }); 
+            res.redirect('http://localhost:3000/')
             // res.send("Email verifified successfully");
             // console.log(response)
             
@@ -197,15 +228,31 @@ class AccountController {
     });
     }
     signUpGoogle = async (req,res)=>{
-        const {email,password,fullname} = req.body;
-        console.log(req.body);
-        const resultCheckAccount = await AccountService.checkExitAccount(email);
-        if(resultCheckAccount.success){
+        const {credential} = req.body; 
+        const decode = jwtDecode(credential);
+        const email = decode.email;
+        const username = decode.name;
+        const password = decode.sub;
+        
+        const resultCheckAccountEmail = await AccountService.checkExitAccountEmail(email);
+        if(resultCheckAccountEmail.success ){
             //console.log('Google password:',password);
-            await AccountService.createAccount(fullname,email,password);
+            await AccountService.createAccount(email,username,password);
+            const passWordInDB = await AccountService.getPassWord(email);
+            const isMatch = await bcrypt.compare(password, passWordInDB);
+            const account = await AccountService.login(email, isMatch ? passWordInDB : null);
+            const payload = {
+                    id: account.id,
+                    userName: account.username,
+                    email: account.email
+                };
+                // Ký token (expiresIn = thời hạn, ví dụ 1h)
+            const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
+            res.cookie("token", token, { httpOnly: true,sameSite: "lax" }); 
             res.json ({
                 success:true,
-                message:'Sign up with google successfully'
+                message:'Sign up with google successfully',
+                // token: token
             })
             // res.redirect('http://localhost:3000/')
         }

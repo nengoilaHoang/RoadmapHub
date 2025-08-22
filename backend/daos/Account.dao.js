@@ -28,7 +28,7 @@ class AccountDAO {
 
     async createAccount(email,username, password) {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const account = new Account(Buffer.from(uuidv4().replace(/-/g, ''), 'hex'), email, username, hashedPassword, 1);
+        const account = new Account(Buffer.from(uuidv4().replace(/-/g, ''), 'hex'),  username, email, hashedPassword, 1);
         const result = await db('account').insert(account);
         return {
                 success:true,
@@ -36,18 +36,33 @@ class AccountDAO {
         }
         
     }
-    async checkExitAccount(email){
+    async checkExitAccountEmail(email){
         const exit = await db('account').where({email}).first();
         if(exit){
             return {
-                succes:false,
-                message:'"Email already registered"'
+                success:false,
+                message:"Email already registered"
             }
         }
         else {
              return{
                 success:true,
-                message:'Email is not registered'
+                message:"Email is not registered"
+            }
+        }
+    }
+    async checkExitAccountUsername(username){
+        const exit = await db('account').where({username}).first();
+        if(exit){
+            return {
+                success:false,
+                message:"Username already registered"
+            }
+        }
+        else {
+             return{
+                success:true,
+                message:"Username is not registered"
             }
         }
     }

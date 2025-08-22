@@ -1,9 +1,11 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import nodemailer from 'nodemailer';
+import promises from 'bluebird';
 dotenv.config();
 
-export function SendEmail(to, text, data){
+export function SendEmail(mailData){
+    const { to, text, html } = mailData;
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -11,10 +13,6 @@ export function SendEmail(to, text, data){
             pass: process.env.EMAIL_PASSWORD
         }
     });
-    const mailToken = jwt.sign({
-            data: data
-        }, process.env.JWT_SECRET, { expiresIn: '10m' }
-    );
 
     const mailConfigurations = {
         // It should be a string of sender/server email
@@ -27,11 +25,18 @@ export function SendEmail(to, text, data){
         
         // This would be the text of email body
         text: text,
-    };
 
-    transporter.sendMail(mailConfigurations, function(error, info){
-        if (error) throw Error(error);
-        console.log('Email Sent Successfully');
-        console.log(info);
+        html: html,
+    };
+    return new promises((resolve, reject) => {
+        transporter.sendMail(mailConfigurations, function(error, info){
+            if (error) {
+                console.error(error);
+                return resolve(false); // hoặc reject(error) nếu muốn bắt lỗi riêng
+            }
+            console.log('Email Sent Successfully');
+            console.log(info);
+            return resolve(true);
+        });
     });
 }
