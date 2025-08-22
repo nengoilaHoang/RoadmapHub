@@ -54,10 +54,11 @@ export default function SignUp() {
                 })
             }
             else{
-                if("message" in response.data){
+                // if("message" in response.data){
 
-                }
-                else if("errors" in response.data){
+                // }
+                // else 
+                if("errors" in response.data){
                     if("email" in response.data.errors){
                         setAlertEmail(true);
                         setContentErrorEmail(response.data.errors.email);
@@ -124,7 +125,7 @@ export default function SignUp() {
                 </div>
                 <button type="submit" className="btn btn-dark fs-4 fw-bold">Verify Email</button>
                 <div className="mt-3">Already have an account? <a href='/login' className="fw-bold text-decoration-none">Login</a></div>
-                <p>By continuing to use our services, you acknowledge that you have both read and agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</p>
+                <p>By continuing to use our services, you acknowledge that you have both read and agree to our <a href="/terms-of-service">Terms of Service</a> and <a href="/privacy-policy">Privacy Policy</a>.</p>
             </form>
         </div>
     )

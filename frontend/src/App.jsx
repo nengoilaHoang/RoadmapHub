@@ -10,6 +10,8 @@ import ForgotPassword from '#pages/ForgotPassword/ForgotPassword/forgotPassword.
 import ResetPassword from './pages/ForgotPassword/ResetPassword/ResetPassword'
 import RefreshToken from '#pages/Login/RefreshTokenPage/RefreshToken.jsx'
 import RoadmapEditPage from '#pages/Roadmap/RoadmapEditPage/RoadmapEditPage.jsx'
+import PrivacyPolicy from '#pages/TermsServiceAndPrivacyPolicy/PrivacyPolicy/PrivacyPolicy.jsx'
+import TermsService from '#pages/TermsServiceAndPrivacyPolicy/TermsService/TermsService.jsx'
 function App() {
   const router = createBrowserRouter(
   [
@@ -32,7 +34,9 @@ function App() {
         {path:'forgot-password',element:<ForgotPassword/>},
         {path:'reset-password/:token/:email', element: <ResetPassword />},
         {path:'refresh-token', element: <RefreshToken />},
-        {path:'roadmap/edit', element: <RoadmapEditPage />}
+        {path:'roadmap/edit', element: <RoadmapEditPage />},
+        {path:'privacy-policy', element: <PrivacyPolicy />},
+        {path:'terms-of-service', element: <TermsService />},
       ]
     }
   ]

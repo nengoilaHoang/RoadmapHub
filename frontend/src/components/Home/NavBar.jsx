@@ -32,7 +32,7 @@ export default function NavBar() {
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false"
-            style={{ width: '40px', height: '40px' }}
+            style={{ width: '60px', height: '60px' }}
         >
             <img
             src="https://i.pravatar.cc/40"

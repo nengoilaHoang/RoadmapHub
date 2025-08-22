@@ -1,0 +1,52 @@
+.tos-wrapper {
+  max-width: 700px;
+  margin: 32px auto;
+  padding: 0 12px;
+  font-family: Arial, sans-serif;
+  color: #222;
+}
+
+.tos-wrapper h1 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.tos-section {
+  border-bottom: 1px solid #ddd;
+  padding: 8px 0;
+}
+
+.tos-title {
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 12px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #333;
+}
+
+.tos-title:hover {
+  color: #007bff;
+}
+
+.tos-arrow {
+  font-size: 0.8rem;
+  color: #666;
+  margin-left: 8px;
+}
+
+.tos-content {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #555;
+  padding: 8px 0 16px 12px;
+  user-select: text;
+}
