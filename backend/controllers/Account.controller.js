@@ -66,7 +66,7 @@ class AccountController {
                 // gửi pin qua mail
                 if(type==="normal") {
                     const text = `Hi! There, this is your pin code: ${pin}. Please use this pin to verify your login. The pin is valid for 10 minutes. If you did not request this, please ignore this email.`;
-                    SendEmail(account.email, text);
+                    SendEmail({ to: account.email, text: text });
                     return res.status(200).json({status: true, message: "Login successful", account, hashedPin, encodeToken, encodeRefreshToken});
                 }
                 return res.status(200).json({status: true, message: "Login successful", account, token});
@@ -83,6 +83,7 @@ class AccountController {
             // Create a new session or token for the user
             const decodedToken = CryptoJS.AES.decrypt(encodeToken, process.env.CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
             const decodeRefreshToken = CryptoJS.AES.decrypt(encodeRefreshToken, process.env.CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
+            res.cookie("token", decodedToken, { httpOnly: true,sameSite: "lax" });
             return res.status(200).json({ status: true, message: "Login successful", decodedToken, decodeRefreshToken });
         }
         // If invalid, return an error response

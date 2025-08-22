@@ -41,7 +41,6 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode }) {
     (params) => setEdges((eds) => addEdge(params, eds)),
     []
   );
-
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
