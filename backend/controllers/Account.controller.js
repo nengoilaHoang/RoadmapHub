@@ -12,7 +12,7 @@ dotenv.config();
 //const accountService = new AccountService(new AccountDAO());
 class AccountController {
     login = async (req,res,next)=>{
-        console.log("Login request received cookie", req.headers.cookie);
+        //console.log("Login request received cookie", req.headers.cookie);
         if(req.authenticate) {
             //console.log("User is already logged in");
             return res.status(200).json({status: true, message: "User is already logged in"});
@@ -37,7 +37,7 @@ class AccountController {
                     return res.status(400).json({status: false, message: "Email and password are required"});
                 }
                 const passWordInDB = await AccountService.getPassWord(encodeCredential.email);
-                console.log("data to compare: ", encodeCredential.sub, passWordInDB)
+                //onsole.log("data to compare: ", encodeCredential.sub, passWordInDB)
                 const isMatch = await bcrypt.compare(encodeCredential.sub, passWordInDB);
                 //console.log("Google password match:", isMatch);
                 account = await AccountService.login(encodeCredential.email, isMatch ? passWordInDB : null);
@@ -69,6 +69,7 @@ class AccountController {
                     SendEmail({ to: account.email, text: text });
                     return res.status(200).json({status: true, message: "Login successful", account, hashedPin, encodeToken, encodeRefreshToken});
                 }
+                res.cookie("token", token, { httpOnly: true,sameSite: "lax" });
                 return res.status(200).json({status: true, message: "Login successful", account, token});
 
             }
@@ -107,7 +108,7 @@ class AccountController {
 
     checkLogin = async (req, res, next) => {
         //console.log(req.headers.authorization);
-        //console.log("Check login request received", req.authenticate);
+        console.log("Check login request received", req.authenticate);
         if (req.authenticate) {
             //console.log("User is logged in", req.authenticate);
             return res.status(200).json({ status: true, message: "User is logged in", user: req.authenticate });
@@ -139,7 +140,7 @@ class AccountController {
                     <p>This link will expire in 10 minutes.</p>
                 `
             const success = SendEmail({to:email,html:html});
-            console.log("Send email success:", success);
+            //console.log("Send email success:", success);
             if(success) return res.json({success:true,message:'Email Sent Successfully'});
             else return res.json({success:false,message:'Failed to send email'});
         
@@ -209,7 +210,7 @@ class AccountController {
         // Verifying the JWT token 
         jwt.verify(token, process.env.JWT_SECRET||'ourSecretKey', async function(err, decoded) {
         if (err) {
-            console.log(err);
+            //console.log(err);
             res.send("Email verification failed, possibly the link is invalid or expired");
             // return {
             //     success:false,

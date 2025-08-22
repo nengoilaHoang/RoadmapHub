@@ -5,8 +5,9 @@ dotenv.config();
 import auRoutes from './routes/auth.route.js'
 import cors from 'cors'
 import authenticate from './middlewares/AuthMiddleware.js';
+import cookieParser from "cookie-parser";
 const app = express()
-
+app.use(cookieParser());
 app.get('/', (req, res) => {
   res.send('Hello World')
 })

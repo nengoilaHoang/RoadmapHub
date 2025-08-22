@@ -13,7 +13,8 @@ export const useCheckLogin = () => {
         }
         // Đúng chuẩn với axios:
         axios.post('http://localhost:5000/api/auth/check-login', {}, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        //headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        withCredentials: true
         })  
         .then(res => {
             if (res.data.status === true) {

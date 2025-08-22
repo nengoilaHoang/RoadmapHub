@@ -3,10 +3,10 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 const authenticate = (req, res, next) => {
-  const authHeader = req.headers.authorization;
-  console.log("this is authHeader: ",authHeader)
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    const token = authHeader.split(' ')[1];
+  //const authHeader = req.headers.authorization;
+  const token = req.cookies?.token; // lấy từ cookie
+  console.log("this is token: ", token)
+  if (token) {
     try {
       const payload = jwt.verify(token, process.env.JWT_SECRET);
       console.log("verify token: ",payload)
