@@ -22,10 +22,7 @@ const getId = () => `dndnode_${id++}`;
 
 const nodeTypes = { label: LabelNode, topic: Topic };
 
-const initialNodes = [
-  { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Node 1' } },
-  { id: 'n2', position: { x: 0, y: 100 }, data: { label: 'Node 2' } },
-];
+const initialNodes = [];
 const initialEdges = [];
 
 function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode }) {
@@ -108,7 +105,7 @@ export default function RoadmapEditPage() {
     setSelectedNode(null);
     };
     return (
-        <div style={{ display: 'flex', width: '80vw', height: '80vh' }}>
+        <div style={{ display: 'flex', width: '90vw', height: '80vh' }}>
         <ReactFlowProvider>
             <DnDProvider>
             <NodesBar />
