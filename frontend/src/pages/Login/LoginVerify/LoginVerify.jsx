@@ -40,7 +40,8 @@ export default function LoginVerify() {
         {
             headers: {
                 "Content-Type": "application/json"
-            }
+            },
+            withCredentials: true
         });
         if (res.data?.status === true) {
           localStorage.setItem("token", res.data?.decodedToken);

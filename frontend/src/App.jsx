@@ -6,7 +6,8 @@ import SignUp from '#pages/SignUp/SignUp.jsx'
 import VerifyEmail from '#pages/SignUp/VerifyEmail.jsx'
 import Login from '#pages/Login/loginPage/Login.jsx'
 import LoginVerify from '#pages/Login/LoginVerify/LoginVerify.jsx'
-import ForgotPassword from '#pages/ForgotPassword/forgotPassword.jsx'
+import ForgotPassword from '#pages/ForgotPassword/ForgotPassword/forgotPassword.jsx'
+import ResetPassword from './pages/ForgotPassword/ResetPassword/ResetPassword'
 import RefreshToken from '#pages/Login/RefreshTokenPage/RefreshToken.jsx'
 import RoadmapEditPage from '#pages/Roadmap/RoadmapEditPage/RoadmapEditPage.jsx'
 function App() {
@@ -29,6 +30,7 @@ function App() {
         {path:'login',element:<Login/>},
         {path:'login/verify',element:<LoginVerify/>},
         {path:'forgot-password',element:<ForgotPassword/>},
+        {path:'reset-password/:token/:email', element: <ResetPassword />},
         {path:'refresh-token', element: <RefreshToken />},
         {path:'roadmap/edit', element: <RoadmapEditPage />}
       ]

@@ -1,11 +1,12 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "./ForgotPassword.css";
 
 function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email) {
@@ -13,12 +14,21 @@ function ForgotPassword() {
       return;
     }
 
-    // Giả lập check email
-    if (email !== "demo@gmail.com") {
-      setError("we can't find your email");
-    } else {
-      setError("");
-      alert("Check your email for reset link!");
+    try {
+      // Simulate sending a reset link
+      await axios.post("http://localhost:5000/api/auth/forgot-password",
+          { email }, // body
+          {
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              withCredentials: true
+          }
+        );
+    }
+    catch (err) {
+      console.error("Error sending reset link:", err);
+      setError("Failed to send reset link. Please try again later.");
     }
   };
 
