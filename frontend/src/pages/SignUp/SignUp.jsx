@@ -11,19 +11,23 @@ export default function SignUp() {
     const [fullname,setFullName] = useState("");
     const [password,setPassWord] = useState("");
     const [alertEmail,setAlertEmail] = useState(false);
-    const [contentError,setContentError] = useState("")
+    const [alertUsername,setAlertUsername] = useState(false);
+    const [contentErrorEmail,setContentErrorEmail] = useState("")
+    const [contentErrorUsername,setContentErrorUsername] = useState("")
     const navigate = useNavigate();
     // const clientSecret = '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'
     const handleGoogleSuccess = async (credentialResponse) => {
         console.log(credentialResponse);
         console.log(jwtDecode(credentialResponse.credential));
-        const decode = jwtDecode(credentialResponse.credential);
-        const response = await api.post("/accounts/signup-google",{email:decode.email,password:decode.sub,fullname:decode.name})
+        // const decode = jwtDecode(credentialResponse.credential);
+        //const response = await api.post("/accounts/signup-google",{email:decode.email,password:decode.sub,fullname:decode.name})
+        const response = await api.post("/accounts/signup-google",{credential:credentialResponse.credential})
         console.log(response)
         if(!response.data.success){
             navigate('/login');
         }
         else{
+            //Storage.setItem("token", response.data.token);
             navigate('/');
         }
         // Xử lý đăng nhập thành công
@@ -50,8 +54,29 @@ export default function SignUp() {
                 })
             }
             else{
-                setAlertEmail(true);
-                setContentError(response.data.message)
+                if("message" in response.data){
+
+                }
+                else if("errors" in response.data){
+                    if("email" in response.data.errors){
+                        setAlertEmail(true);
+                        setContentErrorEmail(response.data.errors.email);
+                    }
+                    else {
+                        setAlertEmail(false);
+                        setContentErrorEmail("");
+                    }
+                    if("username" in response.data.errors){
+                        setAlertUsername(true);
+                        setContentErrorUsername(response.data.errors.username);
+                    }
+                    else {
+                        setAlertUsername(false);
+                        setContentErrorUsername("");
+                    }
+                    
+                }
+                
             }
             // console.log(response)
         } catch (err) {
@@ -87,12 +112,12 @@ export default function SignUp() {
                     <label htmlFor="fullName" className="form-label fs-4 fw-bold">Full Name</label>
                     <input type="text" onChange={(e)=>setFullName(e.target.value)} className="form-control form-control-lg" id="fullName" placeholder="full name" required/>
                 </div>
-               
+                {alertUsername?<AlertError content={contentErrorUsername}/>:""}
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label fs-4 fw-bold">Email address</label>
                     <input type="email" onChange={(e)=>setEmail(e.target.value)} className="form-control form-control-lg" id="email" placeholder="email" required/>
                 </div>
-                {alertEmail?<AlertError content={contentError}/>:""}
+                {alertEmail?<AlertError content={contentErrorEmail}/>:""}
                 <div className="mb-3 ">
                     <label htmlFor="password" className="form-label fs-4 fw-bold">Password</label>
                     <input type="password" onChange={(e)=>setPassWord(e.target.value)} className="form-control form-control-lg" id="password" placeholder="password" required />

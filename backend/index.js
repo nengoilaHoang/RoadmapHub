@@ -4,6 +4,7 @@ dotenv.config();
 //import auRoutes from './routes/auth.route.js'
 import auRoutes from './routes/auth.route.js'
 import cors from 'cors'
+import authenticate from './middlewares/AuthMiddleware.js';
 const app = express()
 
 app.get('/', (req, res) => {
@@ -14,10 +15,11 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json())
+app.use('/',authenticate);
 app.use('/api/accounts', auRoutes)
-app.listen(5000,()=>{
-    console.log('Server is running at http://localhost:5000')
-})
+// app.listen(5000,()=>{
+//     console.log('Server is running at http://localhost:5000')
+// })
 // app.use('/api/accounts', auRoutes)
 app.use('/api/auth', auRoutes)
 app.listen(process.env.PORT,()=>{

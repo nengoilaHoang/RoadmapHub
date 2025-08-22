@@ -19,8 +19,11 @@ class AccountService {
     async createAccount (email, username, password){
         return await AccountDAO.createAccount(email,username,password);
     }
-    async checkExitAccount(email){
-        return await AccountDAO.checkExitAccount(email);
+    async checkExitAccountEmail(email){
+        return await AccountDAO.checkExitAccountEmail(email);
+    }
+    async checkExitAccountUsername(username){
+        return await AccountDAO.checkExitAccountUsername(username);
     }
 
     async updateAccount(id, passWord) {
