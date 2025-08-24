@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Route,Routes,createBrowserRouter,createRoutesFromElements,RouterProvider } from 'react-router-dom'
 import HomeLayout from '#layouts/HomeLayout.jsx'
 import NavbarLayout from '#layouts/NavbarLayout.jsx'
+import RoadmapLayout from '#layouts/RoadmapLayout.jsx'
 import SignUp from '#pages/SignUp/SignUp.jsx'
 import VerifyEmail from '#pages/SignUp/VerifyEmail.jsx'
 import Login from '#pages/Login/loginPage/Login.jsx'
@@ -30,8 +31,16 @@ function App() {
         {path:'login/verify',element:<LoginVerify/>},
         {path:'forgot-password',element:<ForgotPassword/>},
         {path:'refresh-token', element: <RefreshToken />},
+        
+      ]
+    },
+    {
+      path:'/',
+      element:<RoadmapLayout/>,
+      children:[
         {path:'roadmap/edit', element: <RoadmapEditPage />}
       ]
+
     }
   ]
   //   createRoutesFromElements(
