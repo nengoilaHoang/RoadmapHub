@@ -1,36 +1,43 @@
 import React from 'react';
 import { useDnD } from './DnDContext';
-// node preview
-import LabelNode from '#pages/Roadmap/Nodes/Label/Label.jsx';
-import Topic from '#pages/Roadmap/Nodes/Topic/Topic.jsx';
+import './NodeBar.css';
 
 const NodesBar = () => {
   const [, setType] = useDnD();
 
   const onDragStart = (event, nodeType) => {
-    setType(nodeType); // lưu type vào context
+    setType(nodeType);
     event.dataTransfer.effectAllowed = 'move';
-    event.dataTransfer.setData('application/reactflow', nodeType); 
+    event.dataTransfer.setData('application/reactflow', nodeType);
   };
 
+  const nodeTypes = [
+    { type: 'title', label: 'Title' },
+    { type: 'topic', label: 'Topic' },
+    { type: 'button', label: 'Button' },
+    { type: 'section', label: 'Section' },
+    { type: 'checklist', label: 'Check List' },
+    { type: 'horizontalline', label: 'Horizontal Line' },
+    { type: 'verticalline', label: 'Vertical Line' }
+  ];
+
   return (
-    <aside style={{ width: 200, padding: 10, borderRight: '1px solid #ccc' }}>
-      <p className="description">Drag these nodes into the canvas:</p>
-      <div
-        className="dndnode"
-        draggable
-        onDragStart={(event) => onDragStart(event, 'label')}
-        style={{ marginBottom: 10, cursor: 'grab' }}
-      >
-        <LabelNode />
+    <aside className="nodes-bar">
+      <div className="nodes-bar-header">
+        <h3>Node Types</h3>
+        <p className="description">Drag nodes to canvas</p>
       </div>
-      <div
-        className="dndnode"
-        draggable
-        onDragStart={(event) => onDragStart(event, 'topic')}
-        style={{ marginBottom: 10, cursor: 'grab' }}
-      >
-        <Topic />
+      <div className="nodes-container">
+        {nodeTypes.map((node) => (
+          <div
+            key={node.type}
+            className="node-item"
+            draggable
+            onDragStart={(event) => onDragStart(event, node.type)}
+          >
+            {node.label}
+          </div>
+        ))}
       </div>
     </aside>
   );
