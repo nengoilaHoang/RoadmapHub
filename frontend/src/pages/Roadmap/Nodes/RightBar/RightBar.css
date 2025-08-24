@@ -1,18 +1,112 @@
-.right-bar {
-  width: 220px;
-  background: #f4f6f8;
-  border-left: 1px solid #ddd;
-  padding: 12px;
-  box-sizing: border-box;
+.rightbar {
+  position: fixed;
+  right: 0;
+  top: 152px;
+  width: 300px;
+  height: calc(100vh - 64px);
+  background: white;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  overflow-y: auto;
 }
 
-.right-bar h3 {
-  margin: 0 0 12px 0;
-  font-size: 16px;
-  color: #333;
+.rightbar.show {
+  transform: translateX(0);
 }
 
-.right-bar-content {
-  font-size: 14px;
-  color: #555;
+.rightbar-content {
+  padding: 20px;
 }
+
+.node-config-section {
+  margin-bottom: 20px;
+}
+
+.node-config-section h4 {
+  color: #666;
+  font-size: 12px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.label-input, .type-select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.dimensions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.dimension-input {
+  display: flex;
+  flex-direction: column;
+}
+
+.dimension-input label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.dimension-input input {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.auto-size-btn {
+  width: 100%;
+  padding: 8px;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin: 10px 0;
+  cursor: pointer;
+}
+
+.layer-buttons, .font-size-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.layer-buttons button, .font-size-buttons button {
+  flex: 1;
+  padding: 8px;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.color-buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.color-btn {
+  aspect-ratio: 1;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: white;
+  font-weight: bold;
+}
+
+.color-a { background: #FF5252; }
+.color-b { background: #FF9800; }
+.color-c { background: #FFEB3B; }
+.color-d { background: #4CAF50; }
+.color-e { background: #2196F3; }
+.color-f { background: #9C27B0; }
+.color-g { background: #607D8B; }
+.color-h { background: #795548; }

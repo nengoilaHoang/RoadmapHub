@@ -2,26 +2,83 @@ import React from "react";
 import "./RightBar.css";
 
 export default function RightBar({ selectedNode, onDeleteNode }) {
-  if (!selectedNode) {
-    return (
-      <div className="rightbar">
-        <h3 className="rightbar-title">Right Panel</h3>
-        <p>Chọn một node để xem chi tiết...</p>
-      </div>
-    );
-  }
+  if (!selectedNode) return null;
 
   return (
-    <div className="rightbar">
-      <h3 className="rightbar-title">Chi tiết Node</h3>
+    <div className={`rightbar ${selectedNode ? 'show' : ''}`}>
       <div className="rightbar-content">
-        <p><b>ID:</b> {selectedNode.id}</p>
-        <p><b>Type:</b> {selectedNode.type || "default"}</p>
-        <p><b>Label:</b> {selectedNode.data?.label}</p>
+        <div className="node-config-section">
+          <h4>LABEL</h4>
+          <input 
+            type="text" 
+            className="label-input"
+            value={selectedNode.data?.label || ''}
+            onChange={(e) => {/* handle label change */}}
+          />
+        </div>
+
+        <div className="node-config-section">
+          <h4>TYPE</h4>
+          <select className="type-select">
+            <option>Subtopic</option>
+            <option>Topic</option>
+            <option>Section</option>
+          </select>
+        </div>
+
+        <div className="node-config-section dimensions">
+          <div className="dimension-input">
+            <label>X</label>
+            <input type="number" value={selectedNode.position?.x || 0} />
+          </div>
+          <div className="dimension-input">
+            <label>Y</label>
+            <input type="number" value={selectedNode.position?.y || 0} />
+          </div>
+          <div className="dimension-input">
+            <label>W</label>
+            <input type="number" value={selectedNode.width || 0} />
+          </div>
+          <div className="dimension-input">
+            <label>H</label>
+            <input type="number" value={selectedNode.height || 0} />
+          </div>
+        </div>
+
+        <button className="auto-size-btn">↔ Auto-Size</button>
+
+        <div className="node-config-section">
+          <h4>LAYERING</h4>
+          <div className="layer-buttons">
+            <button title="Bring to front">⌃</button>
+            <button title="Bring forward">△</button>
+            <button title="Send backward">▽</button>
+            <button title="Send to back">⌄</button>
+          </div>
+        </div>
+
+        <div className="node-config-section">
+          <h4>FONT SIZE</h4>
+          <div className="font-size-buttons">
+            <button>S</button>
+            <button>M</button>
+            <button>L</button>
+            <button>XL</button>
+            <button>XXL</button>
+          </div>
+        </div>
+
+        <div className="node-config-section">
+          <h4>NODE COLOR</h4>
+          <div className="color-buttons">
+            {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map(letter => (
+              <button key={letter} className={`color-btn color-${letter.toLowerCase()}`}>
+                {letter}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
-      <button className="delete-btn" onClick={() => onDeleteNode(selectedNode.id)}>
-        Xóa Node
-      </button>
     </div>
   );
 }
