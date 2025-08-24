@@ -10,22 +10,31 @@ import {
 import { Background, BackgroundVariant, Controls, MiniMap } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
-import LabelNode from '#pages/Roadmap/Nodes/Label/Label.jsx';
+
 import Topic from '#pages/Roadmap/Nodes/Topic/Topic.jsx';
+import Title from '#pages/Roadmap/Nodes/Title/Title.jsx';
+import Button from '#pages/Roadmap/Nodes/Button/Button.jsx';
+import Section from '#pages/Roadmap/Nodes/Section/Section.jsx';
+import CheckList from '#pages/Roadmap/Nodes/CheckList/CheckList.jsx';
+import HorizontalLine from '#pages/Roadmap/Nodes/HorizontalLine/HorizontalLine.jsx';
+import VerticalLine from '#pages/Roadmap/Nodes/VerticalLine/VerticalLine.jsx';
+import Paragraph from '#pages/Roadmap/Nodes/Paragraph/Paragraph.jsx';
 
 import NodesBar from '../Nodes/NodesBar/NodeBar';
 import { DnDProvider, useDnD } from '../Nodes/NodesBar/DnDContext.jsx';
 import RightBar from '../Nodes/RightBar/RightBar.jsx';
+import TopBar from '../Nodes/TopBar/TopBar.jsx';
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
-const nodeTypes = { label: LabelNode, topic: Topic };
+const nodeTypes = {  topic: Topic, title: Title, button: Button, section: Section, checklist: CheckList, horizontalline: HorizontalLine, verticalline: VerticalLine, paragraph: Paragraph };
 
 const initialNodes = [];
 const initialEdges = [];
 
-function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode }) {
+
+function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRightBarOpen, rightBarOpen}) {
   const { screenToFlowPosition } = useReactFlow();
   const [type] = useDnD();
 
@@ -61,7 +70,16 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode }) {
         id: getId(),
         type: nodeType,
         position,
-        data: { label: `${nodeType} node` },
+        data: { label: `${nodeType} node`, 
+        width: 180,
+        height: 45,
+        onResize: (id, w, h) => {
+        setNodes((nds) =>
+          nds.map((n) =>
+            n.id === id ? { ...n, data: { ...n.data, width: w, height: h } } : n
+          )
+        );
+      }, },
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -71,7 +89,14 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode }) {
 
   const onNodeClick = useCallback((_, node) => {
     setSelectedNode(node);
+    setRightBarOpen(300);
+    setNodeClick(true);
   }, [setSelectedNode]);
+  const onPaneClick = useCallback(() => {
+  setSelectedNode(null);
+  setRightBarOpen(0);
+}, []);
+
 
   return (
     <ReactFlow
@@ -84,11 +109,14 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode }) {
       onDrop={onDrop}
       onDragOver={onDragOver}
       onNodeClick={onNodeClick}
+      onPaneClick={onPaneClick} 
       fitView
     >
       <Background color="#ccc" variant={BackgroundVariant.Cross} />
-      <Controls showFitView={false} />
-      <MiniMap />
+      <Controls showFitView={false} style={{ left: 260, bottom:100 }} />
+      <MiniMap pannable 
+      style={{ height: 150,  width: 250,    bottom: 100, right: rightBarOpen,     
+  }} />
     </ReactFlow>
   );
 }
@@ -97,6 +125,7 @@ export default function RoadmapEditPage() {
     const [nodes, setNodes] = useState(initialNodes);
     const [edges, setEdges] = useState(initialEdges);
     const [selectedNode, setSelectedNode] = useState(null);
+    const [rightBarOpen, setRightBarOpen] = useState(0);
 
     const handleDeleteNode = (nodeId) => {
     setNodes((nds) => nds.filter((n) => n.id !== nodeId));
@@ -104,15 +133,17 @@ export default function RoadmapEditPage() {
     setSelectedNode(null);
     };
     return (
-        <div style={{ display: 'flex', width: '90vw', height: '80vh' }}>
+        <div style={{ display: 'flex',width:'100%',height:'100vh', flexDirection: "column"}}>
+        <TopBar />
         <ReactFlowProvider>
             <DnDProvider>
             <NodesBar />
-            <div style={{ flexGrow: 1 }}>
+            <div style={{ flexGrow: 1 }} >
                 <FlowCanvas nodes={nodes} setNodes={setNodes} edges={edges} setEdges={setEdges} 
-                setSelectedNode={setSelectedNode}/>
+                setSelectedNode={setSelectedNode} setRightBarOpen={setRightBarOpen} rightBarOpen={rightBarOpen}/>
             </div>
-            <RightBar selectedNode={selectedNode} onDeleteNode={handleDeleteNode} />
+            {selectedNode &&<RightBar selectedNode={selectedNode} onDeleteNode={handleDeleteNode} />}
+            
             </DnDProvider>
         </ReactFlowProvider>
         </div>
