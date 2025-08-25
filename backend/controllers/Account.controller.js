@@ -4,10 +4,8 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import bcrypt from "bcrypt";
 import CryptoJS from "crypto-js";
-import nodemailer from 'nodemailer';
 import { SendEmail } from "../Helps/SendEmail.js";
 import { jwtDecode } from "jwt-decode";
-import e from "express";
 dotenv.config();
 //const accountService = new AccountService(new AccountDAO());
 class AccountController {
@@ -53,7 +51,7 @@ class AccountController {
                     email: account.email
                 };
                 // Ký token (expiresIn = thời hạn, ví dụ 1h)
-                const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
+                const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
                 let encodeToken = CryptoJS.AES.encrypt(token, process.env.CRYPTO_SECRET).toString();
                 const refreshToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
                 // Lưu refreshToken vào cơ sở dữ liệu
@@ -84,8 +82,17 @@ class AccountController {
             // Create a new session or token for the user
             const decodedToken = CryptoJS.AES.decrypt(encodeToken, process.env.CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
             const decodeRefreshToken = CryptoJS.AES.decrypt(encodeRefreshToken, process.env.CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
-            res.cookie("token", decodedToken, { httpOnly: true,sameSite: "lax" });
+            console.log("Login successful", { decodedToken });
+            res.cookie("token", decodedToken, {
+                httpOnly: true,
+                secure: false,
+                sameSite: "lax",
+            });
             return res.status(200).json({ status: true, message: "Login successful", decodedToken, decodeRefreshToken });
+        }
+        else
+        {
+            return res.status(401).json({ status: false, message: "Invalid pin" });
         }
         // If invalid, return an error response
     };
@@ -115,6 +122,71 @@ class AccountController {
         }
         else {
             return res.status(401).json({ status: false, message: "User is not logged in" });
+        }
+    }
+
+    logout = async (req, res, next) => {
+        res.clearCookie("token");
+        return res.status(200).json({ status: true, message: "Logout successful" });
+    }
+
+    forgotPassword = async (req, res, next) => {
+        const { email } = req.body;
+        // Check if the email exists
+        try {
+            const account = await AccountService.getAccountByEmail(email);
+            if (!account) {
+                return res.status(404).json({ status: false, message: "Email not found" });
+            }
+            // Generate a reset token
+            const resetToken = jwt.sign({ email: account.email}, process.env.JWT_SECRET, { expiresIn: '1h' });
+            // Send the reset link via email
+            const resetLink = `http://localhost:3000/reset-password/${resetToken}/${email}`;
+            const html = `
+                <h1>Password Reset</h1>
+                <p>Hi ${account.fullname},</p>
+                <p>Please click the link below to reset your password:</p>
+                <a href="${resetLink}">Reset Password</a>
+                <p>This link will expire in 1 hour.</p>
+            `;
+            const success = SendEmail({ to: email, html: html });
+            if (success) {
+                const account = await AccountService.getAccountByEmail(email);
+                newAccessToken = jwt.sign({email: account.email}, process.env.JWT_SECRET, { expiresIn: '15m' });
+                return res.status(200).json({ status: true, message: "Password reset email sent successfully" });
+            } else {
+                return res.status(500).json({ status: false, message: "Failed to send email" });
+            }
+        }
+        catch (error) {
+            console.error("Error checking email:", error);
+            return res.status(500).json({ status: false, message: "Internal server error" });
+        }
+    }
+
+    resetPassword = async (req, res, next) => {
+        const { token, email } = req.params;
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+            if (decoded.email !== email) {
+                return res.status(400).json({ status: false, message: "Invalid token" });
+            }
+            const account = await AccountService.getAccountByEmail(email);
+            // Tạo payload cho token
+                const payload = {
+                    id: account.id,
+                    userName: account.userName,
+                    email: account.email
+                };
+                // Ký token (expiresIn = thời hạn, ví dụ 1h)
+                const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
+                res.cookie("token", accessToken, { httpOnly: true, sameSite: "lax" });
+                await AccountService.changePassword(email, req.body.password);
+            return res.status(200).json({ status: true, message: "Token is valid" });
+        }
+        catch (error) {
+            console.error("Error verifying password reset:", error);
+            return res.status(500).json({ status: false, message: "Internal server error" });
         }
     }
     verifyEmail = async (req, res, nex) => {

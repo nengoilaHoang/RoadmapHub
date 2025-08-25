@@ -99,8 +99,8 @@ const Login = () => {
             <form className="login-form" onSubmit={handleSubmit}>
             <input type="email" placeholder="Email Address" onChange={(e) => setEmail(e.target.value)}/>
             <input type="password" placeholder="Password" onChange={(e) => setPassWord(e.target.value)}/>
-            <a href="#" className="reset-link">
-                Reset your password
+            <a href="/forgot-password" className="reset-link">
+                forgot your password
             </a>
             <button type="submit" className="continue-btn">
                 Continue
@@ -109,14 +109,14 @@ const Login = () => {
 
             {/* Signup link */}
             <p className="signup-text">
-            Don’t have an account? <a href="#">Sign up</a>
+            Don’t have an account? <a href="/signup">Sign up</a>
             </p>
 
             {/* Footer */}
             <p className="footer-text">
             By continuing to use our services, you acknowledge that you have both
-            read and agree to our <a href="#">Terms of Service</a> and{" "}
-            <a href="#">Privacy Policy</a>.
+            read and agree to our <a href="/terms-of-service">Terms of Service</a> and{" "}
+            <a href="/privacy-policy">Privacy Policy</a>.
             </p>
         </div>
         </div>

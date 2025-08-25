@@ -40,5 +40,12 @@ class AccountService {
     async setRefreshToken(accountId, refreshToken) {
         return await this.AccountDAO.setRefreshToken(accountId, refreshToken);
     }
+
+    async getAccountByEmail(email) {
+        return await this.AccountDAO.getAccountByEmail(email);
+    }
+    async changePassword(email, newPassword) {
+        return await this.AccountDAO.changePassword(email, newPassword);
+    }
 }
 export default new AccountService(AccountDAO)

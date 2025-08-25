@@ -92,5 +92,18 @@ class AccountDAO {
             .update({ refreshToken });
         return rows > 0;
     }
+    async getAccountByEmail(email) {
+        const row = await db('account')
+            .where({ email })
+            .first();
+        return row ? Account.fromRow(row) : null;
+    }
+    async changePassword(email, newPassword) {
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const rows = await db('account')
+            .where({ email })
+            .update({ password: hashedPassword });
+        return rows > 0;
+    }
 }
 export default new AccountDAO()

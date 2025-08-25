@@ -1,0 +1,41 @@
+import ProfileDAO from '../daos/Profile.dao.js';
+
+class ProfileService {
+  constructor(profileDAO) {
+    this.ProfileDAO = profileDAO;
+  }
+
+  async getAllProfiles() {
+    return await this.ProfileDAO.getAllProfiles();
+  }
+
+  async getProfileById(id) {
+    return await this.ProfileDAO.getProfileById(id);
+  }
+
+  async getProfileByAccountId(accountId) {
+    return await this.ProfileDAO.getProfileByAccountId(accountId);
+  }
+
+  async createProfile(accountId, fullname, github = null, linkedin = null, avatar = null) {
+    return await this.ProfileDAO.createProfile(accountId, fullname, github, linkedin, avatar);
+  }
+
+  async updateProfile(id, updateFields) {
+    return await this.ProfileDAO.updateProfile(id, updateFields);
+  }
+
+  async deleteProfile(id) {
+    return await this.ProfileDAO.deleteProfile(id);
+  }
+
+  async getProfileTeams(profileId) {
+    return await this.ProfileDAO.getProfileTeams(profileId);
+  }
+
+  async getProfileRoadmaps(profileId) {
+    return await this.ProfileDAO.getProfileRoadmaps(profileId);
+  }
+}
+
+export default new ProfileService(ProfileDAO);
