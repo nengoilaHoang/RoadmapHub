@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 //import auRoutes from './routes/auth.route.js'
 import auRoutes from './routes/auth.route.js'
+import roadmapRoutes from './routes/Roadmap.route.js'
 import cors from 'cors'
 import authenticate from './middlewares/AuthMiddleware.js';
 import cookieParser from "cookie-parser";
@@ -23,6 +24,7 @@ app.use('/api/accounts', auRoutes)
 // })
 // app.use('/api/accounts', auRoutes)
 app.use('/api/auth', auRoutes)
+app.use('/api/roadmaps', auRoutes)
 app.listen(process.env.PORT,()=>{
     console.log(`Server is running at http://localhost:${process.env.PORT}`)
 });
