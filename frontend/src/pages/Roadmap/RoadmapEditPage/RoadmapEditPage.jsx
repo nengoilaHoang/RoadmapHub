@@ -20,7 +20,7 @@ import HorizontalLine from '#pages/Roadmap/Nodes/HorizontalLine/HorizontalLine.j
 import VerticalLine from '#pages/Roadmap/Nodes/VerticalLine/VerticalLine.jsx';
 import Paragraph from '#pages/Roadmap/Nodes/Paragraph/Paragraph.jsx';
 
-import NodesBar from '../Nodes/NodesBar/NodeBar';
+import NodesBar from '../Nodes/NodesBar/NodeBar.jsx';
 import { DnDProvider, useDnD } from '../Nodes/NodesBar/DnDContext.jsx';
 import RightBar from '../Nodes/RightBar/RightBar.jsx';
 import TopBar from '../Nodes/TopBar/TopBar.jsx';
