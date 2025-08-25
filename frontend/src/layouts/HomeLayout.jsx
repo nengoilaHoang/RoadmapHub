@@ -6,7 +6,6 @@ export default function HomeLayout(){
         <div className="d-flex flex-column min-vh-100">
             <NavBar />
             <main className="flex-fill container my-4">
-                <h1>Welcome to Home Layout</h1>
             <Outlet />
             </main>
             <Footer />

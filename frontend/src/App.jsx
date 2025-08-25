@@ -14,6 +14,8 @@ import RoadmapEditPage from '#pages/Roadmap/RoadmapEditPage/RoadmapEditPage.jsx'
 import PrivacyPolicy from '#pages/TermsServiceAndPrivacyPolicy/PrivacyPolicy/PrivacyPolicy.jsx'
 import TermsService from '#pages/TermsServiceAndPrivacyPolicy/TermsService/TermsService.jsx'
 import ProfilePage from './pages/ProfilePage/ProfilePage/ProfilePage'
+import RoadmapView from '#pages/Roadmap/RoadmapView/RoadmapView.jsx'
+import Home from '#pages/Home/Home.jsx'
 function App() {
   const router = createBrowserRouter(
   [
@@ -21,7 +23,7 @@ function App() {
       path:'/',
       element:<HomeLayout />,
       children:[
-        {index:true,element:<h1>Home Page</h1>},
+        {index:true,element:<Home />},
         {path:'about',element:<h1>About Page</h1>}
       ]
     },
@@ -38,14 +40,16 @@ function App() {
         {path:'refresh-token', element: <RefreshToken />},
         {path:'privacy-policy', element: <PrivacyPolicy />},
         {path:'terms-of-service', element: <TermsService />},
-        {path:'profile', element: <ProfilePage />}
+        {path:'profile', element: <ProfilePage />},
+        {path:'roadmap/view', element:<RoadmapView />}
       ]
     },
     {
       path:'/',
       element:<RoadmapLayout/>,
       children:[
-        {path:'roadmap/edit', element: <RoadmapEditPage />}
+        {path:'roadmap/edit', element: <RoadmapEditPage />},
+        
       ]
 
     }
