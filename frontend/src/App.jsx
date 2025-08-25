@@ -10,6 +10,8 @@ import LoginVerify from '#pages/Login/LoginVerify/LoginVerify.jsx'
 import ForgotPassword from '#pages/ForgotPassword/forgotPassword.jsx'
 import RefreshToken from '#pages/Login/RefreshTokenPage/RefreshToken.jsx'
 import RoadmapEditPage from '#pages/Roadmap/RoadmapEditPage/RoadmapEditPage.jsx'
+import RoadmapView from '#pages/Roadmap/RoadmapView/RoadmapView.jsx'
+import Home from '#pages/Home/Home.jsx'
 function App() {
   const router = createBrowserRouter(
   [
@@ -17,7 +19,7 @@ function App() {
       path:'/',
       element:<HomeLayout />,
       children:[
-        {index:true,element:<h1>Home Page</h1>},
+        {index:true,element:<Home />},
         {path:'about',element:<h1>About Page</h1>}
       ]
     },
@@ -31,6 +33,7 @@ function App() {
         {path:'login/verify',element:<LoginVerify/>},
         {path:'forgot-password',element:<ForgotPassword/>},
         {path:'refresh-token', element: <RefreshToken />},
+        {path:'roadmap/view', element:<RoadmapView />},
         
       ]
     },
@@ -38,7 +41,8 @@ function App() {
       path:'/',
       element:<RoadmapLayout/>,
       children:[
-        {path:'roadmap/edit', element: <RoadmapEditPage />}
+        {path:'roadmap/edit', element: <RoadmapEditPage />},
+        
       ]
 
     }
