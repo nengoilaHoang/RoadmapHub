@@ -1,0 +1,30 @@
+.custom-node {
+  border: 2px solid #555;
+  border-radius: 8px;
+  padding: 10px;
+  min-width: 120px;
+  text-align: center;
+  background: #fff;
+  font-family: sans-serif;
+  font-size: 14px;
+  position: relative;
+}
+
+/* Topic node */
+.topic-node {
+  background: #e0f7fa;
+  border-color: #00acc1;
+}
+.topic-node .title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.react-flow__handle {
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border: 2px solid #555;
+  border-radius: 50%;
+}
+
