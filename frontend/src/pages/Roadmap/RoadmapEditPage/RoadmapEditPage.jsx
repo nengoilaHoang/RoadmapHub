@@ -11,19 +11,19 @@ import { Background, BackgroundVariant, Controls, MiniMap } from '@xyflow/react'
 import '@xyflow/react/dist/style.css';
 
 
-import Topic from '#pages/Roadmap/Nodes/Topic/Topic.jsx';
-import Title from '#pages/Roadmap/Nodes/Title/Title.jsx';
-import Button from '#pages/Roadmap/Nodes/Button/Button.jsx';
-import Section from '#pages/Roadmap/Nodes/Section/Section.jsx';
-import CheckList from '#pages/Roadmap/Nodes/CheckList/CheckList.jsx';
-import HorizontalLine from '#pages/Roadmap/Nodes/HorizontalLine/HorizontalLine.jsx';
-import VerticalLine from '#pages/Roadmap/Nodes/VerticalLine/VerticalLine.jsx';
-import Paragraph from '#pages/Roadmap/Nodes/Paragraph/Paragraph.jsx';
+import Topic from '#components/Roadmap/Nodes/Topic/Topic.jsx';
+import Title from '#components/Roadmap/Nodes/Title/Title.jsx';
+import Button from '#components/Roadmap/Nodes/Button/Button.jsx';
+import Section from '#components/Roadmap/Nodes/Section/Section.jsx';
+import CheckList from '#components/Roadmap/Nodes/CheckList/CheckList.jsx';
+import HorizontalLine from '#components/Roadmap/Nodes/HorizontalLine/HorizontalLine.jsx';
+import VerticalLine from '#components/Roadmap/Nodes/VerticalLine/VerticalLine.jsx';
+import Paragraph from '#components/Roadmap/Nodes/Paragraph/Paragraph.jsx';
 
-import NodesBar from '../Nodes/NodesBar/NodeBar.jsx';
-import { DnDProvider, useDnD } from '../Nodes/NodesBar/DnDContext.jsx';
-import RightBar from '../Nodes/RightBar/RightBar.jsx';
-import TopBar from '../Nodes/TopBar/TopBar.jsx';
+import NodesBar from '#components/Roadmap/Nodes/NodesBar/NodeBar.jsx';
+import { DnDProvider, useDnD } from '#components/Roadmap/Nodes/NodesBar/DnDContext.jsx';
+import RightBar from '#components/Roadmap/Nodes/RightBar/RightBar.jsx';
+import TopBar from '#components/Roadmap/Nodes/TopBar/TopBar.jsx';
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
