@@ -1,9 +1,9 @@
 .rightbar {
   position: fixed;
   right: 0;
-  top: 152px;
+  top: 180px;
   width: 300px;
-  height: calc(100vh - 64px);
+  bottom:0;
   background: white;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
   z-index: 100;
