@@ -36,3 +36,14 @@
   background-color: #dc3545;
   color: white;
 }
+
+.dropdown-item{
+  position: relative;
+  z-index: 1000;
+}
+
+.navbar{
+  position: relative;
+  z-index: 1000;
+}
+

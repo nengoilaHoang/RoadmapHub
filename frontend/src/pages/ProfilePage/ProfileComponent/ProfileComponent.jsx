@@ -2,6 +2,7 @@ import React,{ useState, useEffect } from "react";
 import axios from "axios";
 
 const ProfileComponent = () => {
+    const [email, setEmail] = useState("");
     const getUserData = async () => {
         const userData = await axios.get('http://localhost:5000/api/profiles/get-profile',{
             headers: {
@@ -9,7 +10,8 @@ const ProfileComponent = () => {
             },
             withCredentials: true
         });
-        return userData.data.profile;
+        setEmail(userData.data.email);
+        return (userData.data.profile);
     };
     const [formData, setFormData] = useState(null);
     useEffect(() => {
@@ -19,6 +21,7 @@ const ProfileComponent = () => {
         };
         fetchData();
     }, []);
+    console.log("Email:", email);
     console.log("Form data state:", formData);
     //Hàm thay đổi input
     const handleInputChange = (e) => {
@@ -62,7 +65,7 @@ const ProfileComponent = () => {
             <input
                 type="email"
                 id="email"
-                value={formData?.email||""}
+                value={email||""}
                 disabled
                 className="disabled-input"
             />

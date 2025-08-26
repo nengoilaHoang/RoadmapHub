@@ -55,7 +55,6 @@ export default function NavBar() {
             <li><a className="dropdown-item" onClick={onLogout}>Log out</a></li>
         </ul>
         </div>
-
     }
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-2 py-4">
@@ -78,8 +77,6 @@ export default function NavBar() {
             </div>
             </div>
         </div>
-           
-
         </nav>
 
     )

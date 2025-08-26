@@ -9,7 +9,7 @@ class ProfileController{
         const token = req.cookies?.token;
         console.log("this is token when get profile: ", token);
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        const { id } = decodedToken;
+        const { id, email } = decodedToken;
         console.log("decoded token id: ", id);
         // Tạo buffer từ object
         const realBuffer = Buffer.from(id.data);
@@ -21,7 +21,11 @@ class ProfileController{
         if (!profile) {
             return res.status(404).json({ status: false, message: "Profile not found" });
         }
-        return res.status(200).json({ status: true, profile });
+        return res.status(200).json({ status: true, profile, email});
     };
+
+    updateProfile = async (req, res, next) => {
+
+    }
 }
 export default new ProfileController(ProfileService);
