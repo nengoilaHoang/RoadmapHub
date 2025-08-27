@@ -1,7 +1,7 @@
 import React from "react";
 import { useState, useRef } from "react";
 
-export default function EnterPin(pin, setPin, onClickFunction){
+export default function EnterPin({pin, setPin, onClickFunction}){
     const inputRefs = useRef([]);
     const handleChange = (e, index) => {
     const value = e.target.value.replace(/\D/, ""); // chỉ cho nhập số
