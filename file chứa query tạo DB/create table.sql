@@ -39,7 +39,11 @@ CREATE TABLE Roadmap(
   FOREIGN KEY (accountId) REFERENCES Account(id),
   FOREIGN KEY (teamId) REFERENCES Team(id),
   name VARCHAR(16),
-  description VARCHAR(255)
+  description VARCHAR(255),
+  isPublic TINYINT(1),
+  learning INT DEFAULT(0),
+  teaching INT DEFAULT(0)
+  
 );
 -- Node table
 CREATE TABLE Node(
