@@ -392,7 +392,8 @@ class AccountController {
             const pinToken = jwt.sign({pin}, process.env.JWT_SECRET, { expiresIn: '10m' });
             const verifyText = `here is your pin ${pin} to change email`
             const verifyHtml =
-            `<p>here is your link to change email <a href="http://localhost:3000/change-email/verify/${pinToken}/${oldEmail}/${newEmail}">click here</a></p>`
+            `<p>here is your link to change email <a href="http://localhost:3000/change-email/verify/${pinToken}/${oldEmail}/${newEmail}">click here</a></p>
+            <p>please open this link in the browser where you are logged in</p>`
             SendEmail({to: oldEmail, text: verifyText})
             SendEmail({to: newEmail, html: verifyHtml})
             if(!resultCheckAccountEmail.success){
