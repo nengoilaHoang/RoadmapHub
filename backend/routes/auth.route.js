@@ -12,4 +12,5 @@ router.post('/check-login', AccountController.checkLogin);
 router.post('/logout', AccountController.logout);
 router.post('/forgot-password', AccountController.forgotPassword);
 router.post('/reset-password/:token/:email', AccountController.resetPassword);
+router.post('/change-password', AccountController.changePassword);
 export default router;

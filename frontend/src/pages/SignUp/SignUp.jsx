@@ -21,7 +21,16 @@ export default function SignUp() {
         console.log(jwtDecode(credentialResponse.credential));
         // const decode = jwtDecode(credentialResponse.credential);
         //const response = await api.post("/accounts/signup-google",{email:decode.email,password:decode.sub,fullname:decode.name})
-        const response = await api.post("/accounts/signup-google",{credential:credentialResponse.credential})
+        const response = await api.post("/accounts/signup-google",{credential:credentialResponse.credential}
+            ,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    // "Authorization": `Bearer ${localStorage.getItem("token")}`
+                },
+                withCredentials: true
+            }
+        )
         console.log(response)
         if(!response.data.success){
             navigate('/login');
@@ -42,7 +51,8 @@ export default function SignUp() {
         // console.log(email,password,fullname)
        
         try {
-            const response = await api.post("/accounts/verify-email",{email:email,password:password,fullname:fullname});
+            const response = await api.post("/accounts/verify-email",{email:email,password:password,fullname:fullname},
+            );
             if(response.data.success)
             {
                  navigate(`/verify/${email}`,{

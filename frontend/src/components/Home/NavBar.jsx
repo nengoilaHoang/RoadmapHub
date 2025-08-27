@@ -42,16 +42,9 @@ export default function NavBar() {
             />
         </button>
         <ul className="dropdown-menu dropdown-menu-dark">
-            <li>
-            <a className="dropdown-item" href="#"><i className="bi bi-0-circle"></i> Account</a>
-            </li>
-            <li><a className="dropdown-item" href="#">My Profile</a></li>
-            <li><a className="dropdown-item" href="#">Friends</a></li>
-            <li><hr className="dropdown-divider" /></li>
-            <li><a className="dropdown-item" href="#">New Roadmap</a></li>
-            <li><a className="dropdown-item" href="#">Roadmaps</a></li>
-            <li><hr className="dropdown-divider" /></li>
+            <li><a className="dropdown-item" href="/profile">My Profile</a></li>
             <li><a className="dropdown-item" href="#">Teams</a></li>
+            <li><hr className="dropdown-divider" /></li>
             <li><a className="dropdown-item" onClick={onLogout}>Log out</a></li>
         </ul>
         </div>

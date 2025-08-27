@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import axios from "axios";
 
 const SettingComponent = () => {
     const [emailCurrent, setEmailCurrent] = useState('');
@@ -6,6 +7,28 @@ const SettingComponent = () => {
         const [passCurrent, setPassCurrent] = useState('');
         const [passNew, setPassNew] = useState('');
         const [passConfirm, setPassConfirm] = useState('');
+
+    const handleUpdateEmail = async () => {
+        // Call API to update email
+    };
+
+    const handleUpdatePassword = async () => {
+        console.log(passCurrent, passNew, passConfirm);
+        if(passCurrent && passNew && passConfirm) {
+            if((passCurrent !== passConfirm) && (passConfirm == passNew)) {
+                console.log("run to here");
+                await axios.post('http://localhost:5000/api/accounts/change-password', { oldPassword: passCurrent, newPassword: passNew },
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true
+                });
+            }
+            // Call API to update password
+        }
+    };
+
     return (
         <div className="setting-content-wrapper">
             <section className="setting-section">
@@ -52,7 +75,7 @@ const SettingComponent = () => {
                 value={passConfirm}
                 onChange={e => setPassConfirm(e.target.value)}
                 />
-                <button className="setting-btn black">Send verification link</button>
+                <button className="setting-btn black" onClick={handleUpdatePassword}>Change password</button>
             </section>
 
             <section className="setting-section">

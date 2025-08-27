@@ -35,11 +35,12 @@ class ProfileDAO {
     };
   }
 
-  async updateProfile(id, updateFields) {
+  async updateProfile(id, fullname, github, linkedin) {
     // updateFields: { fullname, github, linkedin, avatar }
+    //console.log("Updating profile in DAO with id:", id, fullname, github, linkedin);
     const rows = await db('profile')
-      .where({ id })
-      .update(updateFields);
+      .where({ accountId: id })
+      .update({ fullname, github, linkedin });
     if (rows === 0) return null;
     return this.getProfileById(id);
   }

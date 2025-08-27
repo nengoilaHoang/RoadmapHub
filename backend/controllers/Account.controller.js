@@ -67,7 +67,8 @@ class AccountController {
                     SendEmail({ to: account.email, text: text });
                     return res.status(200).json({status: true, message: "Login successful", account, hashedPin, encodeToken, encodeRefreshToken});
                 }
-                res.cookie("token", token, { httpOnly: true,sameSite: "lax" });
+                console.log("this is token aaa:", token);
+                res.cookie("token", token, { httpOnly: true,secure: false,sameSite: "lax" });
                 return res.status(200).json({status: true, message: "Login successful", account, token});
 
             }
@@ -101,8 +102,7 @@ class AccountController {
         //const payload = jwt.decode(refreshToken);
         const payload = jwt.verify(refreshToken, process.env.JWT_SECRET);
         //const idString = payload.id;
-        const bufData = payload.id.data;
-        const idString = Buffer.from(bufData).toString('utf-8');
+        const idString = payload.id;
         const refreshTokenFromDB = await AccountService.getRefreshTokenById(idString);
         //Verify the refresh token and issue a new access token
         if (refreshToken === refreshTokenFromDB) {
@@ -115,7 +115,7 @@ class AccountController {
 
     checkLogin = async (req, res, next) => {
         //console.log(req.headers.authorization);
-        console.log("Check login request received", req.authenticate);
+        //console.log("Check login request received", req.authenticate);
         if (req.authenticate) {
             //console.log("User is logged in", req.authenticate);
             return res.status(200).json({ status: true, message: "User is logged in", user: req.authenticate });
@@ -315,6 +315,7 @@ class AccountController {
             const passWordInDB = await AccountService.getPassWord(email);
             const isMatch = await bcrypt.compare(password, passWordInDB);
             const account = await AccountService.login(email, isMatch ? passWordInDB : null);
+            console.log("Account created via Google:", account);
             const payload = {
                     id: account.id,
                     userName: account.username,
@@ -339,6 +340,30 @@ class AccountController {
         }
        
 
+    }
+    changePassword = async (req, res, next) => {
+        if(!req.authenticate) {
+            //console.log("User is not logged in");
+            return res.status(401).json({status: false, message: "User is not logged in"});
+        }
+        else{
+            const { oldPassword, newPassword } = req.body;
+            console.log("Change password request received", req.authenticate, oldPassword, newPassword, typeof newPassword);
+            if (!oldPassword || !newPassword) {
+                return res.status(400).json({ status: false, message: "Old password and new password are required" });
+            }
+            // Check if the old password is correct
+            const account = await AccountService.getAccountByEmail(req.authenticate.email);
+            console.log("Account retrieved:", account);
+            const isMatch = await bcrypt.compare(oldPassword, account.passWord);
+            console.log("Old password match:", isMatch);
+            if (!isMatch) {
+                return res.status(401).json({ status: false, message: "Old password is incorrect"});
+            }
+            //Update the password
+            await AccountService.changePassword(req.authenticate.email, newPassword);
+            return res.status(200).json({ status: true, message: "Password changed successfully" });
+        }
     }
 
 }

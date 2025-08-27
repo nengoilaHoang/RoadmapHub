@@ -2,6 +2,7 @@ import db from '../utils/db.js'
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import Account from '../models/Account.model.js';
+import genUUID from '../Helps/genUUID.js';
 
 class AccountDAO {
     async getAccountAll(){
@@ -28,7 +29,7 @@ class AccountDAO {
 
     async createAccount(email,username, password) {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const account = new Account(Buffer.from(uuidv4().replace(/-/g, ''), 'hex'),  username, email, hashedPassword, 1);
+        const account = new Account(genUUID(), username, email, hashedPassword, 1);
         const result = await db('account').insert(account);
         return {
                 success:true,

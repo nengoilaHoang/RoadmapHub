@@ -19,11 +19,11 @@ app.use(cors({
 }));
 app.use(express.json())
 app.use('/',authenticate);
-app.use('/api/accounts', auRoutes)
+app.use('/api/accounts', auRoutes);
 app.use('/api/profiles', profileRoute);
-app.use('/api/auth', auRoutes)
+app.use('/api/auth', auRoutes);
 
-app.use('/api/roadmaps', auRoutes)
-app.listen(process.env.PORT,()=>{
+app.use('/api/roadmaps', roadmapRoutes);
+app.listen(process.env.PORT, () => {
     console.log(`Server is running at http://localhost:${process.env.PORT}`)
 });
