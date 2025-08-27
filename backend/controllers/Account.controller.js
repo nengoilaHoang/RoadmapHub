@@ -24,21 +24,24 @@ class AccountController {
                     return res.status(400).json({status: false, message: "Email and password are required"});
                 }
                 const passWordInDB = await AccountService.getPassWord(email);
+                //console.log("data to compare: ", passWord, passWordInDB);
                 const isMatch = await bcrypt.compare(passWord, passWordInDB);
+                //console.log("Password match:", isMatch);
                 account = await AccountService.login(email, isMatch ? passWordInDB : null);
             }
             else if(type === 'google') {
                 // Handle Google login
                 const encodeCredential = jwtDecode(credentialResponse.credential);
-                //console.log("Decoded Google credential:", encodeCredential);
+                //console.log("Google credential decoded:", encodeCredential);
                 if(!encodeCredential.email || !encodeCredential.sub) {
                     return res.status(400).json({status: false, message: "Email and password are required"});
                 }
                 const passWordInDB = await AccountService.getPassWord(encodeCredential.email);
-                //onsole.log("data to compare: ", encodeCredential.sub, passWordInDB)
+                //console.log("data to compare: ", encodeCredential.sub, passWordInDB);
                 const isMatch = await bcrypt.compare(encodeCredential.sub, passWordInDB);
                 //console.log("Google password match:", isMatch);
                 account = await AccountService.login(encodeCredential.email, isMatch ? passWordInDB : null);
+                //console.log("Account retrieved via Google:", account);
             }
             if(!account) {
                 return res.status(401).json({status: false, message: "Invalid username or password"});
@@ -54,9 +57,6 @@ class AccountController {
                 const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
                 let encodeToken = CryptoJS.AES.encrypt(token, process.env.CRYPTO_SECRET).toString();
                 const refreshToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
-                // Lưu refreshToken vào cơ sở dữ liệu
-                //const result = await AccountService.setRefreshToken(account.id, refreshToken);
-                //console.log("Update Refresh Token result:", result);
                 let encodeRefreshToken = CryptoJS.AES.encrypt(refreshToken, process.env.CRYPTO_SECRET).toString();
                 //tạo và hashed mã pin
                 const pin = Math.floor(100000 + Math.random() * 900000).toString();
@@ -67,7 +67,7 @@ class AccountController {
                     SendEmail({ to: account.email, text: text });
                     return res.status(200).json({status: true, message: "Login successful", account, hashedPin, encodeToken, encodeRefreshToken});
                 }
-                console.log("this is token aaa:", token);
+                //console.log("this is token aaa:", token);
                 res.cookie("token", token, { httpOnly: true,secure: false,sameSite: "lax" });
                 return res.status(200).json({status: true, message: "Login successful", account, token});
 
@@ -83,7 +83,7 @@ class AccountController {
             // Create a new session or token for the user
             const decodedToken = CryptoJS.AES.decrypt(encodeToken, process.env.CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
             const decodeRefreshToken = CryptoJS.AES.decrypt(encodeRefreshToken, process.env.CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
-            console.log("Login successful", { decodedToken });
+            //console.log("Login successful", { decodedToken });
             res.cookie("token", decodedToken, {
                 httpOnly: true,
                 secure: false,
@@ -181,6 +181,7 @@ class AccountController {
                 // Ký token (expiresIn = thời hạn, ví dụ 1h)
                 const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
                 res.cookie("token", accessToken, { httpOnly: true, sameSite: "lax" });
+                //console.log("this is password:", req.body.password);
                 await AccountService.changePassword(email, req.body.password);
             return res.status(200).json({ status: true, message: "Token is valid" });
         }
@@ -348,15 +349,15 @@ class AccountController {
         }
         else{
             const { oldPassword, newPassword } = req.body;
-            console.log("Change password request received", req.authenticate, oldPassword, newPassword, typeof newPassword);
+            //console.log("Change password request received", req.authenticate, oldPassword, newPassword, typeof newPassword);
             if (!oldPassword || !newPassword) {
                 return res.status(400).json({ status: false, message: "Old password and new password are required" });
             }
             // Check if the old password is correct
             const account = await AccountService.getAccountByEmail(req.authenticate.email);
-            console.log("Account retrieved:", account);
+            //console.log("Account retrieved:", account);
             const isMatch = await bcrypt.compare(oldPassword, account.passWord);
-            console.log("Old password match:", isMatch);
+            //console.log("Old password match:", isMatch);
             if (!isMatch) {
                 return res.status(401).json({ status: false, message: "Old password is incorrect"});
             }
