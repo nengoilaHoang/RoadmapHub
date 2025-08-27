@@ -15,5 +15,5 @@ router.post('/reset-password/:token/:email', AccountController.resetPassword);
 router.post('/change-password', AccountController.changePassword);
 // đổi email
 router.post('/change-email', AccountController.changeEmail);
-//router.post('/change-email/verify/:hashedPin', AccountController.changeEmailVerify);
+router.post('/change-email/verify/:hashedPin/:oldEmail/:newEmail', AccountController.changeEmailVerify);
 export default router;

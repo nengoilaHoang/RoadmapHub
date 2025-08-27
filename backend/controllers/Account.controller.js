@@ -305,26 +305,26 @@ class AccountController {
     }
     signUpGoogle = async (req,res)=>{
         const {credential} = req.body; 
-        console.log(credential);
+        //console.log(credential);
         const decode = jwtDecode(credential);
         const email = decode.email;
         const username = decode.name;
         const password = decode.sub;
-        console.log(decode, email, username, password);
+        //console.log(decode, email, username, password);
         const resultCheckAccountEmail = await AccountService.checkExitAccountEmail(email);
         if(resultCheckAccountEmail.success ){
-            console.log('Google password:',password);
+            //console.log('Google password:',password);
             await AccountService.createAccount(email,username,password);
             //tạo profile cho account với fullname là username
-            console.log("run to here: ",email,username,password);
+            //console.log("run to here: ",email,username,password);
             const newaccount = await AccountService.getAccountByEmail(email);
-            console.log("New account created via Google:", newaccount);
+            //console.log("New account created via Google:", newaccount);
             await ProfileService.createProfile(newaccount.id,username);
             //
             const passWordInDB = await AccountService.getPassWord(email);
             const isMatch = await bcrypt.compare(password, passWordInDB);
             const account = await AccountService.login(email, isMatch ? passWordInDB : null);
-            console.log("Account created via Google:", account);
+            //console.log("Account created via Google:", account);
             const payload = {
                     id: account.id,
                     userName: account.username,
@@ -332,7 +332,7 @@ class AccountController {
                 };
                 // Ký token (expiresIn = thời hạn, ví dụ 1h)
             const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
-            console.log("this is token in signupGG: ",token);
+            //console.log("this is token in signupGG: ",token);
             res.cookie("token", token, { httpOnly: true,sameSite: "lax" }); 
             res.json ({
                 success:true,
@@ -382,17 +382,17 @@ class AccountController {
         }
         else{
             const { oldEmail, newEmail } = req.body;
-            console.log("oldEmail:", oldEmail, "newEmail: ", newEmail);
+            //console.log("oldEmail:", oldEmail, "newEmail: ", newEmail);
             if (!newEmail && !oldEmail) {
                 return res.status(400).json({ status: false, message: "New email is required" });
             }
             // gửi pin cho email cũ
             const pin = Math.floor(100000 + Math.random() * 900000).toString();
             // bỏ hashlink vào url và gửi tới email mới. Ở link này sẽ cần nhập mã pin để verify việc đổi email
-            let hashedPin = await bcrypt.hash(pin, parseInt(process.env.BCRYPT_SALT_ROUNDS));
+            const pinToken = jwt.sign({pin}, process.env.JWT_SECRET, { expiresIn: '10m' });
             const verifyText = `here is your pin ${pin} to change email`
             const verifyHtml =
-            `<p>here is your link to change email <a href="http://localhost:3000/change-email/${hashedPin}">click here</a></p>`
+            `<p>here is your link to change email <a href="http://localhost:3000/change-email/verify/${pinToken}/${oldEmail}/${newEmail}">click here</a></p>`
             SendEmail({to: oldEmail, text: verifyText})
             SendEmail({to: newEmail, html: verifyHtml})
             if(!resultCheckAccountEmail.success){
@@ -403,6 +403,26 @@ class AccountController {
             return res.status(200).json({ status: true, message: "Email changed successfully" });
         }
     }
-
+    changeEmailVerify = async (req, res, next) => {
+        const { hashedPin, oldEmail, newEmail } = req.params;
+        const { pin } = req.body;
+        //console.log("hashedPin:", hashedPin, "pin: ", pin);
+        try {
+            const decoded = jwt.verify(hashedPin, process.env.JWT_SECRET);
+            if (!decoded) {
+                return res.status(400).json({ status: false, message: "Invalid or expired token" });
+            }
+            // Check if the pin is correct
+            if (pin !== decoded.pin) {
+                return res.status(400).json({ status: false, message: "Invalid pin" });
+            }
+            // Update the email
+            await AccountService.changeEmail(oldEmail, newEmail);
+            return res.status(200).json({ status: true, message: "Email changed successfully" });
+        } catch (error) {
+            console.error("Error verifying email change:", error);
+            return res.status(500).json({ status: false, message: "Internal server error" });
+        }
+    }
 }
 export default new AccountController(AccountService)

@@ -48,5 +48,9 @@ class AccountService {
     async changePassword(email, newPassword) {
         return await this.AccountDAO.changePassword(email, newPassword);
     }
+    async changeEmail(oldEmail, newEmail) {
+        //console.log("Changing email from", oldEmail, "to", newEmail);
+        return await this.AccountDAO.changeEmail(oldEmail, newEmail);
+    }
 }
 export default new AccountService(AccountDAO)

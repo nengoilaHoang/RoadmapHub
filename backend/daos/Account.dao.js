@@ -112,5 +112,11 @@ class AccountDAO {
             .update({ password: hashedPassword });
         return rows > 0;
     }
+    async changeEmail(oldEmail, newEmail) {
+        const rows = await db('account')
+            .where({ email: oldEmail })
+            .update({ email: newEmail });
+        return rows > 0;
+    }
 }
 export default new AccountDAO()
