@@ -20,7 +20,8 @@ CREATE TABLE Profile(
 );
 -- Team table
 CREATE TABLE Team(
-  id VARCHAR(36) PRIMARY KEY
+  id VARCHAR(36) PRIMARY KEY,
+  name VARCHAR(255)
 );
 -- TeamMember table
 CREATE TABLE TeamMember(
