@@ -9,7 +9,16 @@ const SettingComponent = () => {
         const [passConfirm, setPassConfirm] = useState('');
 
     const handleUpdateEmail = async () => {
-        // Call API to update email
+        if(emailCurrent && emailNew) {
+            console.log(emailCurrent, emailNew);
+            await axios.post(`http://localhost:5000/api/accounts/change-email`, {oldEmail: emailCurrent, newEmail: emailNew },
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            });
+        }
     };
 
     const handleUpdatePassword = async () => {
@@ -48,7 +57,7 @@ const SettingComponent = () => {
                 value={emailNew}
                 onChange={e => setEmailNew(e.target.value)}
                 />
-                <button className="setting-btn black">Send verification link</button>
+                <button className="setting-btn black" onClick={handleUpdateEmail}>Send verification link</button>
             </section>
 
             <section className="setting-section">

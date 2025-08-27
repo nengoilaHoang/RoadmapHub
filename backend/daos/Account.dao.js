@@ -28,12 +28,18 @@ class AccountDAO {
     }
 
     async createAccount(email,username, password) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const account = new Account(genUUID(), username, email, hashedPassword, 1);
-        const result = await db('account').insert(account);
-        return {
-                success:true,
-                message:'Create account successfully'
+        try{
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const account = new Account(genUUID(), username, email, hashedPassword, 1);
+            console.log("Account to be created:", account);
+            const result = await db('account').insert(account);
+            return {
+                    success:true,
+                    message:'Create account successfully'
+            }
+        }
+        catch(e){
+            console.log(e);
         }
         
     }

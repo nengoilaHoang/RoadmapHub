@@ -1,4 +1,5 @@
 import AccountService from "../services/Account.service.js";
+import ProfileService from "../services/Profile.service.js";
 import AccountDAO from "../daos/Account.dao.js";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -10,13 +11,10 @@ dotenv.config();
 //const accountService = new AccountService(new AccountDAO());
 class AccountController {
     login = async (req,res,next)=>{
-        //console.log("Login request received cookie", req.headers.cookie);
         if(req.authenticate) {
-            //console.log("User is already logged in");
             return res.status(200).json({status: true, message: "User is already logged in"});
         }
         else{
-            //console.log("Login request received", req.body);
             const {email, passWord, type, credentialResponse} = req.body;
             let account;
             if(type === 'normal'){
@@ -24,24 +22,18 @@ class AccountController {
                     return res.status(400).json({status: false, message: "Email and password are required"});
                 }
                 const passWordInDB = await AccountService.getPassWord(email);
-                //console.log("data to compare: ", passWord, passWordInDB);
                 const isMatch = await bcrypt.compare(passWord, passWordInDB);
-                //console.log("Password match:", isMatch);
                 account = await AccountService.login(email, isMatch ? passWordInDB : null);
             }
             else if(type === 'google') {
                 // Handle Google login
                 const encodeCredential = jwtDecode(credentialResponse.credential);
-                //console.log("Google credential decoded:", encodeCredential);
                 if(!encodeCredential.email || !encodeCredential.sub) {
                     return res.status(400).json({status: false, message: "Email and password are required"});
                 }
                 const passWordInDB = await AccountService.getPassWord(encodeCredential.email);
-                //console.log("data to compare: ", encodeCredential.sub, passWordInDB);
                 const isMatch = await bcrypt.compare(encodeCredential.sub, passWordInDB);
-                //console.log("Google password match:", isMatch);
                 account = await AccountService.login(encodeCredential.email, isMatch ? passWordInDB : null);
-                //console.log("Account retrieved via Google:", account);
             }
             if(!account) {
                 return res.status(401).json({status: false, message: "Invalid username or password"});
@@ -294,7 +286,16 @@ class AccountController {
         else {
             const { email, password, fullname } = decoded;
             await AccountService.createAccount(email,fullname,password);
-            res.cookie("token", token, { httpOnly: true,sameSite: "lax" }); 
+            //tạo profile cho account với fullname là username
+            const newaccount = await AccountService.getAccountByEmail(email, fullname);
+            await ProfileService.createProfile(newaccount.id,fullname);
+            payload = {
+                id: newaccount.id,
+                email: newaccount.email,
+                fullname: newaccount.fullname
+            };
+            const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
+            res.cookie("token", newToken, { httpOnly: true,sameSite: "lax" }); 
             res.redirect('http://localhost:3000/')
             // res.send("Email verifified successfully");
             // console.log(response)
@@ -304,15 +305,22 @@ class AccountController {
     }
     signUpGoogle = async (req,res)=>{
         const {credential} = req.body; 
+        console.log(credential);
         const decode = jwtDecode(credential);
         const email = decode.email;
         const username = decode.name;
         const password = decode.sub;
-        
+        console.log(decode, email, username, password);
         const resultCheckAccountEmail = await AccountService.checkExitAccountEmail(email);
         if(resultCheckAccountEmail.success ){
-            //console.log('Google password:',password);
+            console.log('Google password:',password);
             await AccountService.createAccount(email,username,password);
+            //tạo profile cho account với fullname là username
+            console.log("run to here: ",email,username,password);
+            const newaccount = await AccountService.getAccountByEmail(email);
+            console.log("New account created via Google:", newaccount);
+            await ProfileService.createProfile(newaccount.id,username);
+            //
             const passWordInDB = await AccountService.getPassWord(email);
             const isMatch = await bcrypt.compare(password, passWordInDB);
             const account = await AccountService.login(email, isMatch ? passWordInDB : null);
@@ -324,6 +332,7 @@ class AccountController {
                 };
                 // Ký token (expiresIn = thời hạn, ví dụ 1h)
             const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
+            console.log("this is token in signupGG: ",token);
             res.cookie("token", token, { httpOnly: true,sameSite: "lax" }); 
             res.json ({
                 success:true,
@@ -364,6 +373,34 @@ class AccountController {
             //Update the password
             await AccountService.changePassword(req.authenticate.email, newPassword);
             return res.status(200).json({ status: true, message: "Password changed successfully" });
+        }
+    }
+
+    changeEmail = async (req, res, next) => {
+        if(!req.authenticate) {
+            return res.status(401).json({status: false, message: "User is not logged in"});
+        }
+        else{
+            const { oldEmail, newEmail } = req.body;
+            console.log("oldEmail:", oldEmail, "newEmail: ", newEmail);
+            if (!newEmail && !oldEmail) {
+                return res.status(400).json({ status: false, message: "New email is required" });
+            }
+            // gửi pin cho email cũ
+            const pin = Math.floor(100000 + Math.random() * 900000).toString();
+            // bỏ hashlink vào url và gửi tới email mới. Ở link này sẽ cần nhập mã pin để verify việc đổi email
+            let hashedPin = await bcrypt.hash(pin, parseInt(process.env.BCRYPT_SALT_ROUNDS));
+            const verifyText = `here is your pin ${pin} to change email`
+            const verifyHtml =
+            `<p>here is your link to change email <a href="http://localhost:3000/change-email/${hashedPin}">click here</a></p>`
+            SendEmail({to: oldEmail, text: verifyText})
+            SendEmail({to: newEmail, html: verifyHtml})
+            if(!resultCheckAccountEmail.success){
+                return res.status(400).json({ status: false, message: resultCheckAccountEmail.message });
+            }
+            //Update the email
+            await AccountService.changeEmail(req.authenticate.email, newEmail);
+            return res.status(200).json({ status: true, message: "Email changed successfully" });
         }
     }
 
