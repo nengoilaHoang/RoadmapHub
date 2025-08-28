@@ -8,7 +8,7 @@ export default function Paragraph({ data, id, selected }) {
       border="2px solid #555" 
       background="#fff" 
       borderRadius="8px" 
-      name="Button"
+      name="paragraph node"
     />
   );
 }
