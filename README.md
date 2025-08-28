@@ -12,13 +12,13 @@ RoadmapHub là một nền tảng hỗ trợ xây dựng và quản lý lộ tr�
 ## 🛠 Công nghệ sử dụng
 - **Frontend**: ReactJS, Vite, Axios
 - **Backend**: NodeJS, ExpressJS, CORS
-- **Cơ sở dữ liệu**: (Điền vào nếu có, ví dụ MySQL / MongoDB)
+- **Cơ sở dữ liệu**: MySQL, MongoDB
 - **Công cụ hỗ trợ**: Git, Docker (nếu dùng)
 
 ## 👨‍💻 Thành viên nhóm
 | Họ và tên               | MSSV      | Vai trò               |
 |-------------------------|-----------|-----------------------|
-| Mai Đức Kiên            | 22110046  | Backend, Cấu hình dự án |
+| Mai Đức Kiên            | 22110046  | Backend, Frontend, Cấu hình dự án |
 | Lê Văn Việt Hoàng       | 22110027  | Fe, Be, UI/UX       |
 
 ## 🚀 Cách chạy dự án
