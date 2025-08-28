@@ -6,7 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useCheckLogin } from "../../../hooks/userCheckLogin";
 import {GoogleLogin} from '@react-oauth/google'
-
+import AlertError from "#components/SignUp/AlertError.jsx";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [passWord, setPassWord] = useState("");
@@ -101,7 +101,7 @@ const Login = () => {
             <p>OR</p>
             <span></span>
             </div>
-            {error && <span className="error">{error}</span>}
+            {error && <AlertError content={error}/>}
             {/* Form */}
             <form className="login-form" onSubmit={handleSubmit}>
             <input type="email" placeholder="Email Address" onChange={(e) => setEmail(e.target.value)}/>

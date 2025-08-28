@@ -26,6 +26,7 @@ class ProfileController{
         const { id } = decodedToken;
         const profileId = id
         const updatedProfile = await ProfileService.updateProfile(profileId, fullname, github, linkedin);
+        console.log("Updated profile:", updatedProfile);
         if (!updatedProfile) {
             return res.status(404).json({ status: false, message: "Profile not found" });
         }

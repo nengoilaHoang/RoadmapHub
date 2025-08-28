@@ -67,21 +67,22 @@ class AccountController {
         }
     };
     loginVerify = async (req, res, next) => {
-        const { hashedPin, encodeToken, encodeRefreshToken, pin } = req.body;
+        const { hashedPin, encodeToken, pin } = req.body;
         // Verify the hashedPin
         let validPin = await bcrypt.compare(pin, hashedPin);
         // If valid, log the user in
+        console.log("Valid pin:", validPin);
         if (validPin) {
             // Create a new session or token for the user
             const decodedToken = CryptoJS.AES.decrypt(encodeToken, process.env.CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
-            const decodeRefreshToken = CryptoJS.AES.decrypt(encodeRefreshToken, process.env.CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
+            //const decodeRefreshToken = CryptoJS.AES.decrypt(encodeRefreshToken, process.env.CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
             //console.log("Login successful", { decodedToken });
             res.cookie("token", decodedToken, {
                 httpOnly: true,
                 secure: false,
                 sameSite: "lax",
             });
-            return res.status(200).json({ status: true, message: "Login successful", decodedToken, decodeRefreshToken });
+            return res.status(200).json({ status: true, message: "Login successful", decodedToken });
         }
         else
         {

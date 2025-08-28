@@ -1,11 +1,14 @@
 import React,{ useState, useEffect } from "react";
 import axios from "axios";
-
+import AlertError from "../../../components/SignUp/AlertError";
+import AlertSuccess from "../../../components/SignUp/AlertSuccess";
 const ProfileComponent = ({ changeIntoSetting }) => {
     const [email, setEmail] = useState("");
     const [fullname, setFullname] = useState("");
     const [github, setGithub] = useState("");
     const [linkedin, setLinkedin] = useState("");
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
     const getUserData = async () => {
         const userData = await axios.get('http://localhost:5000/api/profiles/get-profile',{
             headers: {
@@ -47,16 +50,30 @@ const ProfileComponent = ({ changeIntoSetting }) => {
     };
 
     const handleSaveProfile = async () => {
-        await axios.post('http://localhost:5000/api/profiles/update-profile',{
-            fullname,
-            github,
-            linkedin
-        },{
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        });
+        try {
+            const res = await axios.post('http://localhost:5000/api/profiles/update-profile',{
+                fullname,
+                github,
+                linkedin
+            },{
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            });
+            console.log("Response data:", res.data);
+            if(!res.data?.status){
+                setError("Cập nhật thông tin không thành công");
+                setSuccess("");
+            }
+            else{
+                setSuccess("Cập nhật thông tin thành công");
+                setError("");
+            }
+        } catch {
+            setError("Cập nhật thông tin không thành công");
+            setSuccess("");
+        }
     };
     return(
     <div className="content-wrapper">
@@ -119,7 +136,8 @@ const ProfileComponent = ({ changeIntoSetting }) => {
                 placeholder="https://linkedin.com/in/username"
             />
             </div>
-
+            {error && <AlertError content={error} />}
+            {success && <AlertSuccess content={success} />}
             <button
             type="button"
             className="save-btn"

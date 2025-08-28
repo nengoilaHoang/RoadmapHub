@@ -43,8 +43,7 @@ class ProfileDAO {
     const rows = await db('profile')
       .where({ accountId: id })
       .update({ fullname, github, linkedin });
-    if (rows === 0) return null;
-    return this.getProfileById(id);
+    return rows > 0 ? { id, fullname, github, linkedin } : null;
   }
 
   async deleteProfile(id) {

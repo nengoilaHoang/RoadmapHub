@@ -14,7 +14,9 @@ export default function NavBar() {
             },
             withCredentials: true
         });
-        navigate('/login');
+        setTimeout(() => {
+            navigate("/login");
+        }, 500);
     }
     let dropdown;
     if (!isLoggedIn) {

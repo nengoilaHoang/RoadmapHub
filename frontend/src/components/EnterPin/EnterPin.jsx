@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useRef } from "react";
+import "./EnterPin.css";
 
 export default function EnterPin({pin, setPin, onClickFunction}){
     const inputRefs = useRef([]);
@@ -9,7 +10,6 @@ export default function EnterPin({pin, setPin, onClickFunction}){
     const newPin = [...pin];
     newPin[index] = value;
     setPin(newPin);
-
     // focus sang ô tiếp theo
     if (index < 5) {
       inputRefs.current[index + 1].focus();
