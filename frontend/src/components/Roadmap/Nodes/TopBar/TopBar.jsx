@@ -1,7 +1,8 @@
 import { useState } from "react";
 import "./TopBar.css"; 
 import CreateRoadmap from "#components/Roadmap/CreateRoadmap/CreateRoadmap";
-export default function TopBar() {
+export default function TopBar(props) {
+  const {onSaveNode} = props;
   const [title, setTitle] = useState("Untitled Roadmap");
   const [isEditing, setIsEditing] = useState(false);
 
@@ -17,7 +18,8 @@ export default function TopBar() {
 
   return (
     <div className="topbar">
-      <div className="topbar-left">
+      
+        <div className="topbar-left">
         {isEditing ? (
           <CreateRoadmap onClose={()=>setIsEditing(false)}/>
         ) : (
@@ -41,11 +43,13 @@ export default function TopBar() {
           <span>Live View</span>
         </button>
       </div>
-
-      <button className="save-btn-topbar-edit-roadmap">
+      <form onSubmit={onSaveNode}>
+      <button className="save-btn-topbar-edit-roadmap" onClick={onSaveNode}>
         <i className="bi bi-save"></i>
         <span>Save Roadmap</span>
       </button>
+      </form>
+      
     </div>
   );
 }
