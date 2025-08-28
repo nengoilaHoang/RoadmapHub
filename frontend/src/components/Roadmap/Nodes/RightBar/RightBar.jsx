@@ -7,7 +7,7 @@ import RightBarParagraph from "./RightBarParagraph/RightBarParagraph";
 import RightBarButton from "./RightBarButton/RightBarButton";
 import RightBarCheckList from "./RightBarCheckList/RightBarCheckList";
 import RightBarLine from "./RightBarLine/RightBarLine";
-import "./RightBar.css";
+//import "./RightBar.css";
 
 export default function RightBar({ selectedNode, onDeleteNode }) {
   if (!selectedNode) return null;
