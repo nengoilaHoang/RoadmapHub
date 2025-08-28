@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   ReactFlow,
   applyNodeChanges,
@@ -24,6 +24,7 @@ import NodesBar from '#components/Roadmap/Nodes/NodesBar/NodeBar.jsx';
 import { DnDProvider, useDnD } from '#components/Roadmap/Nodes/NodesBar/DnDContext.jsx';
 import RightBar from '#components/Roadmap/Nodes/RightBar/RightBar.jsx';
 import TopBar from '#components/Roadmap/Nodes/TopBar/TopBar.jsx';
+import api from '#utils/api.js'
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
@@ -80,6 +81,8 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
           )
         );
       }, },
+        fontSize:'M',
+
       };
 
       setNodes((nds) => nds.concat(newNode));
@@ -89,13 +92,13 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
 
   const onNodeClick = useCallback((_, node) => {
     setSelectedNode(node);
-    setRightBarOpen(300);
-    setNodeClick(true);
+    setRightBarOpen(360);
   }, [setSelectedNode]);
   const onPaneClick = useCallback(() => {
   setSelectedNode(null);
   setRightBarOpen(0);
 }, []);
+
 
 
   return (
@@ -132,9 +135,64 @@ export default function RoadmapEditPage() {
     setEdges((eds) => eds.filter((e) => e.source !== nodeId && e.target !== nodeId));
     setSelectedNode(null);
     };
+    const onSaveNodes = (e) => {
+        e.preventDefault();
+        console.log('Nodes:', nodes);
+        console.log('Edges:', edges);
+        const response = api.post('/roadmaps/edit-nodes',{nodes,edges});
+        console.log(response);
+
+    }
+      useEffect(() => {
+    if(selectedNode)
+    {
+      switch (selectedNode.type) {
+
+        case "topic":
+          selectedNode.color ='#FFFF00';
+          selectedNode.typeTopic = 'Topic'
+          break
+        case "paragraph":
+          selectedNode.background = '';
+          selectedNode.border = '';
+          selectedNode.text = '#000000';
+          selectedNode.padding = 16;
+          selectedNode.textAlign = 'left';
+          selectedNode.justification = 'left-start';
+          break
+        case  "button":
+          selectedNode.url = '';
+          selectedNode.background = '';
+          selectedNode.border = '';
+          selectedNode.text = '#FFFFFF';
+          selectedNode.borderRadius = 0
+          break
+        case "checklist":
+          //selectedNode.items.push("1")
+          break
+        case 'section':
+          selectedNode.background = '';
+          selectedNode.border = '';
+          selectedNode.borderRadius = 0
+          break
+        case 'horizontalline':
+          selectedNode.style = 'solid'
+          selectedNode.lineColor = '#2B78E4'
+          selectedNode.width = 3
+          break
+        case 'verticalline':
+          selectedNode.style = 'solid'
+          selectedNode.lineColor = '#2B78E4'
+          selectedNode.width = 3
+          break
+        default :
+          break
+      }
+    }
+  },[selectedNode]);
     return (
         <div style={{ display: 'flex',width:'100%',height:'100vh', flexDirection: "column"}}>
-        <TopBar />
+        <TopBar onSaveNode={onSaveNodes}/>
         <ReactFlowProvider>
             <DnDProvider>
             <NodesBar />
