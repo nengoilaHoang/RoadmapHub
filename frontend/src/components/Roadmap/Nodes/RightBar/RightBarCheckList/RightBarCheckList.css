@@ -1,0 +1,96 @@
+
+
+.items-section {
+    margin-top: 24px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-title i {
+    color: #805ad5;
+}
+
+.items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.item-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.item-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 14px;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+.item-input:focus {
+    outline: none;
+    border-color: #805ad5;
+    box-shadow: 0 0 0 3px rgba(128, 90, 213, 0.1);
+}
+
+.delete-item-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 6px;
+    background: #fee2e2;
+    color: #dc2626;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.delete-item-btn:hover {
+    background: #fecaca;
+    transform: translateY(-1px);
+}
+
+.add-item-btn {
+    width: 100%;
+    padding: 12px;
+    background: white;
+    border: 2px dashed #e2e8f0;
+    border-radius: 6px;
+    color: #805ad5;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.add-item-btn:hover {
+    background: #f8fafc;
+    border-color: #805ad5;
+}
+
+.add-item-btn i {
+    font-size: 16px;
+}
