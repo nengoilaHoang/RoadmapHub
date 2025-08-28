@@ -1,0 +1,79 @@
+.number-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.number-input {
+    width: 60px;
+    padding: 6px 8px;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    font-size: 14px;
+    text-align: center;
+    background: #f8fafc;
+}
+
+.number-input:focus {
+    outline: none;
+    border-color: #805ad5;
+    background: white;
+}
+
+.button-group {
+    display: flex;
+    gap: 4px;
+}
+
+.align-btn,
+.justify-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    background: #f8fafc;
+    color: #4a5568;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.align-btn:hover,
+.justify-btn:hover {
+    background: #edf2f7;
+    color: #2d3748;
+}
+
+.align-btn.active,
+.justify-btn.active {
+    background: #805ad5;
+    color: white;
+    border-color: #805ad5;
+}
+
+.unit {
+    color: #718096;
+    font-size: 13px;
+}
+
+.property-item {
+    margin-bottom: 16px;
+    padding: 12px;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.property-label {
+    margin-bottom: 8px;
+    color: #4a5568;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.property-label i {
+    color: #805ad5;
+    margin-right: 8px;
+}
