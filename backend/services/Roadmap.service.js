@@ -13,5 +13,11 @@ class RoadmapService {
     async deleteRoadmap(name) {
         return await RoadmapDAO.deleteRoadmap(name);
     }
+    async checkRoadmap(name, accountId) {
+        return await RoadmapDAO.checkRoadmap(name, accountId);
+    }
+    async editNodeRoadmap(nodes, edges) {
+        return await RoadmapDAO.editNodeRoadmap(nodes, edges);
+    }
 }
 export default new RoadmapService(RoadmapDAO)
