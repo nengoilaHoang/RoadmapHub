@@ -7,7 +7,6 @@ dotenv.config();
 class ProfileController{
     getProfile = async (req, res, next) => {
         const token = req.cookies?.token;
-        console.log("this is token when get profile: ", token);
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
         const { id } = decodedToken;
         console.log("decoded token id: ", id);
