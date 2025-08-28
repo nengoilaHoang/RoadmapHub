@@ -5,11 +5,10 @@ dotenv.config()
 const authenticate = (req, res, next) => {
   //const authHeader = req.headers.authorization;
   const token = req.cookies?.token; // lấy từ cookie
-  console.log("this is token: ", token)
   if (token) {
     try {
       const payload = jwt.verify(token, process.env.JWT_SECRET);
-      console.log("verify token: ",payload)
+      // console.log("verify token: ",payload)
       req.authenticate = payload; // Set user nếu token hợp lệ
     } catch (e) {
       // Token sai hoặc hết hạn, bỏ qua không lỗi
