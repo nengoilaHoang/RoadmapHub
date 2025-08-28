@@ -287,7 +287,7 @@ class AccountController {
             //tạo profile cho account với fullname là username
             const newaccount = await AccountService.getAccountByEmail(email, fullname);
             await ProfileService.createProfile(newaccount.id,fullname);
-            payload = {
+            const payload = {
                 id: newaccount.id,
                 email: newaccount.email,
                 fullname: newaccount.fullname
