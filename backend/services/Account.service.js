@@ -17,6 +17,7 @@ class AccountService {
     }
 
     async createAccount (email, username, password){
+        console.log("accout service recieived",email, username, password);
         return await AccountDAO.createAccount(email,username,password);
     }
     async checkExitAccountEmail(email){
@@ -46,6 +47,10 @@ class AccountService {
     }
     async changePassword(email, newPassword) {
         return await this.AccountDAO.changePassword(email, newPassword);
+    }
+    async changeEmail(oldEmail, newEmail) {
+        //console.log("Changing email from", oldEmail, "to", newEmail);
+        return await this.AccountDAO.changeEmail(oldEmail, newEmail);
     }
 }
 export default new AccountService(AccountDAO)

@@ -10,10 +10,15 @@ const ProfilePage = () => {
     const [selectedTeam, setSelectedTeam] = useState('Lê Văn Việt Hoàng');
     const [activeNav, setActiveNav] = useState('Profile');
 
-    const profile = <ProfileComponent/>
-    const setting = <SettingComponent/>
-    const friends = <FriendsComponent/>
-    const roadmaps = <RoadmapsComponent/>
+    const changeIntoSetting = () => {
+        setMainContent(setting);
+        setActiveNav('Setting');
+    };
+
+    const profile = <ProfileComponent changeIntoSetting={changeIntoSetting}/>;
+    const setting = <SettingComponent/>;
+    const friends = <FriendsComponent/>;
+    const roadmaps = <RoadmapsComponent/>;
 
     const [mainContent, setMainContent] = useState(profile);
     const handleNavClick = (navId) => {

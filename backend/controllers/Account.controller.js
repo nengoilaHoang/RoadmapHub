@@ -1,4 +1,5 @@
 import AccountService from "../services/Account.service.js";
+import ProfileService from "../services/Profile.service.js";
 import AccountDAO from "../daos/Account.dao.js";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
@@ -10,13 +11,10 @@ dotenv.config();
 //const accountService = new AccountService(new AccountDAO());
 class AccountController {
     login = async (req,res,next)=>{
-        //console.log("Login request received cookie", req.headers.cookie);
         if(req.authenticate) {
-            //console.log("User is already logged in");
             return res.status(200).json({status: true, message: "User is already logged in"});
         }
         else{
-            //console.log("Login request received", req.body);
             const {email, passWord, type, credentialResponse} = req.body;
             let account;
             if(type === 'normal'){
@@ -30,14 +28,11 @@ class AccountController {
             else if(type === 'google') {
                 // Handle Google login
                 const encodeCredential = jwtDecode(credentialResponse.credential);
-                //console.log("Decoded Google credential:", encodeCredential);
                 if(!encodeCredential.email || !encodeCredential.sub) {
                     return res.status(400).json({status: false, message: "Email and password are required"});
                 }
                 const passWordInDB = await AccountService.getPassWord(encodeCredential.email);
-                //onsole.log("data to compare: ", encodeCredential.sub, passWordInDB)
                 const isMatch = await bcrypt.compare(encodeCredential.sub, passWordInDB);
-                //console.log("Google password match:", isMatch);
                 account = await AccountService.login(encodeCredential.email, isMatch ? passWordInDB : null);
             }
             if(!account) {
@@ -54,9 +49,6 @@ class AccountController {
                 const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
                 let encodeToken = CryptoJS.AES.encrypt(token, process.env.CRYPTO_SECRET).toString();
                 const refreshToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '7d' });
-                // Lưu refreshToken vào cơ sở dữ liệu
-                //const result = await AccountService.setRefreshToken(account.id, refreshToken);
-                //console.log("Update Refresh Token result:", result);
                 let encodeRefreshToken = CryptoJS.AES.encrypt(refreshToken, process.env.CRYPTO_SECRET).toString();
                 //tạo và hashed mã pin
                 const pin = Math.floor(100000 + Math.random() * 900000).toString();
@@ -67,7 +59,8 @@ class AccountController {
                     SendEmail({ to: account.email, text: text });
                     return res.status(200).json({status: true, message: "Login successful", account, hashedPin, encodeToken, encodeRefreshToken});
                 }
-                res.cookie("token", token, { httpOnly: true,sameSite: "lax" });
+                //console.log("this is token aaa:", token);
+                res.cookie("token", token, { httpOnly: true,secure: false,sameSite: "lax" });
                 return res.status(200).json({status: true, message: "Login successful", account, token});
 
             }
@@ -82,7 +75,7 @@ class AccountController {
             // Create a new session or token for the user
             const decodedToken = CryptoJS.AES.decrypt(encodeToken, process.env.CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
             const decodeRefreshToken = CryptoJS.AES.decrypt(encodeRefreshToken, process.env.CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
-            console.log("Login successful", { decodedToken });
+            //console.log("Login successful", { decodedToken });
             res.cookie("token", decodedToken, {
                 httpOnly: true,
                 secure: false,
@@ -101,8 +94,7 @@ class AccountController {
         //const payload = jwt.decode(refreshToken);
         const payload = jwt.verify(refreshToken, process.env.JWT_SECRET);
         //const idString = payload.id;
-        const bufData = payload.id.data;
-        const idString = Buffer.from(bufData).toString('utf-8');
+        const idString = payload.id;
         const refreshTokenFromDB = await AccountService.getRefreshTokenById(idString);
         //Verify the refresh token and issue a new access token
         if (refreshToken === refreshTokenFromDB) {
@@ -114,7 +106,6 @@ class AccountController {
     };
 
     checkLogin = async (req, res, next) => {
-        //console.log(req.headers.authorization);
         if (req.authenticate) {
             //console.log("User is logged in", req.authenticate);
             return res.status(200).json({ status: true, message: "User is logged in", user: req.authenticate });
@@ -180,6 +171,7 @@ class AccountController {
                 // Ký token (expiresIn = thời hạn, ví dụ 1h)
                 const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
                 res.cookie("token", accessToken, { httpOnly: true, sameSite: "lax" });
+                //console.log("this is password:", req.body.password);
                 await AccountService.changePassword(email, req.body.password);
             return res.status(200).json({ status: true, message: "Token is valid" });
         }
@@ -292,7 +284,16 @@ class AccountController {
         else {
             const { email, password, fullname } = decoded;
             await AccountService.createAccount(email,fullname,password);
-            res.cookie("token", token, { httpOnly: true,sameSite: "lax" }); 
+            //tạo profile cho account với fullname là username
+            const newaccount = await AccountService.getAccountByEmail(email, fullname);
+            await ProfileService.createProfile(newaccount.id,fullname);
+            payload = {
+                id: newaccount.id,
+                email: newaccount.email,
+                fullname: newaccount.fullname
+            };
+            const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
+            res.cookie("token", newToken, { httpOnly: true,sameSite: "lax" }); 
             res.redirect('http://localhost:3000/')
             // res.send("Email verifified successfully");
             // console.log(response)
@@ -302,18 +303,26 @@ class AccountController {
     }
     signUpGoogle = async (req,res)=>{
         const {credential} = req.body; 
+        //console.log(credential);
         const decode = jwtDecode(credential);
         const email = decode.email;
         const username = decode.name;
         const password = decode.sub;
-        
+        //console.log(decode, email, username, password);
         const resultCheckAccountEmail = await AccountService.checkExitAccountEmail(email);
         if(resultCheckAccountEmail.success ){
             //console.log('Google password:',password);
             await AccountService.createAccount(email,username,password);
+            //tạo profile cho account với fullname là username
+            //console.log("run to here: ",email,username,password);
+            const newaccount = await AccountService.getAccountByEmail(email);
+            //console.log("New account created via Google:", newaccount);
+            await ProfileService.createProfile(newaccount.id,username);
+            //
             const passWordInDB = await AccountService.getPassWord(email);
             const isMatch = await bcrypt.compare(password, passWordInDB);
             const account = await AccountService.login(email, isMatch ? passWordInDB : null);
+            //console.log("Account created via Google:", account);
             const payload = {
                     id: account.id,
                     userName: account.username,
@@ -321,6 +330,7 @@ class AccountController {
                 };
                 // Ký token (expiresIn = thời hạn, ví dụ 1h)
             const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
+            //console.log("this is token in signupGG: ",token);
             res.cookie("token", token, { httpOnly: true,sameSite: "lax" }); 
             res.json ({
                 success:true,
@@ -339,6 +349,79 @@ class AccountController {
        
 
     }
+    changePassword = async (req, res, next) => {
+        if(!req.authenticate) {
+            //console.log("User is not logged in");
+            return res.status(401).json({status: false, message: "User is not logged in"});
+        }
+        else{
+            const { oldPassword, newPassword } = req.body;
+            //console.log("Change password request received", req.authenticate, oldPassword, newPassword, typeof newPassword);
+            if (!oldPassword || !newPassword) {
+                return res.status(400).json({ status: false, message: "Old password and new password are required" });
+            }
+            // Check if the old password is correct
+            const account = await AccountService.getAccountByEmail(req.authenticate.email);
+            //console.log("Account retrieved:", account);
+            const isMatch = await bcrypt.compare(oldPassword, account.passWord);
+            //console.log("Old password match:", isMatch);
+            if (!isMatch) {
+                return res.status(401).json({ status: false, message: "Old password is incorrect"});
+            }
+            //Update the password
+            await AccountService.changePassword(req.authenticate.email, newPassword);
+            return res.status(200).json({ status: true, message: "Password changed successfully" });
+        }
+    }
 
+    changeEmail = async (req, res, next) => {
+        if(!req.authenticate) {
+            return res.status(401).json({status: false, message: "User is not logged in"});
+        }
+        else{
+            const { oldEmail, newEmail } = req.body;
+            //console.log("oldEmail:", oldEmail, "newEmail: ", newEmail);
+            if (!newEmail && !oldEmail) {
+                return res.status(400).json({ status: false, message: "New email is required" });
+            }
+            // gửi pin cho email cũ
+            const pin = Math.floor(100000 + Math.random() * 900000).toString();
+            // bỏ hashlink vào url và gửi tới email mới. Ở link này sẽ cần nhập mã pin để verify việc đổi email
+            const pinToken = jwt.sign({pin}, process.env.JWT_SECRET, { expiresIn: '10m' });
+            const verifyText = `here is your pin ${pin} to change email`
+            const verifyHtml =
+            `<p>here is your link to change email <a href="http://localhost:3000/change-email/verify/${pinToken}/${oldEmail}/${newEmail}">click here</a></p>
+            <p>please open this link in the browser where you are logged in</p>`
+            SendEmail({to: oldEmail, text: verifyText})
+            SendEmail({to: newEmail, html: verifyHtml})
+            if(!resultCheckAccountEmail.success){
+                return res.status(400).json({ status: false, message: resultCheckAccountEmail.message });
+            }
+            //Update the email
+            await AccountService.changeEmail(req.authenticate.email, newEmail);
+            return res.status(200).json({ status: true, message: "Email changed successfully" });
+        }
+    }
+    changeEmailVerify = async (req, res, next) => {
+        const { hashedPin, oldEmail, newEmail } = req.params;
+        const { pin } = req.body;
+        //console.log("hashedPin:", hashedPin, "pin: ", pin);
+        try {
+            const decoded = jwt.verify(hashedPin, process.env.JWT_SECRET);
+            if (!decoded) {
+                return res.status(400).json({ status: false, message: "Invalid or expired token" });
+            }
+            // Check if the pin is correct
+            if (pin !== decoded.pin) {
+                return res.status(400).json({ status: false, message: "Invalid pin" });
+            }
+            // Update the email
+            await AccountService.changeEmail(oldEmail, newEmail);
+            return res.status(200).json({ status: true, message: "Email changed successfully" });
+        } catch (error) {
+            console.error("Error verifying email change:", error);
+            return res.status(500).json({ status: false, message: "Internal server error" });
+        }
+    }
 }
 export default new AccountController(AccountService)

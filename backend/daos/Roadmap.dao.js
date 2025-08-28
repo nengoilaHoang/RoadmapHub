@@ -57,5 +57,17 @@ class RoadmapDAO {
         const Edges = await Edge.find();
         console.log(edges);
     }
+    async getRoadmapByUserID(accountId) {
+        await db('roadmap')
+        .join('account', 'roadmap.accountId', 'account.id')
+        .where('account.id', accountId)
+        .select('roadmap.*');
+    }
+    async getRoadmapByTeamID(teamId) {
+        await db('roadmap')
+        .join('team', 'roadmap.teamId', 'team.id')
+        .where('team.id', teamId)
+        .select('roadmap.*');
+    }
 }
 export default new RoadmapDAO();

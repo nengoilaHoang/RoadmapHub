@@ -2,6 +2,7 @@ import db from '../utils/db.js'
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
 import Account from '../models/Account.model.js';
+import genUUID from '../Helps/genUUID.js';
 
 class AccountDAO {
     async getAccountAll(){
@@ -27,12 +28,18 @@ class AccountDAO {
     }
 
     async createAccount(email,username, password) {
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const account = new Account(Buffer.from(uuidv4().replace(/-/g, ''), 'hex'),  username, email, hashedPassword, 1);
-        const result = await db('account').insert(account);
-        return {
-                success:true,
-                message:'Create account successfully'
+        try{
+            const hashedPassword = await bcrypt.hash(password, 10);
+            const account = new Account(genUUID(), username, email, hashedPassword, 1);
+            console.log("Account to be created:", account);
+            const result = await db('account').insert(account);
+            return {
+                    success:true,
+                    message:'Create account successfully'
+            }
+        }
+        catch(e){
+            console.log(e);
         }
         
     }
@@ -103,6 +110,12 @@ class AccountDAO {
         const rows = await db('account')
             .where({ email })
             .update({ password: hashedPassword });
+        return rows > 0;
+    }
+    async changeEmail(oldEmail, newEmail) {
+        const rows = await db('account')
+            .where({ email: oldEmail })
+            .update({ email: newEmail });
         return rows > 0;
     }
 }

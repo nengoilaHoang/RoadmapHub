@@ -1,6 +1,7 @@
 import db from '../utils/db.js';
 import { v4 as uuidv4 } from 'uuid';
 import Profile from '../models/Profile.model.js';
+import geneUUID from '../Helps/genUUID.js';
 
 class ProfileDAO {
 
@@ -17,6 +18,7 @@ class ProfileDAO {
   }
 
   async getProfileByAccountId(accountId) {
+    console.log(accountId);
     const row = await db('profile')
       .where({ accountId })
       .first();
@@ -25,7 +27,7 @@ class ProfileDAO {
 
 
   async createProfile(accountId, fullname, github = null, linkedin = null, avatar = null) {
-    const id = Buffer.from(uuidv4().replace(/-/g, ''), 'hex');
+    const id = geneUUID();
     const profile = new Profile(id, accountId, fullname, github, linkedin, avatar);
     await db('profile').insert(profile);
     return {
@@ -35,11 +37,12 @@ class ProfileDAO {
     };
   }
 
-  async updateProfile(id, updateFields) {
+  async updateProfile(id, fullname, github, linkedin) {
     // updateFields: { fullname, github, linkedin, avatar }
+    //console.log("Updating profile in DAO with id:", id, fullname, github, linkedin);
     const rows = await db('profile')
-      .where({ id })
-      .update(updateFields);
+      .where({ accountId: id })
+      .update({ fullname, github, linkedin });
     if (rows === 0) return null;
     return this.getProfileById(id);
   }
@@ -67,7 +70,6 @@ class ProfileDAO {
       .select('*');
     return roadmapRows;
   }
-
 }
 
 export default new ProfileDAO();

@@ -1,7 +1,11 @@
 import React,{ useState, useEffect } from "react";
 import axios from "axios";
 
-const ProfileComponent = () => {
+const ProfileComponent = ({ changeIntoSetting }) => {
+    const [email, setEmail] = useState("");
+    const [fullname, setFullname] = useState("");
+    const [github, setGithub] = useState("");
+    const [linkedin, setLinkedin] = useState("");
     const getUserData = async () => {
         const userData = await axios.get('http://localhost:5000/api/profiles/get-profile',{
             headers: {
@@ -9,29 +13,50 @@ const ProfileComponent = () => {
             },
             withCredentials: true
         });
-        return userData.data.profile;
+        setEmail(userData.data.email);
+        setFullname(userData.data.profile.fullname);
+        setGithub(userData.data.profile.github);
+        setLinkedin(userData.data.profile.linkedin);
+        return (userData.data.profile);
     };
-    const [formData, setFormData] = useState(null);
     useEffect(() => {
-        const fetchData = async () => {
-            const data = await getUserData();
-            setFormData(data);
-        };
-        fetchData();
+        getUserData();
     }, []);
-    console.log("Form data state:", formData);
+    //     };
+    //     fetchData();
+    // }, []);
+    // console.log("Email:", email);
+    // console.log("Form data state:", formData);
     //Hàm thay đổi input
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-        ...prev,
-        [name]: value
-        }));
+        //console.log(name, value);
+        switch (name) {
+            case "fullname":
+                setFullname(value);
+                break;
+            case "github":
+                setGithub(value);
+                break;
+            case "linkedin":
+                setLinkedin(value);
+                break;
+            default:
+                break;
+        }
     };
 
-    const handleSaveProfile = () => {
-        console.log('Saving profile');
-        // thêm logic lưu profile ở đây nếu cần
+    const handleSaveProfile = async () => {
+        await axios.post('http://localhost:5000/api/profiles/update-profile',{
+            fullname,
+            github,
+            linkedin
+        },{
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        });
     };
     return(
     <div className="content-wrapper">
@@ -50,8 +75,8 @@ const ProfileComponent = () => {
             <input
                 type="text"
                 id="name"
-                name="name"
-                value={formData?.fullname||""}
+                name="fullname"
+                value={fullname||""}
                 onChange={handleInputChange}
                 required
             />
@@ -62,11 +87,11 @@ const ProfileComponent = () => {
             <input
                 type="email"
                 id="email"
-                value={formData?.email||""}
+                value={email||""}
                 disabled
                 className="disabled-input"
             />
-            <a href="#" className="email-change-link">
+            <a className="email-change-link" onClick={changeIntoSetting}>
                 Visit settings page to change email
             </a>
             </div>
@@ -77,7 +102,7 @@ const ProfileComponent = () => {
                 type="url"
                 id="github"
                 name="github"
-                value={formData?.github||""}
+                value={github||""}
                 onChange={handleInputChange}
                 placeholder="https://github.com/username"
             />
@@ -89,7 +114,7 @@ const ProfileComponent = () => {
                 type="url"
                 id="linkedin"
                 name="linkedin"
-                value={formData?.linkedin||""}
+                value={linkedin||""}
                 onChange={handleInputChange}
                 placeholder="https://linkedin.com/in/username"
             />
