@@ -5,12 +5,14 @@ import './CreateRoadmap.css';
 export default function CreateRoadmap(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const { onClose } = props;
+    const { onClose ,user} = props;
     const onhandleSubmit = () => {
         // Handle roadmap creation logic here
-        const response = api.post('/api/roadmaps', { title:title, description:description })
+        
+        const response = api.post('/roadmaps/create', { name:title, description:description, userId:user.id });
+        console.log(response)
         if(response.data.success){
-            navigate(`/roadmap/view/${title}`)
+            navigate(`/roadmap/edit/${title}`)
         }
         onClose();
     }
