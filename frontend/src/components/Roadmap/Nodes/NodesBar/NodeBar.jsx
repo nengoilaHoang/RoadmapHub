@@ -15,6 +15,7 @@ const NodesBar = () => {
     { type: 'title', label: 'Title' },
     { type: 'topic', label: 'Topic' },
     { type: 'button', label: 'Button' },
+    { type: 'paragraph', label: 'Paragraph'},
     { type: 'section', label: 'Section' },
     { type: 'checklist', label: 'Check List' },
     { type: 'horizontalline', label: 'Horizontal Line' },
