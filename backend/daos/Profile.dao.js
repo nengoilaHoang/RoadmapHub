@@ -52,7 +52,12 @@ class ProfileDAO {
       .del();
     return rows > 0;
   }
-
+  async deleteProfileByAccountId(accountId) {
+    const rows = await db('profile')
+      .where({ accountId })
+      .del();
+    return rows > 0;
+  }
   // Optional: Get Teams for a profile (if you have a join table)
   async getProfileTeams(profileId) {
     const teamRows = await db('team')

@@ -29,6 +29,10 @@ class ProfileService {
     return await this.ProfileDAO.deleteProfile(id);
   }
 
+  async deleteProfileByAccountId(accountId) {
+    return await this.ProfileDAO.deleteProfileByAccountId(accountId);
+  }
+
   async getProfileTeams(profileId) {
     return await this.ProfileDAO.getProfileTeams(profileId);
   }

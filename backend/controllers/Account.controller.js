@@ -105,7 +105,6 @@ class AccountController {
         }
         return res.status(401).json({ status: false, message: "Invalid refresh token"});
     };
-
     checkLogin = async (req, res, next) => {
         if (req.authenticate) {
             //console.log("User is logged in", req.authenticate);
@@ -115,12 +114,10 @@ class AccountController {
             return res.status(401).json({ status: false, message: "User is not logged in" });
         }
     }
-
     logout = async (req, res, next) => {
         res.clearCookie("token");
         return res.status(200).json({ status: true, message: "Logout successful" });
     }
-
     forgotPassword = async (req, res, next) => {
         const { email } = req.body;
         // Check if the email exists
@@ -154,7 +151,6 @@ class AccountController {
             return res.status(500).json({ status: false, message: "Internal server error" });
         }
     }
-
     resetPassword = async (req, res, next) => {
         const { token, email } = req.params;
         try {
@@ -207,56 +203,6 @@ class AccountController {
             //console.log("Send email success:", success);
             if(success) return res.json({success:true,message:'Email Sent Successfully'});
             else return res.json({success:false,message:'Failed to send email'});
-        
-        // const transporter = nodemailer.createTransport({
-        //     service: 'gmail',
-        //     auth: {
-        //         user: process.env.EMAIL_USERNAME,
-        //         pass: process.env.EMAIL_PASSWORD
-        //     }
-        // });
-
-        // const token = jwt.sign(
-        //     {
-        //         email,
-        //         fullname,
-        //         password
-        //     },
-        //     process.env.JWT_SECRET || 'ourSecretKey', 
-        //     { expiresIn: '10m' }
-        // );
-        // const mailConfigurations = {
-
-        //     // It should be a string of sender/server email
-        //     from: process.env.EMAIL_USERNAME,
-
-        //     to: email,
-
-        //     // Subject of Email
-        //     subject: 'Email Verification',
-
-        //     // This would be the text of email body
-        //     html: `
-        //             <h1>Email Verification</h1>
-        //             <p>Hi! You have recently registered on our website.</p>
-        //             <p>Please click the link below to verify your email:</p>
-        //             <a href="http://localhost:5000/api/accounts/verify/${token}">Verify Email</a>
-        //             <p>This link will expire in 10 minutes.</p>
-        //         `
-        // };
-
-        // transporter.sendMail(mailConfigurations, function (error, info) {
-        //     if (error) 
-        //     {
-        //             // throw Error(error);
-        //             return res.json({success:false,message:'Failed to send email'})
-        //     }
-        //     console.log('Email Sent Successfully');
-        //     console.log(info);
-        //     return res.json({
-        //             success:true,message:'Email Sent Successfully'
-        //         })
-        // });
         }
         else {
             let errors = {};
@@ -374,7 +320,6 @@ class AccountController {
             return res.status(200).json({ status: true, message: "Password changed successfully" });
         }
     }
-
     changeEmail = async (req, res, next) => {
         if(!req.authenticate) {
             return res.status(401).json({status: false, message: "User is not logged in"});
@@ -421,6 +366,47 @@ class AccountController {
             return res.status(200).json({ status: true, message: "Email changed successfully" });
         } catch (error) {
             console.error("Error verifying email change:", error);
+            return res.status(500).json({ status: false, message: "Internal server error" });
+        }
+    }
+    deleteAccount = async (req, res, next) => {
+        if(!req.authenticate) {
+            return res.status(401).json({status: false, message: "User is not logged in"});
+        }
+        else{
+            const payload = {
+                id: req.authenticate.id,
+                email: req.authenticate.email
+            }
+            console.log("Payload:", payload);
+            const verifyToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
+            const toEmail = req.authenticate.email;
+            const html = `<p>here is your link to delete account <a href="http://localhost:3000/delete-account/verify/${verifyToken}/${toEmail}">click here</a></p>`
+            SendEmail({to: toEmail, html: html})
+            return res.status(200).json({ status: true, message: "Verification email sent successfully" });
+        }
+    }
+    deleteAccountVerify = async (req, res, next) => {
+        const { verifyToken, email } = req.body;
+        console.log("verifyToken:", verifyToken, "email: ", email);
+        try {
+            const decoded = jwt.verify(verifyToken, process.env.JWT_SECRET);
+            console.log("Decoded JWT:", decoded);
+            if (decoded.email !== email) {
+                return res.status(400).json({ status: false, message: "Invalid token" });
+            }
+            const account = await AccountService.getAccountByEmail(email);
+            if(!account) {
+                return res.status(404).json({ status: false, message: "Account not found" });
+            }
+            const userId = account.id;
+            await ProfileService.deleteProfileByAccountId(userId);
+            await AccountService.deleteAccount(userId);
+            res.clearCookie("token");
+            return res.status(200).json({ status: true, message: "Account deleted successfully" });
+        }
+        catch (error) {
+            console.error("Error verifying account deletion:", error);
             return res.status(500).json({ status: false, message: "Internal server error" });
         }
     }

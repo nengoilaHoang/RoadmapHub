@@ -20,8 +20,8 @@ const SettingComponent = () => {
     const handleUpdateEmail = async () => {
         try {
             if(emailCurrent && emailNew) {
-            console.log(emailCurrent, emailNew);
-            const res = await axios.post(`http://localhost:5000/api/accounts/change-email`, {oldEmail: emailCurrent, newEmail: emailNew },
+                console.log(emailCurrent, emailNew);
+                const res = await axios.post(`http://localhost:5000/api/accounts/change-email`, {oldEmail: emailCurrent, newEmail: emailNew },
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -37,6 +37,10 @@ const SettingComponent = () => {
                     setChangeEmailSuccess("");
                 }
             }
+            else{
+                setChangeEmailError("hãy nhập đầy đủ thông tin");
+                setChangeEmailSuccess("");
+            }
         } catch (error) {
             setChangeEmailError("thao tác không thành công: " + error.message);
             setChangeEmailSuccess("");
@@ -45,7 +49,7 @@ const SettingComponent = () => {
 
     const handleUpdatePassword = async () => {
         try {
-             console.log(passCurrent, passNew, passConfirm);
+            console.log(passCurrent, passNew, passConfirm);
             if(passCurrent && passNew && passConfirm) {
                 if((passCurrent !== passConfirm) && (passConfirm == passNew)) {
                     console.log("run to here");
@@ -65,13 +69,42 @@ const SettingComponent = () => {
                         setChangePasswordSuccess("");
                     }
                 }
+                else{
+                    setChangePasswordError("mật khẩu cũ không đúng hoặc mật khẩu mới không khớp");
+                    setChangePasswordSuccess("");
+                }
+            }
+            else{
+                setChangePasswordError("hãy nhập đầy đủ thông tin");
+                setChangePasswordSuccess("");
             }
         } catch (error) {
             setChangePasswordError("thao tác không thành công: " + error.message);
             setChangePasswordSuccess("");
         }
     };
-
+    const handleDeleteAccount = async () => {
+        try {
+            const res = await axios.post('http://localhost:5000/api/accounts/delete-account', {},
+            {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            });
+            if(res.data?.status){
+                setDeleteAccountSuccess("Đã gửi mail xác thực tới email của bạn");
+                setDeleteAccountError("");
+            }
+            else{
+                setDeleteAccountError("thao tác không thành công");
+                setDeleteAccountSuccess("");
+            }
+        } catch (error) {
+            setDeleteAccountError("thao tác không thành công: " + error.message);
+            setDeleteAccountSuccess("");
+        }
+    }
     return (
         <div className="setting-content-wrapper">
             <section className="setting-section">
@@ -132,7 +165,7 @@ const SettingComponent = () => {
                 </p>
                 {deleteAccountError && <AlertError content={deleteAccountError} />}
                 {deleteAccountSuccess && <AlertSuccess content={deleteAccountSuccess} />}
-                <button className="setting-btn red">Send verification link</button>
+                <button className="setting-btn red" onClick={handleDeleteAccount}>Send verification link</button>
             </section>
         </div>
     );
