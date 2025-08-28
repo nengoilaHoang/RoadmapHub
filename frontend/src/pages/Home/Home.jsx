@@ -1,28 +1,26 @@
-import React from 'react';
+import React, { use } from 'react';
 import { Link } from 'react-router-dom';
 import CreateRoadmap  from '#components/Roadmap/CreateRoadmap/createRoadmap.jsx';
 import './Home.css';
+import { useState } from 'react';
+import {useCheckLogin} from '#hooks/userCheckLogin.jsx';
 
 export default function Home() {
     const [openCreateRoadmap, setOpenCreateRoadmap] = React.useState(false);
     const onCreateRoadmap = () => {
         setOpenCreateRoadmap(true);
     }
+    const { isLoggedIn, user } = useCheckLogin();
     return (
     <>
-    <div className="home-container">
+    {isLoggedIn &&  <div className="home-container">
             <div className="profile-header">
                 <div className="profile-info">
-                    <img 
-                        src="https://via.placeholder.com/50" 
-                        alt="Profile" 
-                        className="profile-avatar"
-                    />
                     <h2 className="profile-name">viethoangdz</h2>
                 </div>
                 <div className="teams-section">
-                    <Link to="/team1" className="team-link">team1</Link>
-                    <Link to="/team2" className="team-link">team2</Link>
+                    {/* <Link to="/team1" className="team-link">team1</Link>
+                    <Link to="/team2" className="team-link">team2</Link> */}
                     <button className="btn-create-team">+ create team</button>
                 </div>
             </div>
@@ -74,8 +72,9 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-    </div>
-    {openCreateRoadmap && <CreateRoadmap onClose={()=>setOpenCreateRoadmap(false)}/>}
+    </div> }
+   
+    {openCreateRoadmap && <CreateRoadmap onClose={()=>setOpenCreateRoadmap(false) } user={user}/>}
     </>
        
     );
