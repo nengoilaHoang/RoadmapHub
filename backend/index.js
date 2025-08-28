@@ -8,6 +8,8 @@ import roadmapRoutes from './routes/Roadmap.route.js'
 import cors from 'cors'
 import authenticate from './middlewares/AuthMiddleware.js';
 import cookieParser from "cookie-parser";
+import connectDB from './utils/dbmongo.js';
+import mongoose from 'mongoose';
 const app = express()
 app.use(cookieParser());
 app.get('/', (req, res) => {
@@ -22,8 +24,8 @@ app.use('/',authenticate);
 app.use('/api/accounts', auRoutes)
 app.use('/api/profiles', profileRoute);
 app.use('/api/auth', auRoutes)
+app.use('/api/roadmaps', roadmapRoutes)
 
-app.use('/api/roadmaps', auRoutes)
 app.listen(process.env.PORT,()=>{
     console.log(`Server is running at http://localhost:${process.env.PORT}`)
 });
