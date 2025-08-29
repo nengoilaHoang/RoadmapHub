@@ -1,7 +1,34 @@
 import './RightBarSection.css'
 import RightBarTop from "../RightBarTop/RightBarTop";
-export default function RightBarSection({ selectedNode, onDeleteNode }) {
+export default function RightBarSection({ selectedNode, onDeleteNode, onNodeChange }) {
     if (!selectedNode) return null;
+    const changeBackGroundColor = (backgroundColorSection) =>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                backgroundColorSection: backgroundColorSection
+            }
+        })
+    }
+    const changeBorderColor = (borderColorButtonSection) =>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                borderColorButtonSection: borderColorButtonSection
+            }
+        })
+    }
+    const changeBorderRadius = (borderRadiusSection) =>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                borderRadiusSection: borderRadiusSection
+            }
+        })
+    }
     return (
         <div className={`rightbar ${selectedNode ? 'show' : ''}`}>
             <div className="rightbar-content">
@@ -21,17 +48,16 @@ export default function RightBarSection({ selectedNode, onDeleteNode }) {
                         <input
                             type="color"
                             className="color-picker"
-                            value={selectedNode.data?.backgroundColor || '#ffffff'}
-                            onChange={(e) => {/* handle color change */ }}
+                            value={selectedNode.data?.backgroundColorSection || '#ffffff'}
+                            onChange={(e) => changeBackGroundColor(e.target.value)}
                         />
                         <input
                             type="text"
                             className="color-value-input"
-                            value={selectedNode.data?.backgroundColor || '#ffffff'}
+                            value={selectedNode.data?.backgroundColorSection || '#ffffff'}
                             onChange={(e) => {
                                 if (/^#[0-9A-Fa-f]{0,6}$/.test(e.target.value)) {
-                                    /* handle color change */
-                                    //selectedNode.data?.backgroundColor = `#${e.target.value}`;
+                                    changeBackGroundColor(e.target.value)
                                 }
                             }}
                             maxLength={7}
@@ -48,17 +74,16 @@ export default function RightBarSection({ selectedNode, onDeleteNode }) {
                         <input
                             type="color"
                             className="color-picker"
-                            value={selectedNode.data?.borderColor || '#000000'}
-                            onChange={(e) => {/* handle color change */ }}
+                            value={selectedNode.data?.borderColorSection || '#000000'}
+                            onChange={(e) => changeBorderColor(e.target.value)}
                         />
 <input
                             type="text"
                             className="color-value-input"
-                            value={selectedNode.data?.backgroundColor || '#ffffff'}
+                            value={selectedNode.data?.borderColorSection || '#ffffff'}
                             onChange={(e) => {
                                 if (/^#[0-9A-Fa-f]{0,6}$/.test(e.target.value)) {
-                                    /* handle color change */
-                                    //selectedNode.data?.backgroundColor = `#${e.target.value}`;
+                                    changeBorderColor(e.target.value)
                                 }
                             }}
                             maxLength={7}
@@ -75,9 +100,10 @@ export default function RightBarSection({ selectedNode, onDeleteNode }) {
                         <input
                             type="number"
                             className="radius-input"
-                            value={selectedNode.data?.borderRadius || 0}
+                            value={selectedNode.data?.borderRadiusSection || 0}
                             min="0"
                             max="50"
+                            onChange={(e)=>changeBorderRadius(e.target.value)}
                         />
                         <span className="unit">px</span>
                     </div>
