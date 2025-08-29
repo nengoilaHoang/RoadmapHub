@@ -80,8 +80,9 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
             n.id === id ? { ...n, data: { ...n.data, width: w, height: h } } : n
           )
         );
-      }, },
-        fontSize:'M',
+        
+      },
+     },
 
       };
 
@@ -139,18 +140,17 @@ export default function RoadmapEditPage() {
         e.preventDefault();
         console.log('Nodes:', nodes);
         console.log('Edges:', edges);
-        const response = api.post('/roadmaps/edit-nodes',{nodes,edges});
+        //const response = api.post('/roadmaps/edit-nodes',{nodes,edges});
         console.log(response);
 
     }
-      useEffect(() => {
+    useEffect(() => {
     if(selectedNode)
     {
       switch (selectedNode.type) {
 
         case "topic":
           selectedNode.color ='#FFFF00';
-          selectedNode.typeTopic = 'Topic'
           break
         case "paragraph":
           selectedNode.background = '';
@@ -190,6 +190,12 @@ export default function RoadmapEditPage() {
       }
     }
   },[selectedNode]);
+   const handleNodeChange = (updatedNode)=>{
+    setNodes((nds)=>nds.map((node)=>(
+      node.id === updatedNode.id ? updatedNode : node
+    )))
+    setSelectedNode(updatedNode);
+   }
     return (
         <div style={{ display: 'flex',width:'100%',height:'100vh', flexDirection: "column"}}>
         <TopBar onSaveNode={onSaveNodes}/>
@@ -200,7 +206,7 @@ export default function RoadmapEditPage() {
                 <FlowCanvas nodes={nodes} setNodes={setNodes} edges={edges} setEdges={setEdges} 
                 setSelectedNode={setSelectedNode} setRightBarOpen={setRightBarOpen} rightBarOpen={rightBarOpen}/>
             </div>
-            {selectedNode &&<RightBar selectedNode={selectedNode} onDeleteNode={handleDeleteNode} />}
+            {selectedNode &&<RightBar selectedNode={selectedNode} onDeleteNode={handleDeleteNode} onNodeChange={handleNodeChange} />}
             
             </DnDProvider>
         </ReactFlowProvider>
