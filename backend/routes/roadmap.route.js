@@ -6,4 +6,6 @@ router.post('/edit/:name', RoadmapController.editRoadmap);
 router.post('/delete/:name', RoadmapController.deleteRoadmap);
 router.post('/edit-nodes', RoadmapController.editNodeRoadmap);
 // router.get('/view/:name', RoadmapController.viewRoadmap);
+router.get('/getRoadmapByUserId', RoadmapController.getRoadmapByUserId);
+router.get('/getRoadmapByTeamId/:teamId', RoadmapController.getRoadmapByTeamId);
 export default router;

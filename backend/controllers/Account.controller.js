@@ -1,6 +1,5 @@
 import AccountService from "../services/Account.service.js";
 import ProfileService from "../services/Profile.service.js";
-import AccountDAO from "../daos/Account.dao.js";
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import bcrypt from "bcrypt";

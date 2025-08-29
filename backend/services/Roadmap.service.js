@@ -19,5 +19,11 @@ class RoadmapService {
     async editNodeRoadmap(nodes, edges) {
         return await RoadmapDAO.editNodeRoadmap(nodes, edges);
     }
+    async getRoadmapByUserId(userId) {
+        return await RoadmapDAO.getRoadmapByUserId(userId);
+    }
+    async getRoadmapByTeamId(teamId) {
+        return await RoadmapDAO.getRoadmapByTeamId(teamId);
+    }
 }
 export default new RoadmapService(RoadmapDAO)
