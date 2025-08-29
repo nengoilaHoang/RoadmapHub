@@ -14,20 +14,12 @@ export default function NavBar() {
             },
             withCredentials: true
         });
-        setTimeout(() => {
-            navigate("/login");
-        }, 500);
+        navigate("/login");
+        window.location.reload();
     }
     let dropdown;
-    if (!isLoggedIn) {
-        dropdown = 
-        <div className="auth-buttons">
-            <button className="btn login-btn" onClick={onLogin}>Login</button>
-            <button className="btn logout-btn" onClick={onSignup}>sign up</button>
-        </div>
-    }
-    else{
-        dropdown = 
+    if (isLoggedIn) {
+        dropdown =
         <div className="dropdown">
         <button
             className="btn p-0 border-0 rounded-circle overflow-hidden"
@@ -49,6 +41,13 @@ export default function NavBar() {
             <li><hr className="dropdown-divider" /></li>
             <li><a className="dropdown-item" onClick={onLogout}>Log out</a></li>
         </ul>
+        </div> 
+    }
+    else{
+        dropdown = 
+        <div className="auth-buttons">
+            <button className="btn login-btn" onClick={onLogin}>Login</button>
+            <button className="btn logout-btn" onClick={onSignup}>sign up</button>
         </div>
     }
     return (

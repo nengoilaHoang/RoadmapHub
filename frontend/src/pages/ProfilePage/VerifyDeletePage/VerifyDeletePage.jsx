@@ -25,14 +25,10 @@ function VerifyDeletePage() {
                 if(res.data?.status){
                     setSuccess("Xóa tài khoản thành công");
                     setError("");
-                    //fetch thêm 1 lần để check và chờ token bị xóa hoàn toàn khỏi cookie
-                    const res = axios.post('http://localhost:5000/api/auth/check-login', {}, {
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        withCredentials: true
-                    });
-                    console.log("Check login after delete:", res.data);
+                    setTimeout(() => {
+                        navigate('/login');
+                        window.location.reload();
+                    }, 2000);
                 }
                 else{
                     setError("thao tác không thành công");
