@@ -3,31 +3,28 @@ import { Buffer } from 'buffer';
 class RoadmapController {
 
     async createRoadmap(req, res) {
-        const { name, description,userId } = req.body;
-        const realBuffer = Buffer.from(userId.data);
-        const accountId= realBuffer.toString();
-        console.log("Account ID:", accountId);
-        console.log("Name:", name);
-        console.log("Description:", description);
-        try {
-            const responseCheck = await RoadmapService.checkRoadmap(name, accountId);
-            console.log("Response Check:", responseCheck);
-            if (!responseCheck.success) {
-                return res.json(responseCheck);
+        const { name, description,accountId } = req.body;
+        const responseCheck = await RoadmapService.checkRoadmap(name, accountId);
+        if (!responseCheck.success) {
+                res.json(responseCheck);
             }
-            else{
-                await RoadmapService.createRoadmap(name, description, accountId);
-                res.redirect(`/roadmap/view/:${name}`); 
+        else{
+                const response = await RoadmapService.createRoadmap(name, description, accountId);
+                res.json(response);
             }
-            
-        } catch (error) {
-            console.error('Error creating roadmap:', error);
-        }
     }
     async editRoadmap(req, res) {
-        const { name } = req.params;
-        const { description } = req.body;
-        await RoadmapService.editRoadmap(name, description);
+        const { name,description,accountId,roadmapId} = req.body;
+        const responseCheck = await RoadmapService.checkRoadmap(name, accountId);
+        console.log("Response Check:", responseCheck);
+        if (!responseCheck.success) {
+                res.json(responseCheck);
+            }
+        else{
+                const response = await RoadmapService.editRoadmap(name, description,accountId,roadmapId);
+                res.json(response);
+            }
+        
     }
     async deleteRoadmap(req, res) {
         const { name } = req.params;
@@ -38,6 +35,12 @@ class RoadmapController {
         console.log("nodes",nodes);
         console.log("edges",edges);
         await RoadmapService.editNodeRoadmap(nodes,edges);
+    }
+    async getRoadmapByName(req, res) {
+        const { name } = req.params;
+        const {accountId}  = req.query;
+        const roadmap = await RoadmapService.getRoadmapByName(accountId,name);
+        res.json(roadmap);
     }
 }
 export default new RoadmapController(RoadmapService);
