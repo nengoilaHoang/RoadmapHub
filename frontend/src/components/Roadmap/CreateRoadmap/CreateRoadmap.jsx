@@ -2,19 +2,27 @@ import React, { useState } from 'react';
 import api from '#utils/api.js'
 import { useNavigate } from 'react-router-dom';
 import './CreateRoadmap.css';
+import AlertError from '#components/SignUp/AlertError.jsx';
 export default function CreateRoadmap(props) {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [error, setError] = useState('');
     const { onClose ,user} = props;
-    const onhandleSubmit = () => {
+    const navigate = useNavigate();
+    const onhandleSubmit = async (e) => {
+        e.preventDefault();
         // Handle roadmap creation logic here
-        
-        const response = api.post('/roadmaps/create', { name:title, description:description, userId:user.id });
+        const response = await api.post('/roadmaps/create', { name:title, description:description, accountId:user.id });
         console.log(response)
+        
         if(response.data.success){
             navigate(`/roadmap/edit/${title}`)
+            onClose();
         }
-        onClose();
+        else {
+            setError(response.data.message);
+        }
+       
     }
     return (
     <div className="popup-overlay">
@@ -36,7 +44,7 @@ export default function CreateRoadmap(props) {
                     onChange={(e)=>setTitle(e.target.value)}
                 />
             </div>
-
+            {error && <AlertError content={error}/>}
             <div className="form-group">
                 <label className="form-label">DESCRIPTION</label>
                 <textarea 
