@@ -9,40 +9,32 @@ import RightBarCheckList from "./RightBarCheckList/RightBarCheckList";
 import RightBarLine from "./RightBarLine/RightBarLine";
 //import "./RightBar.css";
 
-export default function RightBar({ selectedNode, onDeleteNode }) {
+export default function RightBar({ selectedNode, onDeleteNode, onNodeChange }) {
   if (!selectedNode) return null;
-  // const [activeTab, setActiveTab] = useState('properties');
-  // const [links, setLinks] = useState([{ type: 'Video', title: '', url: '' }]);
-  // const addLink = () => {
-  //   setLinks([...links, { type: 'Video', title: '', url: '' }]);
-  // };
-  // const removeLink = (index) => {
-  //   setLinks(links.filter((_, i) => i !== index));
-  // };
   switch (selectedNode.type) {
     case 'topic':
-      return <RightBarTopic selectedNode={selectedNode} onDeleteNode={onDeleteNode}/>
+      return <RightBarTopic selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange}/>
       break;
     case 'title':
-      return <RightBarTitle selectedNode={selectedNode} onDeleteNode={onDeleteNode}/>
+      return <RightBarTitle selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange}/>
       break;
     case 'paragraph':
-      return <RightBarParagraph selectedNode={selectedNode} onDeleteNode={onDeleteNode}/>
+      return <RightBarParagraph selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange}/>
       break;
     case 'button':
-      return <RightBarButton selectedNode={selectedNode} onDeleteNode={onDeleteNode}/>
+      return <RightBarButton selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange}/>
       break;
     case 'section':
-      return <RightBarSection selectedNode={selectedNode} onDeleteNode={onDeleteNode}/>
+      return <RightBarSection selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange}/>
       break;
     case 'checklist':
-      return <RightBarCheckList selectedNode={selectedNode} onDeleteNode={onDeleteNode}/>
+      return <RightBarCheckList selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange}/>
       break;
     case 'horizontalline':
-      return <RightBarLine selectedNode={selectedNode} onDeleteNode={onDeleteNode}/>
+      return <RightBarLine selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange}/>
       break;
     case 'verticalline':
-      return <RightBarLine selectedNode={selectedNode} onDeleteNode={onDeleteNode}/>
+      return <RightBarLine selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange}/>
       break;
     default:
       break;
