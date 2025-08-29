@@ -1,6 +1,60 @@
 import RightBarTop from "../RightBarTop/RightBarTop";
 export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
     if (!selectedNode) return null;
+    const changeBackGroundColor = (backgroundColorParagraph) =>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                backgroundColorParagraph: backgroundColorParagraph
+            }
+        })
+    }
+    const changeBorderColor = (borderColorParagraph) =>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                borderColorParagraph: borderColorParagraph
+            }
+        })
+    }
+    const changeTextColor = (textColorParagraph) =>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                textColorParagraph: textColorParagraph
+            }
+        })
+    }
+    const changePadding = (paddingParagraph)=>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                paddingParagraph: paddingParagraph
+            }
+        })
+    }
+    const changeTextAlign = (textAlignParagraph)=>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                textAlignParagraph: textAlignParagraph
+            }
+        })
+    }
+    const changeJustification = (justificationParagraph)=>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                justificationParagraph: justificationParagraph
+            }
+        })
+    } 
     return (
         <div className={`rightbar ${selectedNode ? 'show' : ''}`}>
             <div className="rightbar-content">
@@ -19,17 +73,16 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
                         <input
                             type="color"
                             className="color-picker"
-                            value={selectedNode.data?.backgroundColor || '#ffffff'}
-                            onChange={(e) => {/* handle color change */ }}
+                            value={selectedNode.data?.backgroundColorParagraph || '#ffffff'}
+                            onChange={(e) => changeBackGroundColor(e.target.value)}
                         />
                         <input
                             type="text"
                             className="color-value-input"
-                            value={selectedNode.data?.backgroundColor || '#ffffff'}
+                            value={selectedNode.data?.backgroundColorParagraph || '#ffffff'}
                             onChange={(e) => {
                                 if (/^#[0-9A-Fa-f]{0,6}$/.test(e.target.value)) {
-                                    /* handle color change */
-                                    //selectedNode.data?.backgroundColor = `#${e.target.value}`;
+                                    changeBackGroundColor(e.target.value)
                                 }
                             }}
                             maxLength={7}
@@ -46,39 +99,23 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
                         <input
                             type="color"
                             className="color-picker"
-                            value={selectedNode.data?.borderColor || '#000000'}
-                            onChange={(e) => {/* handle color change */ }}
+                            value={selectedNode.data?.borderColorParagraph || '#000000'}
+                            onChange={(e) => changeBorderColor(e.target.value)}
                         />
                         <input
                             type="text"
                             className="color-value-input"
-                            value={selectedNode.data?.backgroundColor || '#ffffff'}
+                            value={selectedNode.data?.borderColorParagraph || '#ffffff'}
                             onChange={(e) => {
                                 if (/^#[0-9A-Fa-f]{0,6}$/.test(e.target.value)) {
-                                    /* handle color change */
-                                    //selectedNode.data?.backgroundColor = `#${e.target.value}`;
+                                    changeBorderColor(e.target.value)
                                 }
                             }}
                             maxLength={7}
                         />
                     </div>
                 </div>
-                <div className="property-item">
-                    <div className="property-label">
-                        <i className="bi bi-circle-square"></i>
-                        <span>Text color</span>
-                    </div>
-                    <div className="radius-input-wrapper">
-                        <input
-                            type="number"
-                            className="radius-input"
-                            value={selectedNode.text || 0}
-                            min="0"
-                            max="50"
-                        />
-                        <span className="unit">px</span>
-                    </div>
-                </div>
+
 
                 <div className="property-item">
                     <div className="property-label">
@@ -89,16 +126,16 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
                         <input
                             type="color"
                             className="color-picker"
-                            value={selectedNode.data?.textColor || '#000000'}
-                            onChange={(e) => {/* handle color change */ }}
+                            value={selectedNode.data?.textColorParagraph || '#000000'}
+                            onChange={(e) => changeTextColor(e.target.value)}
                         />
                         <input
                             type="text"
                             className="color-value-input"
-                            value={selectedNode.data?.textColor || '#000000'}
+                            value={selectedNode.data?.textColorParagraph || '#000000'}
                             onChange={(e) => {
                                 if (/^#[0-9A-Fa-f]{0,6}$/.test(e.target.value)) {
-                                    // handle color change
+                                    changeTextColor(e.target.value)
                                 }
                             }}
                             maxLength={7}
@@ -115,9 +152,10 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
                         <input
                             type="number"
                             className="number-input"
-                            value={selectedNode.data?.padding || 16}
+                            value={selectedNode.data?.paddingParagraph || 16}
                             min="0"
                             max="100"
+                            onChange={(e)=>changePadding(e.target.value)}
                         />
                         <span className="unit">px</span>
                     </div>
@@ -130,20 +168,20 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
                     </div>
                     <div className="button-group">
                         <button
-                            className={`align-btn ${selectedNode.data?.textAlign === 'left' ? 'active' : ''}`}
-                            onClick={() => {/* handle alignment */ }}
+                            className={`align-btn ${selectedNode.data?.textAlignParagraph === 'left' ? 'active' : ''}`}
+                            onClick={() => changeTextAlign('left')}
                         >
                             <i className="bi bi-text-left"></i>
                         </button>
                         <button
-                            className={`align-btn ${selectedNode.data?.textAlign === 'center' ? 'active' : ''}`}
-                            onClick={() => {/* handle alignment */ }}
+                            className={`align-btn ${selectedNode.data?.textAlignParagraph === 'center' ? 'active' : ''}`}
+                            onClick={() => changeTextAlign('center')}
                         >
                             <i className="bi bi-text-center"></i>
                         </button>
                         <button
-                            className={`align-btn ${selectedNode.data?.textAlign === 'right' ? 'active' : ''}`}
-                            onClick={() => {/* handle alignment */ }}
+                            className={`align-btn ${selectedNode.data?.textAlignParagraph === 'right' ? 'active' : ''}`}
+                            onClick={() => changeTextAlign('right')}
                         >
                             <i className="bi bi-text-right"></i>
                         </button>
@@ -157,20 +195,20 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
                     </div>
                     <div className="button-group">
                         <button
-                            className={`justify-btn ${selectedNode.data?.justify === 'start' ? 'active' : ''}`}
-                            onClick={() => {/* handle justification */ }}
+                            className={`justify-btn ${selectedNode.data?.justificationParagraph === 'start' ? 'active' : ''}`}
+                            onClick={() => changeJustification('start')}
                         >
                             <i className="bi bi-align-start"></i>
                         </button>
                         <button
-                            className={`justify-btn ${selectedNode.data?.justify === 'center' ? 'active' : ''}`}
-                            onClick={() => {/* handle justification */ }}
+                            className={`justify-btn ${selectedNode.data?.justificationParagraph === 'center' ? 'active' : ''}`}
+                            onClick={() => changeJustification('center')}
                         >
                             <i className="bi bi-align-center"></i>
                         </button>
                         <button
-                            className={`justify-btn ${selectedNode.data?.justify === 'between' ? 'active' : ''}`}
-                            onClick={() => {/* handle justification */ }}
+                            className={`justify-btn ${selectedNode.data?.justificationParagraph === 'between' ? 'active' : ''}`}
+                            onClick={() => changeJustification('between')}
                         >
                             <i className="bi bi-justify"></i>
                         </button>
