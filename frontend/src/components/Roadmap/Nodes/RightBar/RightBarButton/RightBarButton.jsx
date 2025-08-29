@@ -1,6 +1,51 @@
 import RightBarTop from "../RightBarTop/RightBarTop";
-export default function RightBarButton({ selectedNode, onDeleteNode }) {
+export default function RightBarButton({ selectedNode, onDeleteNode, onNodeChange }) {
     if (!selectedNode) return null;
+    const changeUrl = (url)=>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                url: url 
+            }
+        })
+    }
+    const changeTextColor = (textColorButton)=>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                textColorButton: textColorButton
+            }
+        })
+    }
+    const changeBackGroundColor = (backgroundColorButton) =>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                backgroundColorButton: backgroundColorButton
+            }
+        })
+    }
+    const changeBorderColor = (borderColorButton) =>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                borderColorButton: borderColorButton
+            }
+        })
+    }
+    const changeBorderRadius = (borderRadiusButton) =>{
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                borderRadiusButton: borderRadiusButton
+            }
+        })
+    }
     return (
         <div className={`rightbar ${selectedNode ? 'show' : ''}`}>
             <div className="rightbar-content">
@@ -18,8 +63,7 @@ export default function RightBarButton({ selectedNode, onDeleteNode }) {
                             type="url"
                             className="url-input"
                             placeholder="https://example.com"
-                            value={selectedNode.data?.url || ''}
-                            onChange={(e) => {/* handle url change */}}
+                            onChange={(e) => changeUrl(e.target.value)}
                         />
                 </div>
 
@@ -32,16 +76,16 @@ export default function RightBarButton({ selectedNode, onDeleteNode }) {
                             <input
                                 type="color"
                                 className="color-picker"
-                                value={selectedNode.data?.textColor || '#FFFFFF'}
-                                onChange={(e) => {/* handle color change */}}
+                                value={selectedNode.data?.textColorButton ||'#FFFFFF'}
+                                onChange={(e) => changeTextColor(e.target.value)}
                             />
                             <input
                                 type="text"
                                 className="color-value-input"
-                                value={selectedNode.data?.textColor || '#FFFFFF'}
+                                value={selectedNode.data?.textColorButton || '#FFFFFF'}
                                 onChange={(e) => {
                                     if (/^#[0-9A-Fa-f]{0,6}$/.test(e.target.value)) {
-                                        /* handle color change */
+                                        changeTextColor(e.target.value)
                                     }
                                 }}
                                 maxLength={7}
@@ -58,16 +102,16 @@ export default function RightBarButton({ selectedNode, onDeleteNode }) {
                             <input
                                 type="color"
                                 className="color-picker"
-                                value={selectedNode.data?.backgroundColor || '#2A79E4'}
-                                onChange={(e) => {/* handle color change */}}
+                                value={selectedNode.data?.backgroundColorButton || '#2A79E4'}
+                                onChange={(e) => changeBackGroundColor(e.target.value)}
                             />
                             <input
                                 type="text"
                                 className="color-value-input"
-                                value={selectedNode.data?.backgroundColor || '#2A79E4'}
+                                value={selectedNode.data?.backgroundColorButton || '#2A79E4'}
                                 onChange={(e) => {
                                     if (/^#[0-9A-Fa-f]{0,6}$/.test(e.target.value)) {
-                                        /* handle color change */
+                                        changeBackGroundColor(e.target.value)
                                     }
                                 }}
                                 maxLength={7}
@@ -84,16 +128,16 @@ export default function RightBarButton({ selectedNode, onDeleteNode }) {
                             <input
                                 type="color"
                                 className="color-picker"
-                                value={selectedNode.data?.borderColor || '#2A79E4'}
-                                onChange={(e) => {/* handle color change */}}
+                                value={selectedNode.data?.borderColorButton || '#2A79E4'}
+                                onChange={(e) => changeBorderColor(e.target.value)}
                             />
                             <input
                                 type="text"
                                 className="color-value-input"
-                                value={selectedNode.data?.borderColor || '#2A79E4'}
+                                value={selectedNode.data?.borderColorButton || '#2A79E4'}
                                 onChange={(e) => {
                                     if (/^#[0-9A-Fa-f]{0,6}$/.test(e.target.value)) {
-                                        /* handle color change */
+                                        changeBorderColor(e.target.value)
                                     }
                                 }}
                                 maxLength={7}
@@ -110,10 +154,10 @@ export default function RightBarButton({ selectedNode, onDeleteNode }) {
                             <input
                                 type="number"
                                 className="radius-input"
-                                value={selectedNode.data?.borderRadius || 0}
+                                value={selectedNode.data?.borderRadiusButton || 0}
                                 min="0"
                                 max="50"
-                                onChange={(e) => {/* handle radius change */}}
+                                onChange={(e) => changeBorderRadius(e.target.value)}
                             />
                             <span className="unit">px</span>
                         </div>
