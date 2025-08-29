@@ -50,7 +50,7 @@ function App() {
       path:'/',
       element:<RoadmapLayout/>,
       children:[
-        {path:'roadmap/edit', element: <RoadmapEditPage />},
+        {path:'roadmap/edit/:name', element: <RoadmapEditPage />},
         
       ]
 
