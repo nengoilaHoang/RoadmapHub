@@ -3,7 +3,7 @@ import { useState } from "react";
 import RightBarTop from "../RightBarTop/RightBarTop";
 import "./RightBarTopic.css";
 
-export default function RightBarTopic({ selectedNode, onDeleteNode }) {
+export default function RightBarTopic({ selectedNode, onDeleteNode , onNodeChange}) {
   if (!selectedNode) return null;
   const [activeTab, setActiveTab] = useState('properties');
   const [links, setLinks] = useState([{ type: 'Video', title: '', url: '' }]);
@@ -14,6 +14,24 @@ export default function RightBarTopic({ selectedNode, onDeleteNode }) {
   const removeLink = (index) => {
     setLinks(links.filter((_, i) => i !== index));
   };
+  const changeColor = (letter)=>{
+    onNodeChange({
+      ...selectedNode,
+      data:{
+        ...selectedNode.data,
+        backGroundColorTopic:letter,
+      }
+    })
+  }
+  const updateLink = ()=>{
+    onNodeChange({
+      ...selectedNode,
+      data:{
+        ...selectedNode.data,
+        items:links
+      }
+    })
+  }
   return (
     <div className={`rightbar ${selectedNode ? 'show' : ''}`}>
       <div className="tab-buttons">
@@ -32,12 +50,12 @@ export default function RightBarTopic({ selectedNode, onDeleteNode }) {
       </div>
       {activeTab === 'properties' ? 
       (<div className="rightbar-content">
-        <RightBarTop selectedNode={selectedNode} onDeleteNode={onDeleteNode}/>
+        <RightBarTop selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange}/>
         <div className="node-config-section">
           <h4>NODE COLOR</h4>
           <div className="color-buttons">
             {['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'].map(letter => (
-              <button key={letter} className={`color-btn color-${letter.toLowerCase()}`}>
+              <button key={letter} className={`color-btn color-${letter.toLowerCase()}`} onClick={()=>changeColor(letter)}>
                 {letter}
               </button>
             ))}
