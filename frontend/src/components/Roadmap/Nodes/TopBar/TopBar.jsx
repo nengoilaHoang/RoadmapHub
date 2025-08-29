@@ -1,10 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./TopBar.css"; 
-import CreateRoadmap from "#components/Roadmap/CreateRoadmap/CreateRoadmap";
+import UpdateRoadmap from "#components/Roadmap/UpdateRoadmap/UpdateRoadmap.jsx";
+import {useCheckLogin} from '#hooks/userCheckLogin.jsx';
+import { useParams } from "react-router-dom";
 export default function TopBar(props) {
   const {onSaveNode} = props;
+  const { name } = useParams();
   const [title, setTitle] = useState("Untitled Roadmap");
   const [isEditing, setIsEditing] = useState(false);
+  const { isLoggedIn, user } = useCheckLogin();
+  useEffect(() => {
+    if (name) {
+      setTitle(name);
+    }
+  }, [name]);
 
   const handleTitleClick = () => {
     setIsEditing(true);
@@ -21,7 +30,7 @@ export default function TopBar(props) {
       
         <div className="topbar-left">
         {isEditing ? (
-          <CreateRoadmap onClose={()=>setIsEditing(false)}/>
+          <UpdateRoadmap onClose={()=>setIsEditing(false)} user={user} nameRoadmap ={title}/>
         ) : (
           <>
             <strong onClick={handleTitleClick}>{title}</strong>
