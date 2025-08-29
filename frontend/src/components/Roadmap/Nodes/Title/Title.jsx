@@ -8,7 +8,6 @@ export default function Title({ data, id, selected }) {
       border="2px solid #555"
       background="#fff"
       borderRadius="8px"
-      name="title node"
     />
   );
 }
