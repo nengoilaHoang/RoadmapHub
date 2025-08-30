@@ -15,6 +15,7 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "bluebird": "^3.7.2",
+    "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
