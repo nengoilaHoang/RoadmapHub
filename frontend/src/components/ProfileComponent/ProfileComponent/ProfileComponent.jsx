@@ -1,7 +1,7 @@
 import React,{ useState, useEffect } from "react";
 import axios from "axios";
-import AlertError from "../../../components/SignUp/AlertError";
-import AlertSuccess from "../../../components/SignUp/AlertSuccess";
+import AlertError from "../../SignUp/AlertError";
+import AlertSuccess from "../../SignUp/AlertSuccess";
 const ProfileComponent = ({ changeIntoSetting }) => {
     const [email, setEmail] = useState("");
     const [fullname, setFullname] = useState("");

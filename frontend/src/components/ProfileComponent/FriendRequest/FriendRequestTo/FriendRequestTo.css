@@ -1,0 +1,78 @@
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  max-width: 520px;
+  margin: 20px auto;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  font-family: "Segoe UI", sans-serif;
+}
+
+.card h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.empty {
+  text-align: center;
+  font-style: italic;
+  color: #aaa;
+}
+
+.request-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fafafa;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+}
+
+.request-item:hover {
+  background: #f0f0f0;
+  transform: translateY(-2px);
+}
+
+.email {
+  font-weight: 500;
+  margin: 0 0 4px;
+  color: #222;
+}
+
+small {
+  font-size: 12px;
+  color: #888;
+}
+
+.actions .btn {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin-left: 8px;
+}
+
+.btn.accept {
+  background: #4caf50;
+  color: #fff;
+}
+
+.btn.accept:hover {
+  background: #43a047;
+}
+
+.btn.reject {
+  background: #f44336;
+  color: #fff;
+}
+
+.btn.reject:hover {
+  background: #e53935;
+}

@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import axios from "axios";
-import AlertError from "../../../components/SignUp/AlertError";
-import AlertSuccess from "../../../components/SignUp/AlertSuccess";
+import AlertError from "../../SignUp/AlertError";
+import AlertSuccess from "../../SignUp/AlertSuccess";
 
 const SettingComponent = () => {
     const [emailCurrent, setEmailCurrent] = useState('');

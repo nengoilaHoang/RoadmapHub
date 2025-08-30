@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import AlertError from "../../../components/SignUp/AlertError";
-import AlertSuccess from "../../../components/SignUp/AlertSuccess";
+import AlertError from "#components/SignUp/AlertError.jsx";
+import AlertSuccess from "#components/SignUp/AlertSuccess.jsx";
 import axios from "axios";
 function VerifyDeletePage() {
     const [error, setError] = useState("");

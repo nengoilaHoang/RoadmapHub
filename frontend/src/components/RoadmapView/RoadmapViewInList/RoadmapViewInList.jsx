@@ -3,19 +3,19 @@ const RoadmapViewInList = ({ rm, idx }) => {
     <div className="roadmap-item" key={idx}>
         <div className="roadmap-top">
             <div className="roadmap-info">
-            <div className="roadmap-name">{rm.name}</div>
+            <div className="roadmap-name">{rm?.name}</div>
             <div className="roadmap-meta-row">
                 <span className="roadmap-meta roadmap-privacy">
-                {rm.isPublic
+                {rm?.isPublic
                     ? <span><span role="img" aria-label="public">🔓</span> public</span>
                     : <span><span role="img" aria-label="private">🔒</span> private</span>
                 }
                 </span>
-                <span className="roadmap-meta roadmap-topic">
-                <span role="img" aria-label="topic">📝</span> {rm.topicCount} topic
-                </span>
                 <span className="roadmap-meta roadmap-learning">
-                <span role="img" aria-label="learning">👤</span> {rm.learningCount} learning
+                <span role="img" aria-label="learning">👤</span> {rm?.learning} learning
+                </span>
+                <span className="roadmap-meta roadmap-teaching">
+                <span role="img" aria-label="teaching">👨‍🏫</span> {rm?.teaching} teaching
                 </span>
             </div>
             </div>

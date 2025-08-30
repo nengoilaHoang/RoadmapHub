@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './ProfilePage.css';
-import ProfileComponent from '../ProfileComponent/ProfileComponent.jsx';
-import SettingComponent from '../SettingComponent/SettingComponent.jsx';
-import FriendsComponent from '../FriendsComponent/FriendsComponent.jsx';
-import RoadmapsComponent from '../RoadmapsComponent/RoadmapsComponent.jsx';
+import ProfileComponent from '../../../components/ProfileComponent/ProfileComponent/ProfileComponent.jsx';
+import SettingComponent from '../../../components/ProfileComponent/SettingComponent/SettingComponent.jsx';
+import FriendsComponent from '../../../components/ProfileComponent/FriendsComponent/FriendsComponent.jsx';
+import RoadmapsComponent from '../../../components/ProfileComponent/RoadmapsComponent/RoadmapsComponent.jsx';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 //import {useCheckLogin} from '../../../hooks/userCheckLogin.jsx'

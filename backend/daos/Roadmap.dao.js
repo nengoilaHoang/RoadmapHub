@@ -58,10 +58,17 @@ class RoadmapDAO {
         console.log(edges);
     }
     async getRoadmapByUserId(accountId) {
-        await db('roadmap')
+        const rows = await db('roadmap')
         .join('account', 'roadmap.accountId', 'account.id')
         .where('account.id', accountId)
         .select('roadmap.*');
+        console.log("rows: ", rows);
+        if (rows.length === 0) {
+            return null;
+        }
+        else{
+            return rows.map(row => Roadmap.fromRow(row));
+        }
     }
     async getRoadmapByTeamId(teamId) {
         await db('roadmap')
