@@ -36,12 +36,12 @@ const RoadmapList = () => {
   return (
     <div className="roadmap-list-wrapper">
       <div className="roadmap-total">
-        Total {roadmaps.length} roadmaps
+        Total {roadmaps?.length ?? 0} roadmaps
       </div>
       <div className="roadmap-list">
-        {roadmaps.map((rm, idx) => (
+        {roadmaps!=null? roadmaps.map((rm, idx) => (
           <RoadmapViewInList key={idx} rm={rm} />
-        ))}
+        )):''}
       </div>
       <button className="roadmap-add-btn">+ add new roadmap</button>
     </div>
