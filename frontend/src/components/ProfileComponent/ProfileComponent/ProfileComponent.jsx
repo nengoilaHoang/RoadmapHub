@@ -2,6 +2,7 @@ import React,{ useState, useEffect } from "react";
 import axios from "axios";
 import AlertError from "../../SignUp/AlertError";
 import AlertSuccess from "../../SignUp/AlertSuccess";
+import PopUpAvatar from "../PopUpAvatar/PopUpAvatar";
 const ProfileComponent = ({ changeIntoSetting }) => {
     const [email, setEmail] = useState("");
     const [fullname, setFullname] = useState("");
@@ -9,6 +10,10 @@ const ProfileComponent = ({ changeIntoSetting }) => {
     const [linkedin, setLinkedin] = useState("");
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    // thay đổi avatar
+    const [avatarModal, setAvatarModal] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const [avatarUrl, setAvatarUrl] = useState("https://i.pravatar.cc/120");
     const getUserData = async () => {
         const userData = await axios.get('http://localhost:5000/api/profiles/get-profile',{
             headers: {
@@ -25,11 +30,6 @@ const ProfileComponent = ({ changeIntoSetting }) => {
     useEffect(() => {
         getUserData();
     }, []);
-    //     };
-    //     fetchData();
-    // }, []);
-    // console.log("Email:", email);
-    // console.log("Form data state:", formData);
     //Hàm thay đổi input
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -47,6 +47,14 @@ const ProfileComponent = ({ changeIntoSetting }) => {
             default:
                 break;
         }
+    };
+    //thay avatar
+    const handleAvatarUpload = async (file) => {
+        setUploading(true);
+        // Giả sử upload API: form-data, nhận về avatar mới
+        const formData = new FormData();
+        formData.append("avatar", file);
+        setUploading(false);
     };
 
     const handleSaveProfile = async () => {
@@ -82,10 +90,9 @@ const ProfileComponent = ({ changeIntoSetting }) => {
             <div className="avatar">
                 <img src="https://i.pravatar.cc/120" alt="Profile Avatar" />
             </div>
-            <button className="edit-avatar-btn">Edit</button>
+            <button className="edit-avatar-btn" onClick={() => setAvatarModal(true)}>Edit</button>
             </div>
         </div>
-
         <form className="profile-form">
             <div className="form-group">
             <label htmlFor="name">Name*</label>
@@ -146,6 +153,12 @@ const ProfileComponent = ({ changeIntoSetting }) => {
             Save Profile
             </button>
         </form>
+        <PopUpAvatar
+            show={avatarModal}
+            onClose={() => setAvatarModal(false)}
+            onUpload={handleAvatarUpload}
+            uploading={uploading}
+        />
     </div>
     )
 }

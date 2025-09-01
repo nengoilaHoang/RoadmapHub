@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import Profile from '../models/Profile.model.js';
 import geneUUID from '../Helps/genUUID.js';
 
+const nullAvatar = 'https://res-console.cloudinary.com/dk82ocoin/thumbnails/v1/image/upload/v1756572458/NDA0MzI3NC1hdmF0YXItZWluc3RlaW4tcHJvZmVzc29yLXNjaWVudGlzdF8xMTMyNTlfam91cW1n/drilldown'
+
 class ProfileDAO {
 
   async getAllProfiles() {
@@ -26,7 +28,7 @@ class ProfileDAO {
   }
 
 
-  async createProfile(accountId, fullname, github = null, linkedin = null, avatar = null) {
+  async createProfile(accountId, fullname, github = null, linkedin = null, avatar = nullAvatar) {
     const id = geneUUID();
     const profile = new Profile(id, accountId, fullname, github, linkedin, avatar);
     await db('profile').insert(profile);

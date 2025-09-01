@@ -1,0 +1,116 @@
+.avatar-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(23,26,33,0.44);
+  z-index: 2000;
+}
+
+.avatar-modal {
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(33,43,54,0.18);
+  padding: 32px 28px;
+  min-width: 320px;
+  width: 100%;
+  max-width: 370px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeInModal 0.28s;
+}
+
+@keyframes fadeInModal {
+  from { opacity: 0; transform: scale(0.97);}
+  to { opacity:1; transform: scale(1);}
+}
+
+.avatar-modal-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #24292F;
+  letter-spacing: 0.01em;
+}
+
+.avatar-modal-img-box {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-modal-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #e3e8ee;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+  transition: box-shadow 0.18s;
+}
+
+.avatar-upload-label {
+  cursor: pointer;
+  display: block;
+  position: relative;
+  width: 100%; height: 100%;
+}
+
+.avatar-upload-hover {
+  opacity: 0;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  background: rgba(33,150,243,0.13);
+  color: #2196f3;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  transition: opacity 0.2s;
+  pointer-events: none;
+}
+
+.avatar-upload-label:hover .avatar-upload-hover {
+  opacity: 1;
+}
+
+.avatar-modal-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 14px;
+  width: 100%;
+  justify-content: center;
+}
+
+.avatar-modal-btn {
+  min-width: 90px;
+  padding: 8px 16px;
+  border-radius: 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  transition: background 0.16s;
+  cursor: pointer;
+  box-shadow: 0 1px 6px rgba(33,43,54,0.08);
+}
+.avatar-modal-btn.cancel {
+  background: #f0f4f8;
+  color: #333;
+}
+.avatar-modal-btn.upload {
+  background: linear-gradient(90deg,#2196F3 70%,#21CBF3 100%);
+  color: white;
+}
+.avatar-modal-btn:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+}
