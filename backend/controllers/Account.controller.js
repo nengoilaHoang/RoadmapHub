@@ -107,7 +107,8 @@ class AccountController {
     checkLogin = async (req, res, next) => {
         if (req.authenticate) {
             //console.log("User is logged in", req.authenticate);
-            return res.status(200).json({ status: true, message: "User is logged in", user: req.authenticate });
+            const profile = await ProfileService.getProfileByAccountId(req.authenticate.id);
+            return res.status(200).json({ status: true, message: "User is logged in", user: req.authenticate, profile });
         }
         else {
             return res.status(401).json({ status: false, message: "User is not logged in" });

@@ -13,7 +13,7 @@ const ProfileComponent = ({ changeIntoSetting }) => {
     // thay đổi avatar
     const [avatarModal, setAvatarModal] = useState(false);
     const [uploading, setUploading] = useState(false);
-    const [avatarUrl, setAvatarUrl] = useState("https://i.pravatar.cc/120");
+    const [avatarUrl, setAvatarUrl] = useState();
     const getUserData = async () => {
         const userData = await axios.get('http://localhost:5000/api/profiles/get-profile',{
             headers: {
@@ -21,10 +21,12 @@ const ProfileComponent = ({ changeIntoSetting }) => {
             },
             withCredentials: true
         });
+        console.log("User data:", userData.data);
         setEmail(userData.data.email);
         setFullname(userData.data.profile.fullname);
         setGithub(userData.data.profile.github);
         setLinkedin(userData.data.profile.linkedin);
+        setAvatarUrl(userData.data.profile.avatar);
         return (userData.data.profile);
     };
     useEffect(() => {
@@ -88,7 +90,7 @@ const ProfileComponent = ({ changeIntoSetting }) => {
         <div className="profile-header">
             <div className="avatar-container">
             <div className="avatar">
-                <img src="https://i.pravatar.cc/120" alt="Profile Avatar" />
+                <img src={avatarUrl} alt="Profile Avatar" />
             </div>
             <button className="edit-avatar-btn" onClick={() => setAvatarModal(true)}>Edit</button>
             </div>

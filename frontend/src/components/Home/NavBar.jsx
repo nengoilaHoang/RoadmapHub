@@ -4,7 +4,7 @@ import axios from "axios";
 import './home.css';
 export default function NavBar() {
     const navigate = useNavigate();
-    const { isLoggedIn } = useCheckLogin();
+    const { isLoggedIn, profile } = useCheckLogin();
     function onLogin() {navigate('/login')}
     function onSignup() {navigate('/signup')}
     async function onLogout() {
@@ -29,7 +29,7 @@ export default function NavBar() {
             style={{ width: '60px', height: '60px' }}
         >
             <img
-            src="https://i.pravatar.cc/40"
+            src={profile.avatar || ""}
             alt="User Avatar"
             className="w-100 h-100"
             style={{ objectFit: 'cover' }}

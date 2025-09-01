@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import "./PopUpAvatar.css";
+import { useCheckLogin } from "../../../hooks/userCheckLogin";
 
 const PopUpAvatar = ({ show, onClose, onUpload, uploading }) => {
   const [selectedFile, setSelectedFile] = useState(null);
+  const { profile } = useCheckLogin();
 
   // Sửa tại đây: luôn chọn đúng 1 file
   const handleChange = (e) => {
@@ -20,7 +22,7 @@ const PopUpAvatar = ({ show, onClose, onUpload, uploading }) => {
         <div className="avatar-modal-img-box">
           <label htmlFor="avatar-upload" className="avatar-upload-label">
             <img
-              src={selectedFile ? URL.createObjectURL(selectedFile) : "https://i.pravatar.cc/120"}
+              src={selectedFile ? URL.createObjectURL(selectedFile) : profile.avatar}
               alt="Preview"
               className="avatar-modal-img"
             />

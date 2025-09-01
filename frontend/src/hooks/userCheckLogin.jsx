@@ -4,6 +4,7 @@ import axios from "axios";
 export const useCheckLogin = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(null);
     const [user, setUser] = useState(null);
+    const [profile, setProfile] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -21,9 +22,11 @@ export const useCheckLogin = () => {
             if (res.data.status === true) {
                 setIsLoggedIn(true);
                 setUser(res.data.user);
+                setProfile(res.data.profile);
             } else {
                 setIsLoggedIn(false);
                 setUser(null);
+                setProfile(null);
             }
         })
         .catch(() => {
@@ -32,5 +35,5 @@ export const useCheckLogin = () => {
         });
     }, []);
 
-    return { isLoggedIn, user };
+    return { isLoggedIn, user, profile };
 };
