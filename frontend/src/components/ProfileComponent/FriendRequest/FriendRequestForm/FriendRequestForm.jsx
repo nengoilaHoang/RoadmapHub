@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import "./FriendRequestForm.css";
+import axios from "axios";
 
-export default function FriendRequestForm({ onSend }) {
+export default function FriendRequestForm() {
   const [email, setEmail] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) return;
-    onSend(email);
+    const res = await axios.post('http://localhost:5000/api/friends/friend-requests/send', { receiverEmail: email },{
+      withCredentials: true
+    });
+    console.log(res.data);
+    if (res.data.status === "success") {
+      console.log("Friend request sent");
+    }
     setEmail("");
   };
 
@@ -22,7 +29,7 @@ export default function FriendRequestForm({ onSend }) {
         className="input"
         required
       />
-      <button type="submit" className="btn send">Send</button>
+      <button onClick={handleSubmit} className="btn send">Send</button>
     </form>
   );
 }

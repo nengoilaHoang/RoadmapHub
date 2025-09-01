@@ -1,4 +1,4 @@
-import FriendDao from "../daos/Friend.dao";
+import FriendDao from "../daos/Friend.dao.js";
 
 class FriendService {
     constructor(friendDao) {

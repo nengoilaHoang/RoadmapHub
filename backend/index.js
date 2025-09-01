@@ -6,6 +6,7 @@ import auRoutes from './routes/auth.route.js'
 import profileRoute from './routes/profile.route.js'
 import roadmapRoutes from './routes/Roadmap.route.js'
 import teamRoutes from './routes/team.route.js'
+import friendRoutes from './routes/friend.route.js'
 import cors from 'cors'
 import authenticate from './middlewares/AuthMiddleware.js';
 import cookieParser from "cookie-parser";
@@ -27,6 +28,7 @@ app.use('/api/profiles', profileRoute);
 app.use('/api/auth', auRoutes);
 app.use('/api/roadmaps', roadmapRoutes);
 app.use('/api/teams', teamRoutes);
+app.use('/api/friends', friendRoutes);
 app.listen(process.env.PORT, () => {
     console.log(`Server is running at http://localhost:${process.env.PORT}`)
 });
