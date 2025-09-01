@@ -24,6 +24,10 @@ class ProfileService {
   async updateProfile(id, fullname, github, linkedin) {
     return await this.ProfileDAO.updateProfile(id, fullname, github, linkedin);
   }
+  
+  async updateAvatar(id, avatar) {
+    return await this.ProfileDAO.updateAvatar(id, avatar);
+  }
 
   async deleteProfile(id) {
     return await this.ProfileDAO.deleteProfile(id);

@@ -1,46 +1,28 @@
 import dotenv from "dotenv";
-import { v2 as cloudinary } from 'cloudinary';
-import geneUUID from "./genUUID";
+import { v2 as cloudinary } from "cloudinary";
+import geneUUID from "./genUUID.js";
+
 dotenv.config();
 
-(async function() {
+// Cấu hình Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
-    // Configuration
-    cloudinary.config({ 
-        cloud_name: process.env.CLOUD_NAME, 
-        api_key: process.env.CLOUD_API_KEY, 
-        api_secret: process.env.CLOUD_API_SECRET
+// Hàm upload
+export const uploadToCloudinary = async (filePath) => {
+  try {
+    const imgId = geneUUID(); // bạn tạo id riêng để quản lý
+    const result = await cloudinary.uploader.upload(filePath, {
+      public_id: imgId,
+      folder: "user_uploads", // tùy chọn folder để quản lý
+      resource_type: "image", // có thể đổi sang 'auto' nếu không chắc
     });
-
-    const imgId = geneUUID();
-    // Upload an image
-     const uploadResult = await cloudinary.uploader
-       .upload(
-           'https://res.cloudinary.com/demo/image/upload/getting-started/shoes.jpg', {
-               public_id: imgId,
-           }
-       )
-       .catch((error) => {
-           console.log(error);
-       });
-    
-    console.log(uploadResult);
-    
-    // Optimize delivery by resizing and applying auto-format and auto-quality
-    const optimizeUrl = cloudinary.url('shoes', {
-        fetch_format: 'auto',
-        quality: 'auto'
-    });
-    
-    console.log(optimizeUrl);
-    
-    // Transform the image: auto-crop to square aspect_ratio
-    const autoCropUrl = cloudinary.url('shoes', {
-        crop: 'auto',
-        gravity: 'auto',
-        width: 500,
-        height: 500,
-    });
-    
-    console.log(autoCropUrl);    
-})();
+    return result; // result.secure_url là link ảnh dùng được
+  } catch (error) {
+    console.error("Upload error:", error);
+    throw error;
+  }
+};

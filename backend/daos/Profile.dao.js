@@ -48,6 +48,13 @@ class ProfileDAO {
     return rows > 0 ? { id, fullname, github, linkedin } : null;
   }
 
+  async updateAvatar(id, avatar) {
+    const rows = await db('profile')
+      .where({ accountId: id })
+      .update({ avatar });
+    return rows > 0 ? { id, avatar } : null;
+  }
+
   async deleteProfile(id) {
     const rows = await db('profile')
       .where({ id })

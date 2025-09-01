@@ -53,9 +53,16 @@ const ProfileComponent = ({ changeIntoSetting }) => {
     //thay avatar
     const handleAvatarUpload = async (file) => {
         setUploading(true);
-        // Giả sử upload API: form-data, nhận về avatar mới
         const formData = new FormData();
-        formData.append("avatar", file);
+        formData.append("avatar", file);   
+        console.log(formData.get("avatar"));
+        const res = await axios.post("http://localhost:5000/api/profiles/update-avatar", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+                withCredentials: true,
+            });
+        const newUrl = res.data.avatarUrl;
+        setAvatarUrl(newUrl);
+        window.location.reload();
         setUploading(false);
     };
 
