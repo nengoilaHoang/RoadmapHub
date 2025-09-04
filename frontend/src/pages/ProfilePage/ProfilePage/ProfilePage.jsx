@@ -1,19 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './ProfilePage.css';
-import ProfileComponent from '../ProfileComponent/ProfileComponent.jsx';
-import SettingComponent from '../SettingComponent/SettingComponent.jsx';
-import FriendsComponent from '../FriendsComponent/FriendsComponent.jsx';
-import RoadmapsComponent from '../RoadmapsComponent/RoadmapsComponent.jsx';
+import ProfileComponent from '../../../components/ProfileComponent/ProfileComponent/ProfileComponent.jsx';
+import SettingComponent from '../../../components/ProfileComponent/SettingComponent/SettingComponent.jsx';
+import FriendsComponent from '../../../components/ProfileComponent/FriendsComponent/FriendsComponent.jsx';
+import RoadmapsComponent from '../../../components/ProfileComponent/RoadmapsComponent/RoadmapsComponent.jsx';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+//import {useCheckLogin} from '../../../hooks/userCheckLogin.jsx'
 
 const ProfilePage = () => {
+    const navigate = useNavigate();
     //side bar data
-    const [selectedTeam, setSelectedTeam] = useState('Lê Văn Việt Hoàng');
+    const [selectedTeam, setSelectedTeam] = useState('your account');
     const [activeNav, setActiveNav] = useState('Profile');
+    // const { user } = useCheckLogin();
+    // console.log(user);
+    const [teams, setTeams] = useState(['your account']);
 
     const changeIntoSetting = () => {
         setMainContent(setting);
         setActiveNav('Setting');
     };
+
+    useEffect(() => {
+        const getTeams = async () =>{
+            try {
+                const response = await axios.get(`http://localhost:5000/api/teams/get-teams`, {
+                    withCredentials: true
+                });
+                if(response.data.status === true)
+                    setTeams(['your account', ...response.data.teams.map(team => team.name)]);
+            } catch (error) {
+                console.error('Error fetching teams:', error);
+            }
+        } 
+        getTeams();
+    }, []);
+
+    useEffect(() => {
+        if(selectedTeam === 'your account') {
+            navigate('/profile');
+        }
+        else{
+            navigate(`/team/${selectedTeam}`);
+        }
+    }, [selectedTeam]);
 
     const profile = <ProfileComponent changeIntoSetting={changeIntoSetting}/>;
     const setting = <SettingComponent/>;
@@ -29,13 +60,13 @@ const ProfilePage = () => {
         else if (navId === 'Roadmaps') {setMainContent(roadmaps);}
     };
 
-    const teams = [
-        'Lê Văn Việt Hoàng',
-        'Nguyễn Văn A',
-        'Trần Thị B',
-        'Lê Văn C',
-        'Hoàng Đức D'
-    ];
+    // const teams = [
+    //     'Lê Văn Việt Hoàng',
+    //     'Nguyễn Văn A',
+    //     'Trần Thị B',
+    //     'Lê Văn C',
+    //     'Hoàng Đức D'
+    // ];
 
     const navItems = [
         { id: 'Profile', label: 'Profile', icon: '👤' },

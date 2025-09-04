@@ -22,5 +22,11 @@ class RoadmapService {
     async getRoadmapByName(accountId,name) {
         return await RoadmapDAO.getRoadmapByName(accountId,name);
     }
+    async getRoadmapByUserId(userId) {
+        return await RoadmapDAO.getRoadmapByUserId(userId);
+    }
+    async getRoadmapByTeamId(teamId) {
+        return await RoadmapDAO.getRoadmapByTeamId(teamId);
+    }
 }
 export default new RoadmapService(RoadmapDAO)

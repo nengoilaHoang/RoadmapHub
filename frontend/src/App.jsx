@@ -13,10 +13,11 @@ import RefreshToken from '#pages/Login/RefreshTokenPage/RefreshToken.jsx'
 import RoadmapEditPage from '#pages/Roadmap/RoadmapEditPage/RoadmapEditPage.jsx'
 import PrivacyPolicy from '#pages/TermsServiceAndPrivacyPolicy/PrivacyPolicy/PrivacyPolicy.jsx'
 import TermsService from '#pages/TermsServiceAndPrivacyPolicy/TermsService/TermsService.jsx'
-import ProfilePage from './pages/ProfilePage/ProfilePage/ProfilePage'
+import ProfilePage from './pages/ProfilePage/ProfilePage/ProfilePage.jsx'
 import RoadmapView from '#pages/Roadmap/RoadmapView/RoadmapView.jsx'
 import Home from '#pages/Home/Home.jsx'
 import ChangeEmailVerify from '#pages/ChangeEmailVerify/ChangeEmailVerify.jsx'
+import VerifyDeletePage from '#pages/ProfilePage/VerifyDeletePage/VerifyDeletePage.jsx'
 function App() {
   const router = createBrowserRouter(
   [
@@ -43,7 +44,8 @@ function App() {
         {path:'terms-of-service', element: <TermsService />},
         {path:'profile', element: <ProfilePage />},
         {path:'roadmap/view', element:<RoadmapView />},
-        {path:'change-email/verify/:hashedPin/:oldEmail/:newEmail', element:<ChangeEmailVerify />}
+        {path:'change-email/verify/:hashedPin/:oldEmail/:newEmail', element:<ChangeEmailVerify />},
+        {path:'/delete-account/verify/:verifyToken/:email', element:<VerifyDeletePage />}
       ]
     },
     {

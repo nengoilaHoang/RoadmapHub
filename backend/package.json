@@ -15,6 +15,7 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "bluebird": "^3.7.2",
+    "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
@@ -25,6 +26,7 @@
     "knex": "^3.1.0",
     "mongodb": "^6.18.0",
     "mongoose": "^8.18.0",
+    "multer": "^2.0.2",
     "mysql2": "^3.14.3",
     "nodemailer": "^7.0.5",
     "uuid": "^11.1.0"

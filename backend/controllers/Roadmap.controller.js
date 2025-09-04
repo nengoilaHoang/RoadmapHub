@@ -60,5 +60,17 @@ class RoadmapController {
                 });
             }
     }
+    async getRoadmapByUserId(req, res) {
+        const userId = req.authenticate.id;
+        console.log("Account ID:", userId);
+        const roadmaps = await RoadmapService.getRoadmapByUserId(userId);
+        console.log("Roadmaps:", roadmaps);
+        res.json({status: "success", data: roadmaps});
+    }
+    async getRoadmapByTeamId(req, res) {
+        const { teamId } = req.params;
+        const roadmaps = await RoadmapService.getRoadmapByTeamId(teamId);
+        res.json({status: "success",roadmaps});
+    }
 }
 export default new RoadmapController(RoadmapService);

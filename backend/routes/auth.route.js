@@ -16,4 +16,7 @@ router.post('/change-password', AccountController.changePassword);
 // đổi email
 router.post('/change-email', AccountController.changeEmail);
 router.post('/change-email/verify/:hashedPin/:oldEmail/:newEmail', AccountController.changeEmailVerify);
+// xóa tài khoản
+router.post('/delete-account', AccountController.deleteAccount);
+router.post('/delete-account/verify', AccountController.deleteAccountVerify);
 export default router;

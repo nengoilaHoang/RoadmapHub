@@ -1,11 +1,19 @@
 import React,{ useState, useEffect } from "react";
 import axios from "axios";
-
+import AlertError from "../../SignUp/AlertError";
+import AlertSuccess from "../../SignUp/AlertSuccess";
+import PopUpAvatar from "../PopUpAvatar/PopUpAvatar";
 const ProfileComponent = ({ changeIntoSetting }) => {
     const [email, setEmail] = useState("");
     const [fullname, setFullname] = useState("");
     const [github, setGithub] = useState("");
     const [linkedin, setLinkedin] = useState("");
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
+    // thay đổi avatar
+    const [avatarModal, setAvatarModal] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const [avatarUrl, setAvatarUrl] = useState();
     const getUserData = async () => {
         const userData = await axios.get('http://localhost:5000/api/profiles/get-profile',{
             headers: {
@@ -13,20 +21,17 @@ const ProfileComponent = ({ changeIntoSetting }) => {
             },
             withCredentials: true
         });
+        console.log("User data:", userData.data);
         setEmail(userData.data.email);
         setFullname(userData.data.profile.fullname);
         setGithub(userData.data.profile.github);
         setLinkedin(userData.data.profile.linkedin);
+        setAvatarUrl(userData.data.profile.avatar);
         return (userData.data.profile);
     };
     useEffect(() => {
         getUserData();
     }, []);
-    //     };
-    //     fetchData();
-    // }, []);
-    // console.log("Email:", email);
-    // console.log("Form data state:", formData);
     //Hàm thay đổi input
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -45,30 +50,58 @@ const ProfileComponent = ({ changeIntoSetting }) => {
                 break;
         }
     };
+    //thay avatar
+    const handleAvatarUpload = async (file) => {
+        setUploading(true);
+        const formData = new FormData();
+        formData.append("avatar", file);   
+        console.log(formData.get("avatar"));
+        const res = await axios.post("http://localhost:5000/api/profiles/update-avatar", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+                withCredentials: true,
+            });
+        const newUrl = res.data.avatarUrl;
+        setAvatarUrl(newUrl);
+        window.location.reload();
+        setUploading(false);
+    };
 
     const handleSaveProfile = async () => {
-        await axios.post('http://localhost:5000/api/profiles/update-profile',{
-            fullname,
-            github,
-            linkedin
-        },{
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-        });
+        try {
+            const res = await axios.post('http://localhost:5000/api/profiles/update-profile',{
+                fullname,
+                github,
+                linkedin
+            },{
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                withCredentials: true
+            });
+            console.log("Response data:", res.data);
+            if(!res.data?.status){
+                setError("Cập nhật thông tin không thành công");
+                setSuccess("");
+            }
+            else{
+                setSuccess("Cập nhật thông tin thành công");
+                setError("");
+            }
+        } catch {
+            setError("Cập nhật thông tin không thành công");
+            setSuccess("");
+        }
     };
     return(
     <div className="content-wrapper">
         <div className="profile-header">
             <div className="avatar-container">
             <div className="avatar">
-                <img src="https://i.pravatar.cc/120" alt="Profile Avatar" />
+                <img src={avatarUrl} alt="Profile Avatar" />
             </div>
-            <button className="edit-avatar-btn">Edit</button>
+            <button className="edit-avatar-btn" onClick={() => setAvatarModal(true)}>Edit</button>
             </div>
         </div>
-
         <form className="profile-form">
             <div className="form-group">
             <label htmlFor="name">Name*</label>
@@ -119,7 +152,8 @@ const ProfileComponent = ({ changeIntoSetting }) => {
                 placeholder="https://linkedin.com/in/username"
             />
             </div>
-
+            {error && <AlertError content={error} />}
+            {success && <AlertSuccess content={success} />}
             <button
             type="button"
             className="save-btn"
@@ -128,6 +162,12 @@ const ProfileComponent = ({ changeIntoSetting }) => {
             Save Profile
             </button>
         </form>
+        <PopUpAvatar
+            show={avatarModal}
+            onClose={() => setAvatarModal(false)}
+            onUpload={handleAvatarUpload}
+            uploading={uploading}
+        />
     </div>
     )
 }

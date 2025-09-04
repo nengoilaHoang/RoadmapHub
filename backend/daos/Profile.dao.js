@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import Profile from '../models/Profile.model.js';
 import geneUUID from '../Helps/genUUID.js';
 
+const nullAvatar = 'https://res-console.cloudinary.com/dk82ocoin/thumbnails/v1/image/upload/v1756572458/NDA0MzI3NC1hdmF0YXItZWluc3RlaW4tcHJvZmVzc29yLXNjaWVudGlzdF8xMTMyNTlfam91cW1n/drilldown'
+
 class ProfileDAO {
 
   async getAllProfiles() {
@@ -26,7 +28,7 @@ class ProfileDAO {
   }
 
 
-  async createProfile(accountId, fullname, github = null, linkedin = null, avatar = null) {
+  async createProfile(accountId, fullname, github = null, linkedin = null, avatar = nullAvatar) {
     const id = geneUUID();
     const profile = new Profile(id, accountId, fullname, github, linkedin, avatar);
     await db('profile').insert(profile);
@@ -43,8 +45,14 @@ class ProfileDAO {
     const rows = await db('profile')
       .where({ accountId: id })
       .update({ fullname, github, linkedin });
-    if (rows === 0) return null;
-    return this.getProfileById(id);
+    return rows > 0 ? { id, fullname, github, linkedin } : null;
+  }
+
+  async updateAvatar(id, avatar) {
+    const rows = await db('profile')
+      .where({ accountId: id })
+      .update({ avatar });
+    return rows > 0 ? { id, avatar } : null;
   }
 
   async deleteProfile(id) {
@@ -53,7 +61,12 @@ class ProfileDAO {
       .del();
     return rows > 0;
   }
-
+  async deleteProfileByAccountId(accountId) {
+    const rows = await db('profile')
+      .where({ accountId })
+      .del();
+    return rows > 0;
+  }
   // Optional: Get Teams for a profile (if you have a join table)
   async getProfileTeams(profileId) {
     const teamRows = await db('team')

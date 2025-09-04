@@ -4,7 +4,7 @@ import axios from "axios";
 import './home.css';
 export default function NavBar() {
     const navigate = useNavigate();
-    const { isLoggedIn } = useCheckLogin();
+    const { isLoggedIn, profile } = useCheckLogin();
     function onLogin() {navigate('/login')}
     function onSignup() {navigate('/signup')}
     async function onLogout() {
@@ -14,18 +14,12 @@ export default function NavBar() {
             },
             withCredentials: true
         });
-        navigate('/login');
+        navigate("/login");
+        window.location.reload();
     }
     let dropdown;
-    if (!isLoggedIn) {
-        dropdown = 
-        <div className="auth-buttons">
-            <button className="btn login-btn" onClick={onLogin}>Login</button>
-            <button className="btn logout-btn" onClick={onSignup}>sign up</button>
-        </div>
-    }
-    else{
-        dropdown = 
+    if (isLoggedIn) {
+        dropdown =
         <div className="dropdown">
         <button
             className="btn p-0 border-0 rounded-circle overflow-hidden"
@@ -35,7 +29,7 @@ export default function NavBar() {
             style={{ width: '60px', height: '60px' }}
         >
             <img
-            src="https://i.pravatar.cc/40"
+            src={profile.avatar || ""}
             alt="User Avatar"
             className="w-100 h-100"
             style={{ objectFit: 'cover' }}
@@ -47,6 +41,13 @@ export default function NavBar() {
             <li><hr className="dropdown-divider" /></li>
             <li><a className="dropdown-item" onClick={onLogout}>Log out</a></li>
         </ul>
+        </div> 
+    }
+    else{
+        dropdown = 
+        <div className="auth-buttons">
+            <button className="btn login-btn" onClick={onLogin}>Login</button>
+            <button className="btn logout-btn" onClick={onSignup}>sign up</button>
         </div>
     }
     return (

@@ -8,4 +8,6 @@ router.post('/edit-nodes', RoadmapController.editNodeRoadmap);
 router.get('/edit/:name', RoadmapController.getRoadmapByName);
 router.post('/check-your-roadmap',RoadmapController.checkYourRoadmap)
 // router.get('/view/:name', RoadmapController.viewRoadmap);
+router.get('/getRoadmapByUserId', RoadmapController.getRoadmapByUserId);
+router.get('/getRoadmapByTeamId/:teamName', RoadmapController.getRoadmapByTeamId);
 export default router;

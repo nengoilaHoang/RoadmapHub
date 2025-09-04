@@ -50,13 +50,20 @@ class RoadmapDAO {
         const roadmap = RoadmapSchemaModel({accountId,name,nodes,edges});
         await roadmap.save();
     }
-    async getRoadmapByUserID(accountId) {
-        await db('roadmap')
+    async getRoadmapByUserId(accountId) {
+        const rows = await db('roadmap')
         .join('account', 'roadmap.accountId', 'account.id')
         .where('account.id', accountId)
         .select('roadmap.*');
+        console.log("rows: ", rows);
+        if (rows.length === 0) {
+            return null;
+        }
+        else{
+            return rows.map(row => Roadmap.fromRow(row));
+        }
     }
-    async getRoadmapByTeamID(teamId) {
+    async getRoadmapByTeamId(teamId) {
         await db('roadmap')
         .join('team', 'roadmap.teamId', 'team.id')
         .where('team.id', teamId)
