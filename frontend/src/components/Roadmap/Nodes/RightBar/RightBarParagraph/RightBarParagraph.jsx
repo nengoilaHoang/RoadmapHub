@@ -40,9 +40,9 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode,onNodeCha
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                paddingParagraph: paddingParagraph,
                 width:selectedNode.measured?.width,
                 height:selectedNode.measured?.height,
-                paddingParagraph: paddingParagraph
             }
         })
     }
@@ -165,7 +165,7 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode,onNodeCha
                         <input
                             type="number"
                             className="number-input"
-                            value={selectedNode.data?.paddingParagraph || 16}
+                            value={selectedNode.data?.paddingParagraph || 10}
                             min="0"
                             max="100"
                             onChange={(e)=>changePadding(e.target.value)}
