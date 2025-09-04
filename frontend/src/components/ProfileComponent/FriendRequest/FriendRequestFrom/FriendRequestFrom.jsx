@@ -5,9 +5,7 @@ import axios from "axios";
 export default function FriendRequestFrom() {
 
   const[requests, setRequests] = useState([]);
-
-  useEffect(() => {
-    const fetchRequests = async () => {
+  const fetchRequests = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/friends/friend-requests/from",{
           withCredentials: true
@@ -18,8 +16,16 @@ export default function FriendRequestFrom() {
         console.error("Error fetching friend requests:", error);
       }
     };
+  useEffect(() => {
     fetchRequests();
   }, []);
+
+  const onCancel = async(id)=>{
+    await axios.post("http://localhost:5000/api/friends/friend-requests/from/cancel",{id},{
+      withCredentials: true
+    });
+    fetchRequests();
+  }
 
   return (
     <div className="card">
@@ -33,7 +39,7 @@ export default function FriendRequestFrom() {
           </div>
           <div className="actions">
             {req.requestState === "pending" ? (
-              <button className="btn cancel">
+              <button className="btn cancel" onClick={() => onCancel(req.id)}>
                 Cancel
               </button>
             ) : (
