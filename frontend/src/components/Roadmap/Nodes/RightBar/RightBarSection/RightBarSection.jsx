@@ -7,16 +7,20 @@ export default function RightBarSection({ selectedNode, onDeleteNode, onNodeChan
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 backgroundColorSection: backgroundColorSection
             }
         })
     }
-    const changeBorderColor = (borderColorButtonSection) =>{
+    const changeBorderColor = (borderColorSection) =>{
         onNodeChange({
             ...selectedNode,
             data:{
                 ...selectedNode.data,
-                borderColorButtonSection: borderColorButtonSection
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
+                borderColorSection: borderColorSection
             }
         })
     }
@@ -25,6 +29,8 @@ export default function RightBarSection({ selectedNode, onDeleteNode, onNodeChan
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 borderRadiusSection: borderRadiusSection
             }
         })
@@ -32,7 +38,7 @@ export default function RightBarSection({ selectedNode, onDeleteNode, onNodeChan
     return (
         <div className={`rightbar ${selectedNode ? 'show' : ''}`}>
             <div className="rightbar-content">
-                <RightBarTop selectedNode={selectedNode} onDeleteNode={onDeleteNode} />
+                <RightBarTop selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange}/>
 
                 <h3 className="properties-title">
                     <i className="bi bi-palette"></i>
