@@ -70,12 +70,11 @@ export function ResizableNode(props) {
           background: data.backgroundColorParagraph||"transfer",
           borderStyle: "solid",
           borderColor:data.borderColorParagraph || "#555",
-          borderRadius: data.borderRadiusParagraph?`${data.borderRadiusParagraph}px` : "5px",
           color: data.textColorParagraph ||"#000000",
           padding: data.paddingParagraph? `${data.paddingParagraph}px` : "10px",
           textAlign: data.textAlignParagraph||"center",
           justifyContent: data.justificationParagraph ||"center",
-          boxSizing: "content-box", 
+          // boxSizing: "content-box", 
         }
         break;
       case "checklist":
@@ -89,9 +88,7 @@ export function ResizableNode(props) {
       case "title":
         break;
     }
-    useEffect(()=>{
-
-    },) 
+    console.log(data)
     const onCheckChange =(Index,value)=>{
       data.itemsCheckList.map((item, index) =>{index == Index? item.checked = value:""})
     }
