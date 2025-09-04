@@ -1,14 +1,11 @@
-import { ResizableNode } from '#Helps/ResizableNode.jsx';
-export default function HozicontalLine({ data, id, selected }) {
+import { Line } from '#components/Roadmap/Nodes/Node/Line.jsx';
+export default function HozicontalLine({ data, id, selected,type }) {
   return (
-    <ResizableNode
+    <Line
       data={data}
       id={id}
       selected={selected}
-      border="2px solid #555"
-      background="#fff"
-      borderRadius="8px"
-      name="horizontal line node"
+      type={type}
     />
   );
 }
