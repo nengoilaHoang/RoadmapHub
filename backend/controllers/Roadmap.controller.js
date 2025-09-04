@@ -31,16 +31,34 @@ class RoadmapController {
         await RoadmapService.deleteRoadmap(name);
     }
     async editNodeRoadmap(req, res) {
-        const { nodes,edges } = req.body;
-        console.log("nodes",nodes);
-        console.log("edges",edges);
-        await RoadmapService.editNodeRoadmap(nodes,edges);
+        const { name,nodes,edges } = req.body;
+        const accountId = req.authenticate.id
+        await RoadmapService.editNodeRoadmap(accountId,name,nodes,edges);
     }
     async getRoadmapByName(req, res) {
         const { name } = req.params;
         const {accountId}  = req.query;
         const roadmap = await RoadmapService.getRoadmapByName(accountId,name);
         res.json(roadmap);
+    }
+    async checkYourRoadmap(req,res){
+        const{name} = req.body;
+        const accountId = req.authenticate.id
+        const responseCheck = await RoadmapService.checkRoadmap(name, accountId);
+          if (!responseCheck.success) {
+                res.json({
+                    success:true,
+                    message:"Roadmap is your user"
+
+                });
+            }
+        else{
+                res.json({
+                    success:false,
+                    message:"Roadmap is not your user"
+
+                });
+            }
     }
 }
 export default new RoadmapController(RoadmapService);
