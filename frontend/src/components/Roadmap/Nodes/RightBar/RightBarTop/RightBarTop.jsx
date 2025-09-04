@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function RightBarTop({ selectedNode, onDeleteNode,onNodeChange }){
   const changeLabel = (e)=>{
@@ -6,25 +6,37 @@ export default function RightBarTop({ selectedNode, onDeleteNode,onNodeChange })
       ...selectedNode,
       data:{
         ...selectedNode.data,
+        width:selectedNode.measured?.width,
+        height:selectedNode.measured?.height,
         label:e.target.value
       }
-  }
+    }
     onNodeChange(updatedNode);
   }
   const changePosition = (axis, value) => {
       const updateNode = {
-            ...selectedNode,
-            position: {
-                ...selectedNode.position,
-                [axis]: parseFloat(value)
-            }
+          ...selectedNode,
+          position: {
+              ...selectedNode.position,
+              width:selectedNode.measured?.width,
+              height:selectedNode.measured?.height,
+              [axis]: parseFloat(value)
+          }
         }
         onNodeChange(updateNode);
     };
   const changeSize = (dimension, value) => {
       const updateNode = {
             ...selectedNode,
-            [dimension]: parseFloat(value)
+            data:{
+              ...selectedNode.data,
+              [dimension]: parseFloat(value)
+            },
+            measured:{
+              ...selectedNode.measured,
+              [dimension]: parseFloat(value)
+            }
+           
         }
         onNodeChange(updateNode);
     };
@@ -33,11 +45,35 @@ export default function RightBarTop({ selectedNode, onDeleteNode,onNodeChange })
             ...selectedNode,
             data: {
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 fontSize: size
             }
         }
     onNodeChange(updateNode);
   }
+  const changeWidthHeight=()=>{
+    const updateNode = {
+        ...selectedNode,
+        data: {
+            ...selectedNode.data,
+            width:180,
+            height:45
+        }
+      }
+    onNodeChange(updateNode);
+  }
+  useEffect(()=>{
+    const updateNode = {
+        ...selectedNode,
+        data: {
+            ...selectedNode.data,
+            width:selectedNode.measured?.width,
+            height:selectedNode.measured?.height
+        }
+      }
+    onNodeChange(updateNode)
+  },[selectedNode.measured])
     return(
         <>
         <div className="node-config-section">
@@ -65,19 +101,19 @@ export default function RightBarTop({ selectedNode, onDeleteNode,onNodeChange })
           </div>
           <div className="dimension-input">
             <label>W</label>
-            <input type="number" value={selectedNode.data?.width || 0}
+            <input type="number"  min="180" value={selectedNode.measured?.width || 0}
             onChange={(e)=>changeSize('width',e.target.value)}
-             />
+            />
           </div>
           <div className="dimension-input">
             <label>H</label>
-            <input type="number" value={selectedNode.data?.height || 0} 
+            <input type="number" min="45" value={selectedNode.measured?.height || 0} 
             onChange={(e)=>changeSize('height',e.target.value)}
             />
           </div>
         </div>
 
-        <button className="auto-size-btn">↔ Auto-Size</button>
+        <button className="auto-size-btn" onClick={changeWidthHeight}>↔ Auto-Size</button>
 
 
         <div className="node-config-section">
