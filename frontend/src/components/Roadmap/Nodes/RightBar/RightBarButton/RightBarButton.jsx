@@ -6,6 +6,8 @@ export default function RightBarButton({ selectedNode, onDeleteNode, onNodeChang
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 url: url 
             }
         })
@@ -15,6 +17,8 @@ export default function RightBarButton({ selectedNode, onDeleteNode, onNodeChang
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 textColorButton: textColorButton
             }
         })
@@ -24,6 +28,8 @@ export default function RightBarButton({ selectedNode, onDeleteNode, onNodeChang
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 backgroundColorButton: backgroundColorButton
             }
         })
@@ -33,6 +39,8 @@ export default function RightBarButton({ selectedNode, onDeleteNode, onNodeChang
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 borderColorButton: borderColorButton
             }
         })
@@ -42,6 +50,8 @@ export default function RightBarButton({ selectedNode, onDeleteNode, onNodeChang
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 borderRadiusButton: borderRadiusButton
             }
         })
@@ -49,7 +59,7 @@ export default function RightBarButton({ selectedNode, onDeleteNode, onNodeChang
     return (
         <div className={`rightbar ${selectedNode ? 'show' : ''}`}>
             <div className="rightbar-content">
-                <RightBarTop selectedNode={selectedNode} onDeleteNode={onDeleteNode} />
+                <RightBarTop selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange}/>
                 <h3 className="properties-title">
                     <i className="bi bi-palette"></i>
                     Button Style
@@ -154,7 +164,7 @@ export default function RightBarButton({ selectedNode, onDeleteNode, onNodeChang
                             <input
                                 type="number"
                                 className="radius-input"
-                                value={selectedNode.data?.borderRadiusButton || 0}
+                                value={selectedNode.data?.borderRadiusButton || 8}
                                 min="0"
                                 max="50"
                                 onChange={(e) => changeBorderRadius(e.target.value)}
