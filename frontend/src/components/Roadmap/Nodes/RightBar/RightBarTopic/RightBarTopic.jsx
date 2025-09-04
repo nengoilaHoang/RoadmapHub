@@ -1,37 +1,105 @@
 import React from "react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import RightBarTop from "../RightBarTop/RightBarTop";
 import "./RightBarTopic.css";
 
 export default function RightBarTopic({ selectedNode, onDeleteNode , onNodeChange}) {
   if (!selectedNode) return null;
   const [activeTab, setActiveTab] = useState('properties');
-  const [links, setLinks] = useState([{ type: 'Video', title: '', url: '' }]);
-  const addLink = () => {
-    selectedNode.content_link.push()
-    setLinks([...links, { type: 'Video', title: '', url: '' }]);
-  };
-  const removeLink = (index) => {
-    setLinks(links.filter((_, i) => i !== index));
-  };
+   
   const changeColor = (letter)=>{
     onNodeChange({
       ...selectedNode,
       data:{
         ...selectedNode.data,
+        width:selectedNode.measured?.width,
+        height:selectedNode.measured?.height,
         backGroundColorTopic:letter,
       }
     })
   }
-  const updateLink = ()=>{
+  const changeTitleTopic = (titleTopic)=>{
     onNodeChange({
       ...selectedNode,
       data:{
         ...selectedNode.data,
-        items:links
+        width:selectedNode.measured?.width,
+        height:selectedNode.measured?.height,
+        titleTopic:titleTopic,
       }
     })
   }
+  const changeDescriptionTopic = (descriptionTopic)=>{
+    onNodeChange({
+      ...selectedNode,
+      data:{
+        ...selectedNode.data,
+        width:selectedNode.measured?.width,
+        height:selectedNode.measured?.height,
+        descriptionTopic:descriptionTopic,
+      }
+    })
+  }
+   const updateItem = (item,key,text,indexUpdate) => {
+        let updateItem = item;
+        if(key === 1)
+        {
+           updateItem={
+            ...updateItem,
+            type: text, 
+        }
+        }
+        else if(key === 2)
+        {
+           updateItem={
+            ...updateItem,
+            title: text, 
+        }
+        }
+        else {
+          updateItem={
+            ...updateItem,
+            url: text, 
+        }
+        }
+        const updatedItems = selectedNode.data.itemsTopic.map((item, index) => (index === indexUpdate  ? updateItem:item))
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                itemsTopic:updatedItems
+            }
+        })
+    }
+    const deleteItem = (indexUpdate) => {
+        const updatedItems = selectedNode.data.itemsTopic.filter((item, index) => index !== indexUpdate)
+        onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                itemsTopic:updatedItems
+            }
+        })
+    }
+    const addItemUI = ()=>{
+        const newItem = {
+            type: 'Video', 
+            title: '',
+            url: ''
+        };
+           onNodeChange({
+            ...selectedNode,
+            data:{
+                ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
+                itemsTopic:selectedNode.data.itemsTopic? [
+                    ...selectedNode.data.itemsTopic,
+                    newItem
+                ]:[newItem]
+            }})
+    }
+    //console.log(selectedNode);
   return (
     <div className={`rightbar ${selectedNode ? 'show' : ''}`}>
       <div className="tab-buttons">
@@ -66,7 +134,7 @@ export default function RightBarTopic({ selectedNode, onDeleteNode , onNodeChang
          
             <div className="form-group">
               <label className="form-label">TITLE</label>
-              <input type="text" className="form-control" placeholder="Enter title" />
+              <input type="text" className="form-control" placeholder="Enter title" value={selectedNode.data?.titleTopic} onChange={(e)=>{changeTitleTopic(e.target.value)}}/>
             </div>
 
             <div className="form-group">
@@ -75,13 +143,15 @@ export default function RightBarTopic({ selectedNode, onDeleteNode , onNodeChang
                 className="form-control" 
                 placeholder="Enter description"
                 rows="10"
+                value={selectedNode.data?.descriptionTopic}
+                onChange={(e)=>{changeDescriptionTopic(e.target.value)}}
               />
             </div>
 
             <div className="links-section">
-              {links.map((link, index) => (
+              {selectedNode.data?.itemsTopic?.map((item, index) => (
                 <div key={index} className="link-item">
-                  <select className="form-select mb-2">
+                  <select className="form-select mb-2" value={item.type} onChange={(e)=>updateItem(item,1,e.target.value,index)}>
                     <option value="video">Video</option>
                     <option value="article">Article</option>
                     <option value="opensource">Opensource</option>
@@ -95,6 +165,8 @@ export default function RightBarTopic({ selectedNode, onDeleteNode , onNodeChang
                       type="text" 
                       className="form-control"
                       placeholder="Resource Title"
+                      value={item.title}
+                      onChange={(e)=>updateItem(item,2,e.target.value,index)}
                     />
                   </div>
 
@@ -103,12 +175,14 @@ export default function RightBarTopic({ selectedNode, onDeleteNode , onNodeChang
                       type="url" 
                       className="form-control"
                       placeholder="Resource URL"
+                      value={item.url}
+                      onChange={(e)=>updateItem(item,3,e.target.value,index)}
                     />
                   </div>
 
                   <button 
                     className="btn btn-outline-danger w-100 mb-3"
-                    onClick={() => removeLink(index)}
+                    onClick={() => deleteItem(index)}
                   >
                     <i className="bi bi-trash"></i> Remove
                   </button>
@@ -117,7 +191,7 @@ export default function RightBarTopic({ selectedNode, onDeleteNode , onNodeChang
 
               <button 
                 className="btn btn-outline-primary w-100"
-                onClick={addLink}
+                onClick={addItemUI}
               >
                 Add Link
               </button>
