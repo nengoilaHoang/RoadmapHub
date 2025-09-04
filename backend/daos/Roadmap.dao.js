@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Roadmap from '../models/Roadmap.model.js';
 import NodeFactory from '../models/NodeFactory.model.js';
 import geneUUID from '../Helps/genUUID.js'; 
+import RoadmapSchemaModel from '../models/RoadmapSchema.model.js';
 class RoadmapDAO {
     async createRoadmap(name, description, accountId) {
         const roadmap = new Roadmap(geneUUID(),accountId,null,name, description,null, null, null);
@@ -43,20 +44,11 @@ class RoadmapDAO {
             }
         }
     }
-    async editNodeRoadmap(nodes,edges) {
-        console.log("lll",nodes,edges); 
-        
+    async editNodeRoadmap(accountId,name,nodes,edges) {
+        console.log("lll",accountId,name,nodes,edges); 
         await connectDB();
-        const Edge = mongoose.model("edges", new mongoose.Schema({
-        source: String,
-        target: String
-    },{ versionKey: false }));
-
-        const edge = new Edge({ source: "node1", target: "node2" });
-        await Edge.create(edge);
-
-        const Edges = await Edge.find();
-        console.log(edges);
+        const roadmap = RoadmapSchemaModel({accountId,name,nodes,edges});
+        await roadmap.save();
     }
     async getRoadmapByUserID(accountId) {
         await db('roadmap')
