@@ -1,11 +1,14 @@
 import RightBarTop from "../RightBarTop/RightBarTop";
-export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
+import './RightBarParagraph.css'
+export default function RightBarParagraph({ selectedNode, onDeleteNode,onNodeChange }) {
     if (!selectedNode) return null;
     const changeBackGroundColor = (backgroundColorParagraph) =>{
         onNodeChange({
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 backgroundColorParagraph: backgroundColorParagraph
             }
         })
@@ -15,6 +18,8 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 borderColorParagraph: borderColorParagraph
             }
         })
@@ -24,6 +29,8 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 textColorParagraph: textColorParagraph
             }
         })
@@ -33,6 +40,8 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 paddingParagraph: paddingParagraph
             }
         })
@@ -42,6 +51,8 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 textAlignParagraph: textAlignParagraph
             }
         })
@@ -51,6 +62,8 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
             ...selectedNode,
             data:{
                 ...selectedNode.data,
+                width:selectedNode.measured?.width,
+                height:selectedNode.measured?.height,
                 justificationParagraph: justificationParagraph
             }
         })
@@ -58,7 +71,7 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
     return (
         <div className={`rightbar ${selectedNode ? 'show' : ''}`}>
             <div className="rightbar-content">
-                <RightBarTop selectedNode={selectedNode} onDeleteNode={onDeleteNode} />
+                <RightBarTop selectedNode={selectedNode} onDeleteNode={onDeleteNode} onNodeChange={onNodeChange} />
                 <h3 className="properties-title">
                     <i className="bi bi-palette"></i>
                     Paragraph Style
@@ -166,7 +179,7 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
                         <i className="bi bi-text-left"></i>
                         <span>Text Align</span>
                     </div>
-                    <div className="button-group">
+                    <div className="button-group-pa">
                         <button
                             className={`align-btn ${selectedNode.data?.textAlignParagraph === 'left' ? 'active' : ''}`}
                             onClick={() => changeTextAlign('left')}
@@ -193,7 +206,7 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
                         <i className="bi bi-justify"></i>
                         <span>Justification</span>
                     </div>
-                    <div className="button-group">
+                    <div className="button-group-pa">
                         <button
                             className={`justify-btn ${selectedNode.data?.justificationParagraph === 'start' ? 'active' : ''}`}
                             onClick={() => changeJustification('start')}
@@ -207,10 +220,10 @@ export default function RightBarParagraph({ selectedNode, onDeleteNode }) {
                             <i className="bi bi-align-center"></i>
                         </button>
                         <button
-                            className={`justify-btn ${selectedNode.data?.justificationParagraph === 'between' ? 'active' : ''}`}
-                            onClick={() => changeJustification('between')}
+                            className={`justify-btn ${selectedNode.data?.justificationParagraph === 'end' ? 'active' : ''}`}
+                            onClick={() => changeJustification('end')}
                         >
-                            <i className="bi bi-justify"></i>
+                            <i className="bi bi-align-end"></i>
                         </button>
                     </div>
                 </div>

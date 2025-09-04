@@ -20,7 +20,7 @@
     background: white;
 }
 
-.button-group {
+.button-group-pa {
     display: flex;
     gap: 4px;
 }
