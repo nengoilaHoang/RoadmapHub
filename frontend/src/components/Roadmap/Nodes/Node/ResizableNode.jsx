@@ -74,7 +74,6 @@ export function ResizableNode(props) {
           padding: data.paddingParagraph? `${data.paddingParagraph}px` : "10px",
           textAlign: data.textAlignParagraph||"center",
           justifyContent: data.justificationParagraph ||"center",
-          // boxSizing: "content-box", 
         }
         break;
       case "checklist":
