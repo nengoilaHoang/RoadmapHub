@@ -1,14 +1,11 @@
-import { ResizableNode } from '#Helps/ResizableNode.jsx';
-export default function Section({ data, id, selected }) {
+import { ResizableNode } from '#components/Roadmap/Nodes/Node/ResizableNode.jsx';
+export default function Section({ data, id, selected, type }) {
   return (
     <ResizableNode
+      type={type}
       data={data}
       id={id}
       selected={selected}
-      border="2px solid #555"
-      background="#fff"
-      borderRadius="8px"
-      name="section node"
     />
   );
 }
