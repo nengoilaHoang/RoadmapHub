@@ -19,23 +19,28 @@ import CheckList from '#components/Roadmap/Nodes/CheckList/CheckList.jsx';
 import HorizontalLine from '#components/Roadmap/Nodes/HorizontalLine/HorizontalLine.jsx';
 import VerticalLine from '#components/Roadmap/Nodes/VerticalLine/VerticalLine.jsx';
 import Paragraph from '#components/Roadmap/Nodes/Paragraph/Paragraph.jsx';
+import Edge from '#components/Roadmap/Nodes/Edge/Edge.jsx';
 
 import NodesBar from '#components/Roadmap/Nodes/NodesBar/NodeBar.jsx';
 import { DnDProvider, useDnD } from '#components/Roadmap/Nodes/NodesBar/DnDContext.jsx';
 import RightBar from '#components/Roadmap/Nodes/RightBar/RightBar.jsx';
 import TopBar from '#components/Roadmap/Nodes/TopBar/TopBar.jsx';
 import api from '#utils/api.js'
+import {useCheckLogin} from '#hooks/userCheckLogin.jsx';
+import { useParams,useNavigate } from "react-router-dom";
+import RightBarEdge from '#components/Roadmap/Nodes/RightBar/RightBarEdge/RightBarEdge';
 
 let id = 0;
 const getId = () => `dndnode_${id++}`;
 
 const nodeTypes = {  topic: Topic, title: Title, button: Button, section: Section, checklist: CheckList, horizontalline: HorizontalLine, verticalline: VerticalLine, paragraph: Paragraph };
+const edgeTypes = { default :Edge}
 
 const initialNodes = [];
 const initialEdges = [];
 
 
-function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRightBarOpen, rightBarOpen}) {
+function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRightBarOpen, rightBarOpen,setSelectedEdge}) {
   const { screenToFlowPosition } = useReactFlow();
   const [type] = useDnD();
 
@@ -47,10 +52,14 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
     (changes) => setEdges((eds) => applyEdgeChanges(changes, eds)),
     []
   );
-  const onConnect = useCallback(
-    (params) => setEdges((eds) => addEdge(params, eds)),
-    []
-  );
+  // const onConnect = useCallback(
+  //   (params) => setEdges((eds) => addEdge(params, eds)),
+  //   []
+  // );
+  const onConnect = useCallback((params) => setEdges((eds) => addEdge({
+    ...params,
+    type:"default"
+    }, eds)),[])
   const onDragOver = useCallback((event) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
@@ -71,18 +80,17 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
         id: getId(),
         type: nodeType,
         position,
-        data: { label: `${nodeType} node`, 
-        width: 180,
-        height: 45,
+        data: { label: nodeType!=="section"?`${nodeType} node`:"", 
+        width: nodeType === "horizontalline" ? 150 : nodeType === "verticalline" ? 10 : 180,
+        height: nodeType === "horizontalline" ? 10 : nodeType === "verticalline" ? 150 : 45,
         onResize: (id, w, h) => {
         setNodes((nds) =>
           nds.map((n) =>
             n.id === id ? { ...n, data: { ...n.data, width: w, height: h } } : n
           )
-        );
-        
+        );  
       },
-     },
+        },
 
       };
 
@@ -90,15 +98,26 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
     },
     [screenToFlowPosition, type, setNodes]
   );
+  const onNodeDrag = useCallback((event,node)=>{
+    setSelectedNode(node);
+  })
 
   const onNodeClick = useCallback((_, node) => {
     setSelectedNode(node);
+    setSelectedEdge(null)
     setRightBarOpen(360);
   }, [setSelectedNode]);
   const onPaneClick = useCallback(() => {
   setSelectedNode(null);
+  setSelectedEdge(null)
   setRightBarOpen(0);
 }, []);
+ const onEdgeClick = useCallback((event, edge) => {
+    // event.stopPropagation(); // để không bị pane click clear
+    setSelectedEdge(edge);
+    setSelectedNode(null);
+    setRightBarOpen(360);
+  }, [setSelectedEdge]);
 
 
 
@@ -107,13 +126,17 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
       nodes={nodes}
       edges={edges}
       nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
+      connectionLineStyle={{ stroke: "#1e90ff", strokeWidth: 2 }}
       onNodesChange={onNodesChange}
       onEdgesChange={onEdgesChange}
       onConnect={onConnect}
       onDrop={onDrop}
       onDragOver={onDragOver}
       onNodeClick={onNodeClick}
+      onEdgeClick={onEdgeClick}
       onPaneClick={onPaneClick} 
+      onNodeDrag={onNodeDrag}
       fitView
     >
       <Background color="#ccc" variant={BackgroundVariant.Cross} />
@@ -126,90 +149,73 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
 }
 
 export default function RoadmapEditPage() {
+    const { isLoggedIn, user } = useCheckLogin();
+    const navigate = useNavigate();
+    const { name } = useParams();
+    useEffect( ()=>{
+      async function checkLogin(){
+        const response = await api.post('/roadmaps/check-your-roadmap',{name:name},{
+          withCredentials: true
+        }) ;
+        console.log(response)
+        if(!response.data.success){
+        navigate("/");
+        }
+      }
+      checkLogin()
+     
+    },[])
     const [nodes, setNodes] = useState(initialNodes);
     const [edges, setEdges] = useState(initialEdges);
     const [selectedNode, setSelectedNode] = useState(null);
     const [rightBarOpen, setRightBarOpen] = useState(0);
+    const [selectedEdge, setSelectedEdge] = useState(null);
 
     const handleDeleteNode = (nodeId) => {
     setNodes((nds) => nds.filter((n) => n.id !== nodeId));
     setEdges((eds) => eds.filter((e) => e.source !== nodeId && e.target !== nodeId));
     setSelectedNode(null);
     };
-    const onSaveNodes = (e) => {
+    const onSaveNodes = async (e) => {
         e.preventDefault();
         console.log('Nodes:', nodes);
         console.log('Edges:', edges);
-        //const response = api.post('/roadmaps/edit-nodes',{nodes,edges});
+        const response = await api.post('/roadmaps/edit-nodes',{name:name,nodes:nodes,edges:edges},{
+           withCredentials: true
+        });
         console.log(response);
 
     }
-    useEffect(() => {
-    if(selectedNode)
-    {
-      switch (selectedNode.type) {
-
-        case "topic":
-          selectedNode.color ='#FFFF00';
-          break
-        case "paragraph":
-          selectedNode.background = '';
-          selectedNode.border = '';
-          selectedNode.text = '#000000';
-          selectedNode.padding = 16;
-          selectedNode.textAlign = 'left';
-          selectedNode.justification = 'left-start';
-          break
-        case  "button":
-          selectedNode.url = '';
-          selectedNode.background = '';
-          selectedNode.border = '';
-          selectedNode.text = '#FFFFFF';
-          selectedNode.borderRadius = 0
-          break
-        case "checklist":
-          //selectedNode.items.push("1")
-          break
-        case 'section':
-          selectedNode.background = '';
-          selectedNode.border = '';
-          selectedNode.borderRadius = 0
-          break
-        case 'horizontalline':
-          selectedNode.style = 'solid'
-          selectedNode.lineColor = '#2B78E4'
-          selectedNode.width = 3
-          break
-        case 'verticalline':
-          selectedNode.style = 'solid'
-          selectedNode.lineColor = '#2B78E4'
-          selectedNode.width = 3
-          break
-        default :
-          break
-      }
-    }
-  },[selectedNode]);
+    
    const handleNodeChange = (updatedNode)=>{
     setNodes((nds)=>nds.map((node)=>(
       node.id === updatedNode.id ? updatedNode : node
     )))
     setSelectedNode(updatedNode);
    }
+   const handleEdgeChange = (updatedEdge)=>{
+    setEdges((eds)=>eds.map((edge)=>(
+      edge.id === updatedEdge.id ? updatedEdge : edge
+    )))
+    setSelectedEdge(updatedEdge);
+   }
     return (
-        <div style={{ display: 'flex',width:'100%',height:'100vh', flexDirection: "column"}}>
+      <div style={{ display: 'flex',width:'100%',height:'100vh', flexDirection: "column"}}>
         <TopBar onSaveNode={onSaveNodes}/>
         <ReactFlowProvider>
             <DnDProvider>
             <NodesBar />
             <div style={{ flexGrow: 1 }} >
                 <FlowCanvas nodes={nodes} setNodes={setNodes} edges={edges} setEdges={setEdges} 
-                setSelectedNode={setSelectedNode} setRightBarOpen={setRightBarOpen} rightBarOpen={rightBarOpen}/>
+                setSelectedNode={setSelectedNode} setRightBarOpen={setRightBarOpen} rightBarOpen={rightBarOpen}
+                setSelectedEdge={setSelectedEdge}/>
             </div>
             {selectedNode &&<RightBar selectedNode={selectedNode} onDeleteNode={handleDeleteNode} onNodeChange={handleNodeChange} />}
+            {selectedEdge &&<RightBarEdge selectedEdge={selectedEdge}  onEdgeChange={handleEdgeChange} />}
             
             </DnDProvider>
         </ReactFlowProvider>
         </div>
+
     );
 }
