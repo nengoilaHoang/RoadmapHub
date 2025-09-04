@@ -16,8 +16,8 @@ class RoadmapService {
     async checkRoadmap(name, accountId) {
         return await RoadmapDAO.checkRoadmap(name, accountId);
     }
-    async editNodeRoadmap(nodes, edges) {
-        return await RoadmapDAO.editNodeRoadmap(nodes, edges);
+    async editNodeRoadmap(accountId,name,nodes, edges) {
+        return await RoadmapDAO.editNodeRoadmap(accountId,name,nodes, edges);
     }
     async getRoadmapByName(accountId,name) {
         return await RoadmapDAO.getRoadmapByName(accountId,name);
