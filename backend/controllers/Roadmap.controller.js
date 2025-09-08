@@ -1,7 +1,6 @@
 import RoadmapService from "../services/Roadmap.service.js";
 import { Buffer } from 'buffer';
 class RoadmapController {
-
     async createRoadmap(req, res) {
         const { name, description,accountId } = req.body;
         const responseCheck = await RoadmapService.checkRoadmap(name, accountId);
@@ -33,12 +32,31 @@ class RoadmapController {
     async editNodeRoadmap(req, res) {
         const { name,nodes,edges } = req.body;
         const accountId = req.authenticate.id
-        await RoadmapService.editNodeRoadmap(accountId,name,nodes,edges);
+        try {
+            const findRoadmap = await RoadmapService.checkRoadmapExist(accountId, name);
+            console.log("findRoadmap: ",findRoadmap);
+            if(findRoadmap){ 
+                await RoadmapService.updateRoadmap(accountId,name,nodes,edges);
+            }
+            else{
+                const roadmap = await RoadmapService.getRoadmapByAccountIdAndName(accountId,name);
+                console.log("roadmap in my sql", roadmap);
+                await RoadmapService.editNodeRoadmap(accountId,name,roadmap.id,nodes,edges);
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }
     async getRoadmapByName(req, res) {
         const { name } = req.params;
         const {accountId}  = req.query;
         const roadmap = await RoadmapService.getRoadmapByName(accountId,name);
+        res.json(roadmap);
+    }
+    async getRoadmapByAccountIdAndName(req,res){
+        const {name} = req.params;
+        const accountId = req.authenticate.id;
+        const roadmap = await RoadmapService.getRoadmapByAccountIdAndName(accountId,name);
         res.json(roadmap);
     }
     async checkYourRoadmap(req,res){
@@ -71,6 +89,17 @@ class RoadmapController {
         const { teamId } = req.params;
         const roadmaps = await RoadmapService.getRoadmapByTeamId(teamId);
         res.json({status: "success",roadmaps});
+    }
+    async viewRoadmap(req, res){
+        const {roadmapId} = req.params;
+        try {
+            const roadmap = await RoadmapService.viewRoadmap(roadmapId);
+            console.log("run to here and this is nodes and edges: ",roadmap);
+            return res.json({status: "success", roadmap})
+        } catch (error) {
+            console.log(error);
+            return res.json({status: "failed", error});
+        }
     }
 }
 export default new RoadmapController(RoadmapService);

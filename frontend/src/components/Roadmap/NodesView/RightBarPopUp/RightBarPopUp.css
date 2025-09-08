@@ -1,0 +1,54 @@
+.modal-overlay.right-half {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.35); /* Overlay đen nhẹ */
+  z-index: 1999;
+  display: flex;
+  justify-content: flex-end;    /* Đẩy modal-box sang phải */
+  align-items: stretch;
+}
+
+.modal-box.right {
+  width: 50vw;                  /* Chiếm nửa phải */
+  height: 100vh;
+  background: #fff;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+  padding: 38px 38px 24px;
+  max-width: 680px;
+  min-width: 350px;
+  position: relative;
+  overflow-y: auto;
+}
+
+/* // */
+/* Divider dưới description */
+.links-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 24px 0 16px;
+}
+
+.divider-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #10b981; /* màu xanh lá */
+}
+
+.links-divider hr {
+  flex: 1;
+  border: none;
+  height: 1px;
+  background: #10b981;
+  opacity: 0.6;
+  margin: 0;
+}
+
+/* Danh sách links */
+.links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+

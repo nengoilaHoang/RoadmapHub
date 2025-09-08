@@ -9,6 +9,7 @@ import teamRoutes from './routes/team.route.js'
 import friendRoutes from './routes/friend.route.js'
 import cors from 'cors'
 import authenticate from './middlewares/AuthMiddleware.js';
+import learnTopicRoutes from './routes/learnTopic.route.js'
 import cookieParser from "cookie-parser";
 import connectDB from './utils/dbmongo.js';
 import mongoose from 'mongoose';
@@ -29,6 +30,7 @@ app.use('/api/auth', auRoutes);
 app.use('/api/roadmaps', roadmapRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/friends', friendRoutes);
+app.use('/api/learnTopic',learnTopicRoutes);
 app.listen(process.env.PORT, () => {
     console.log(`Server is running at http://localhost:${process.env.PORT}`)
 });

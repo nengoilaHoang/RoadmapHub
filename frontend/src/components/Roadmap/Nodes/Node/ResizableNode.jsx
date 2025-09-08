@@ -52,7 +52,23 @@ export function ResizableNode(props) {
       case "topic":
         style={
           ...style,
-          background: colorTopic[data.backGroundColorTopic] ||"#FFEB3B"
+          //background: colorTopic[data.backGroundColorTopic] ||"#FFEB3B",
+          // border:
+          //   data.topicStatus === "done"
+          //     ? "10px solid green"
+          //     : data.topicStatus === "progress"
+          //     ? "10px solid gold"
+          //     : data.topicStatus === "skip"
+          //     ? "10px solid gray"
+          //     : "2px solid #555" // default
+          background:
+            data.topicStatus === "done"
+              ? "linear-gradient(to right, green, white, green)"
+              : data.topicStatus === "progress"
+              ? "linear-gradient(to right, darkgoldenrod, white, darkgoldenrod)" // vàng đậm hơn
+              : data.topicStatus === "skip"
+              ? "linear-gradient(to right, gray, white, gray)"
+              : colorTopic[data.backGroundColorTopic] ||"#FFEB3B"
         }
         break;
       case "section":
@@ -87,7 +103,7 @@ export function ResizableNode(props) {
       case "title":
         break;
     }
-    console.log(data)
+    //console.log(data)
     const onCheckChange =(Index,value)=>{
       data.itemsCheckList.map((item, index) =>{index == Index? item.checked = value:""})
     }
@@ -122,8 +138,6 @@ export function ResizableNode(props) {
         )}
       </div>):(data.label)
       }
-        
-                    
                {/* TOP */}
                 <Handle  type="source" position="top" id="top-source" style={{ left: '50%' }} />
                 <Handle  type="target" position="top" id="top-target" style={{ left: '50%' }} />

@@ -3,7 +3,7 @@ class RoadmapService {
     constructor(roadmapDAO) {
         this.RoadmapDAO = roadmapDAO;
     }
-
+    //====================My sql
     async createRoadmap(name, description, accountId) {
         return await RoadmapDAO.createRoadmap(name, description, accountId);
     }
@@ -16,9 +16,6 @@ class RoadmapService {
     async checkRoadmap(name, accountId) {
         return await RoadmapDAO.checkRoadmap(name, accountId);
     }
-    async editNodeRoadmap(accountId,name,nodes, edges) {
-        return await RoadmapDAO.editNodeRoadmap(accountId,name,nodes, edges);
-    }
     async getRoadmapByName(accountId,name) {
         return await RoadmapDAO.getRoadmapByName(accountId,name);
     }
@@ -27,6 +24,22 @@ class RoadmapService {
     }
     async getRoadmapByTeamId(teamId) {
         return await RoadmapDAO.getRoadmapByTeamId(teamId);
+    }
+    async getRoadmapByAccountIdAndName(accountId, name){
+        return await RoadmapDAO.getRoadmapByAccountIdAndName(accountId,name);
+    }
+    //====================mongoDB
+    async editNodeRoadmap(accountId,name,nodes, edges) {
+        return await RoadmapDAO.editNodeRoadmap(accountId,name,nodes, edges);
+    }
+    async viewRoadmap(roadmapId){
+        return await RoadmapDAO.viewRoadmap(roadmapId);
+    }
+    async checkRoadmapExist(accountId, name){
+        return await RoadmapDAO.checkRoadmapExist(accountId,name);
+    }
+    async updateRoadmap(accountId, name, nodes, edges){
+        return await RoadmapDAO.updateRoadmap(accountId, name, nodes, edges)
     }
 }
 export default new RoadmapService(RoadmapDAO)

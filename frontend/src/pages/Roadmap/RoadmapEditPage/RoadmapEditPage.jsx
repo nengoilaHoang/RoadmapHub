@@ -26,18 +26,23 @@ import { DnDProvider, useDnD } from '#components/Roadmap/Nodes/NodesBar/DnDConte
 import RightBar from '#components/Roadmap/Nodes/RightBar/RightBar.jsx';
 import TopBar from '#components/Roadmap/Nodes/TopBar/TopBar.jsx';
 import api from '#utils/api.js'
-import {useCheckLogin} from '#hooks/userCheckLogin.jsx';
+//import {useCheckLogin} from '#hooks/userCheckLogin.jsx';
 import { useParams,useNavigate } from "react-router-dom";
 import RightBarEdge from '#components/Roadmap/Nodes/RightBar/RightBarEdge/RightBarEdge';
 
-let id = 0;
-const getId = () => `dndnode_${id++}`;
+const getRandomId = () => {
+  return Math.floor(1000000000 + Math.random() * 9000000000).toString();
+}
+
+import axios from 'axios';
+//let id = 0;
+const getId = () => getRandomId();
 
 const nodeTypes = {  topic: Topic, title: Title, button: Button, section: Section, checklist: CheckList, horizontalline: HorizontalLine, verticalline: VerticalLine, paragraph: Paragraph };
 const edgeTypes = { default :Edge}
 
-const initialNodes = [];
-const initialEdges = [];
+// const initialNodes = [];
+// const initialEdges = [];
 
 
 function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRightBarOpen, rightBarOpen,setSelectedEdge}) {
@@ -108,10 +113,10 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
     setRightBarOpen(360);
   }, [setSelectedNode]);
   const onPaneClick = useCallback(() => {
-  setSelectedNode(null);
-  setSelectedEdge(null)
-  setRightBarOpen(0);
-}, []);
+    setSelectedNode(null);
+    setSelectedEdge(null)
+    setRightBarOpen(0);
+  }, []);
  const onEdgeClick = useCallback((event, edge) => {
     // event.stopPropagation(); // để không bị pane click clear
     setSelectedEdge(edge);
@@ -149,7 +154,7 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
 }
 
 export default function RoadmapEditPage() {
-    const { isLoggedIn, user } = useCheckLogin();
+    //const { isLoggedIn, user } = useCheckLogin();
     const navigate = useNavigate();
     const { name } = useParams();
     useEffect( ()=>{
@@ -165,8 +170,26 @@ export default function RoadmapEditPage() {
       checkLogin()
      
     },[])
-    const [nodes, setNodes] = useState(initialNodes);
-    const [edges, setEdges] = useState(initialEdges);
+    //const [nodes, setNodes] = useState(initialNodes);
+    //const [edges, setEdges] = useState(initialEdges);
+    const [nodes, setNodes] = useState([]);
+    const [edges, setEdges] = useState([]);
+    const fetchAPI = async () => {
+        const roadmap = await api.get(`/roadmaps/getYourRoadmap/${name}`,{
+            withCredentials: true
+        })
+        const res = await axios.get(`http://localhost:5000/api/roadmaps/view/${roadmap.data?.id}`,{
+            withCredentials: true
+        })
+        console.log(res.data)
+        if(res.data.status==="success"){
+          setNodes(res.data.roadmap?.nodes);
+          setEdges(res.data.roadmap?.edges);
+        }
+    };
+    useEffect(()=>{
+        fetchAPI();
+    },[])
     const [selectedNode, setSelectedNode] = useState(null);
     const [rightBarOpen, setRightBarOpen] = useState(0);
     const [selectedEdge, setSelectedEdge] = useState(null);
@@ -184,7 +207,6 @@ export default function RoadmapEditPage() {
            withCredentials: true
         });
         console.log(response);
-
     }
     
    const handleNodeChange = (updatedNode)=>{

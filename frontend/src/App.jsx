@@ -18,6 +18,7 @@ import RoadmapView from '#pages/Roadmap/RoadmapView/RoadmapView.jsx'
 import Home from '#pages/Home/Home.jsx'
 import ChangeEmailVerify from '#pages/ChangeEmailVerify/ChangeEmailVerify.jsx'
 import VerifyDeletePage from '#pages/ProfilePage/VerifyDeletePage/VerifyDeletePage.jsx'
+import RoadmapViewLayout from '#layouts/RoadmapViewLayout.jsx'
 function App() {
   const router = createBrowserRouter(
   [
@@ -43,7 +44,7 @@ function App() {
         {path:'privacy-policy', element: <PrivacyPolicy />},
         {path:'terms-of-service', element: <TermsService />},
         {path:'profile', element: <ProfilePage />},
-        {path:'roadmap/view', element:<RoadmapView />},
+        //{path:'roadmap/view/:name', element:<RoadmapView/>},
         {path:'change-email/verify/:hashedPin/:oldEmail/:newEmail', element:<ChangeEmailVerify />},
         {path:'/delete-account/verify/:verifyToken/:email', element:<VerifyDeletePage />}
       ]
@@ -53,9 +54,14 @@ function App() {
       element:<RoadmapLayout/>,
       children:[
         {path:'roadmap/edit/:name', element: <RoadmapEditPage />},
-        
       ]
-
+    },
+    {
+      path:'/',
+      element:<RoadmapViewLayout/>,
+      children:[
+        {path:'roadmap/view/:roadmapId', element:<RoadmapView/>},
+      ]
     }
   ]
   //   createRoutesFromElements(

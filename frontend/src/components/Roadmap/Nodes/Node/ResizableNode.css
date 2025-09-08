@@ -6,3 +6,16 @@
 .react-flow__node:hover .react-flow__handle {
   display: block;
 } */
+
+/* status */
+.status-progress {
+  border: 10px solid gold !important;
+}
+
+.status-done {
+  border: 10px solid green !important;
+}
+
+.status-skip {
+  border: 10px solid gray !important;
+}
