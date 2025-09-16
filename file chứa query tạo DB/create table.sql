@@ -106,6 +106,8 @@ CREATE TABLE Edge(
 CREATE TABLE Classroom(
   id VARCHAR(36) PRIMARY KEY,
   teacherId VARCHAR(36),
+  name VARCHAR(100),
+  description VARCHAR(255),
   FOREIGN KEY (teacherId) REFERENCES Account(id)
 );
 -- Quiz table
@@ -195,7 +197,6 @@ CREATE TABLE Post(
   FOREIGN KEY (accountId) REFERENCES Account(id),
   FOREIGN KEY (classroomId) REFERENCES Classroom(id),
   createDate VARCHAR(16),
-  title VARCHAR(255),
   content VARCHAR(255)
 );
 -- Comment table
@@ -204,11 +205,9 @@ CREATE TABLE Comment(
   accountId VARCHAR(36),
   classroomId VARCHAR(36),
   postId VARCHAR(36),
-  repCommentId VARCHAR(36),
   FOREIGN KEY (accountId) REFERENCES Account(id),
   FOREIGN KEY (classroomId) REFERENCES Classroom(id),
   FOREIGN KEY (postId) REFERENCES Post(id),
-  FOREIGN KEY (repCommentId) REFERENCES Comment(id),
   createDate VARCHAR(16),
   content VARCHAR(255)
 );
@@ -222,6 +221,7 @@ VALUES
 ('30254fca-7f55-11', 'hoang2', 'levanviethoang02@gmail.com', '$10$Yi5hDoADwkRY7KwGbu6CUeZ.3sIsJWdtW05Rqof98sSJlbAz9aaYC', 1),
 ('30255001-7f55-11', 'hoang1', 'levanviethoang01@gmail.com', '$10$Yi5hDoADwkRY7KwGbu6CUeZ.3sIsJWdtW05Rqof98sSJlbAz9aaYC', 1),
 ('30255039-7f55-11', 'kien', 'kien@gmail.com', '$10$Yi5hDoADwkRY7KwGbu6CUeZ.3sIsJWdtW05Rqof98sSJlbAz9aaYC', 1);
+('a1a24ce2-9f76-32d5-61ea-0389ba090175', 'Kiên Mai', 'imosciencemath@gmail.com', '$2b$10$k8DdCRsv/q8oOo8dRMjSHur0rK0VKtMKGQkqOTf8CIXd4tyBSCs9O', 1)
 -- Profile
 INSERT INTO profile (id, accountId, fullname, github, linkedin, avatar)
 VALUES
@@ -230,6 +230,7 @@ VALUES
 ('c6cc161d-e1a2-48', '30254fca-7f55-11', 'Trần Đức Hoàng', 'https://github.com/hoang02', NULL, NULL),
 ('f339880e-97ce-44', '30255001-7f55-11', 'Phạm Văn Hoàng', NULL, 'https://linkedin.com/in/van-hoang-pham', NULL),
 ('4cc488d6-0155-4f', '30255039-7f55-11', 'Mai Đức Kiên', 'https://github.com/kienduc', 'https://linkedin.com/in/duc-kien-mai', NULL);
+('e9835529-f28b-569e-2a53-9bcf52d3f708', 'a1a24ce2-9f76-32d5-61ea-0389ba090175', 'Kiên Mai', NULL, NULL, 'https://deadline.com/wp-content/uploads/2024/09/Pokemon-Mini-Series-Aim-to-Be-a-Pokemon-Master-Ep-1-11.jpg?w=800');
 -- Team
 INSERT INTO team (id, name)
 VALUES
@@ -256,3 +257,15 @@ VALUES
 ('63945fb4-09a3-44', '30255001-7f55-11', NULL, 'Data Science', 'Data science and machine learning roadmap',1,0,0),
 ('7fa96882-fbdd-47', '30255001-7f55-11', NULL, 'Mobile Dev', 'Mobile app development guide',1,0,0),
 ('d01c5a59-f3cf-44', '30255039-7f55-11', NULL, 'Web Design', 'UI/UX design principles and tools',1,0,0);
+-- Classroom
+INSERT INTO `classroom` VALUES ('ce0ae0c4-d9db-f729-2706-963fa0395113', 'a1a24ce2-9f76-32d5-61ea-0389ba090175', 'lh', 'lh');
+-- Comment
+INSERT INTO `comment` VALUES ('1', 'a1a24ce2-9f76-32d5-61ea-0389ba090175', 'ce0ae0c4-d9db-f729-2706-963fa0395113', '1', '9-9-2025', 'Làm hết em');
+INSERT INTO `comment` VALUES ('2', 'a1a24ce2-9f76-32d5-61ea-0389ba090175', 'ce0ae0c4-d9db-f729-2706-963fa0395113', '2', '9-9-2025', 'Clip quá trình thì chứa đầy đủ quá trình làm bài là được');
+INSERT INTO `comment` VALUES ('3', 'a1a24ce2-9f76-32d5-61ea-0389ba090175', 'ce0ae0c4-d9db-f729-2706-963fa0395113', '1', '9-9-2025', 'Làm hết em oke thay');
+INSERT INTO `comment` VALUES ('4', 'a1a24ce2-9f76-32d5-61ea-0389ba090175', 'ce0ae0c4-d9db-f729-2706-963fa0395113', '1', '8-9-2025', 'kkkkk');
+INSERT INTO `comment` VALUES ('5', 'a1a24ce2-9f76-32d5-61ea-0389ba090175', 'ce0ae0c4-d9db-f729-2706-963fa0395113', '1', '7-9-2025', 'iiii');
+-- Post
+
+INSERT INTO `post` VALUES ('1', 'a1a24ce2-9f76-32d5-61ea-0389ba090175', 'ce0ae0c4-d9db-f729-2706-963fa0395113', '9-9-2025',  '📢📢📢 Điểm tổng kết môn học 📢📢📢\r\n👉 Các em xem điểm trong file đính kèm nhé, điểm cả 3 lớp thầy để chung 1 file.\r\n👉 Điểm cá nhân nằm trong sheet riêng của từng lớp\r\n👉 Điểm đồ án, gồm 2 cột GK CK nằm trong sheet `G-Project-Agg`, và có chuyển sang 2 cột GK CK ');
+INSERT INTO `post` VALUES ('2', 'a1a24ce2-9f76-32d5-61ea-0389ba090175', 'ce0ae0c4-d9db-f729-2706-963fa0395113', '9-9-2025',  'Từ thứ 7 tới giờ có rất nhiều bạn quan tâm việc khi nào nộp đồ án, khi còn học thầy đã thông báo là 1 tuần sau khi thi sẽ nộp đồ án mà các em cứ hỏi mãi.\r\n\r\n- Nhóm nào làm xong rồi thì cứ để đó, khi nào có link nộp thì nộp\r\n- Nhóm nào làm chưa xong thì lo');
