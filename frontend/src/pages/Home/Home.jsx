@@ -1,14 +1,19 @@
 import React, { use } from 'react';
 import { Link } from 'react-router-dom';
 import CreateRoadmap  from '#components/Roadmap/CreateRoadmap/createRoadmap.jsx';
+import CreateClassroom from '#components/Classroom/CreateClassroom/CreateClassroom';
 import './Home.css';
 import { useState } from 'react';
 import {useCheckLogin} from '#hooks/userCheckLogin.jsx';
 
 export default function Home() {
     const [openCreateRoadmap, setOpenCreateRoadmap] = React.useState(false);
+    const [openCreateClassroom, setOpenCreateClassroom] = useState(false);
     const onCreateRoadmap = () => {
         setOpenCreateRoadmap(true);
+    }
+    const onCreateClassroom = () =>{
+        setOpenCreateClassroom(true);
     }
     const { isLoggedIn, user } = useCheckLogin();
     return (
@@ -49,7 +54,7 @@ export default function Home() {
                     <div className="roadmap-grid">
                         <div className="roadmap-card">for newbie in gym</div>
                         <div className="roadmap-card">for newbie in gym</div>
-                        <button className="btn-add" onClick={onCreateRoadmap}>+ Create your own roadmap</button>
+                        <button className="btn-add" onClick={onCreateRoadmap}>+ Create your roadmap</button>
                     </div>
                 </div>
 
@@ -59,7 +64,7 @@ export default function Home() {
                     </h3>
                     <div className="roadmap-grid">
                         <div className="roadmap-card">gym class</div>
-                        <button className="btn-add">+ Create your out class</button>
+                        <button className="btn-add" onClick={onCreateClassroom}>+ Create your class</button>
                     </div>
                 </div>
 
@@ -75,6 +80,7 @@ export default function Home() {
     </div> }
    
     {openCreateRoadmap && <CreateRoadmap onClose={()=>setOpenCreateRoadmap(false) } user={user}/>}
+    {openCreateClassroom && <CreateClassroom onClose={()=>setOpenCreateClassroom(false) } user={user}/>}
     </>
        
     );
