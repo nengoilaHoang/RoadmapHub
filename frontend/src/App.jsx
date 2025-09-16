@@ -18,6 +18,7 @@ import RoadmapView from '#pages/Roadmap/RoadmapView/RoadmapView.jsx'
 import Home from '#pages/Home/Home.jsx'
 import ChangeEmailVerify from '#pages/ChangeEmailVerify/ChangeEmailVerify.jsx'
 import VerifyDeletePage from '#pages/ProfilePage/VerifyDeletePage/VerifyDeletePage.jsx'
+import ClassroomView from '#/pages/Classroom/ClassromView.jsx'
 function App() {
   const router = createBrowserRouter(
   [
@@ -45,7 +46,8 @@ function App() {
         {path:'profile', element: <ProfilePage />},
         {path:'roadmap/view', element:<RoadmapView />},
         {path:'change-email/verify/:hashedPin/:oldEmail/:newEmail', element:<ChangeEmailVerify />},
-        {path:'/delete-account/verify/:verifyToken/:email', element:<VerifyDeletePage />}
+        {path:'/delete-account/verify/:verifyToken/:email', element:<VerifyDeletePage />},
+        {path:'classroom/view/:name/:classroomId',element:<ClassroomView/>}
       ]
     },
     {
