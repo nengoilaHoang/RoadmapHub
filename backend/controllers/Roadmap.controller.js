@@ -42,10 +42,16 @@ class RoadmapController {
         res.json(roadmap);
     }
     async checkYourRoadmap(req,res){
+        if(req.authenticate?.id == null){
+            res.json({
+                success:false,
+                message:"Roadmap is not your user"
+            });
+        }
         const{name} = req.body;
         const accountId = req.authenticate.id
         const responseCheck = await RoadmapService.checkRoadmap(name, accountId);
-          if (!responseCheck.success) {
+        if (!responseCheck.success) {
                 res.json({
                     success:true,
                     message:"Roadmap is your user"
@@ -56,7 +62,6 @@ class RoadmapController {
                 res.json({
                     success:false,
                     message:"Roadmap is not your user"
-
                 });
             }
     }
