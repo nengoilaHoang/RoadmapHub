@@ -7,5 +7,5 @@ router.get('/get-learnTopic/:topicId', LearnTopicController.getLearnTopic);
 router.post('/create-learnTopic', LearnTopicController.createLearnTopic);
 router.post('/update-learnTopic', LearnTopicController.updateLearnTopic);
 router.post('/delete-learnTopic', LearnTopicController.deleteLearnTopic);
-router.post('/solve-nodes-progress', LearnTopicController.getNodesWithTopicStatus);
+//router.post('/solve-nodes-progress', LearnTopicController.getNodesWithTopicStatus);
 export default router;

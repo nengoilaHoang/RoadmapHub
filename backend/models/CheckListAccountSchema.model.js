@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const CheckListAccountSchema = new mongoose.Schema({
   accountId: { type: String, required: true },
+  roadmapId: { type: String, required: true },
   checklistId: { type: String, required: true },
   itemsCheckList: { type: Array, default: [] },
 }, {

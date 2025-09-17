@@ -25,6 +25,7 @@ import Edge from '#components/Roadmap/Nodes/Edge/Edge.jsx';
 import api from "../../../utils/api";
 import RightBarView from "#components/Roadmap/NodesView/RightBarView/RightBarView.jsx";
 import RightBarPopUp from "#components/Roadmap/NodesView/RightBarPopUp/RightBarPopUp.jsx"
+//import { set } from "mongoose";
 
 const nodeTypes = {  topic: Topic, title: Title, button: Button, section: Section, checklist: CheckList, horizontalline: HorizontalLine, verticalline: VerticalLine, paragraph: Paragraph };
 const edgeTypes = { default :Edge}
@@ -45,22 +46,27 @@ export default function RoadmapView(){
             withCredentials: true
         })
         //console.log(res.data)
-        const nodeFromRes = res.data.roadmap?.nodes;
-        const secondRes = await api.post(`learnTopic/solve-nodes-progress`,{nodes: nodeFromRes},{withCredentials: true});
-        console.log(secondRes.data.nodes);
-        setNodes(secondRes.data.nodes);
+        //const nodeFromRes = res.data.roadmap?.nodes;
+        console.log("nodeFromRes:", res);
+        setNodes(res.data.roadmap?.nodes);
         setEdges(res.data.roadmap?.edges);
+        //const secondRes = await api.post(`learnTopic/solve-nodes-progress`,{nodes: nodeFromRes},{withCredentials: true});
+        //console.log(secondRes.data.nodes);
+        //setNodes(secondRes.data.nodes);
+        //setEdges(res.data.roadmap?.edges);
     };
     const changeCheckListSelected = async(node) => {
-        const res = await api.post(`checkListAccount/change-item-checklist`,{checkListSelected: node},{withCredentials: true});
+        const res = await api.post(`checkListAccount/change-item-checklist`,{checkListSelected: node, roadmapId},{withCredentials: true});
         console.log(res.data);
     }
     useEffect(()=>{
         fetchAPI();
     },[isReload])
     useEffect(()=>{
-        console.log("checkListSelected:", checkListSelected?.data?.itemsCheckList);
-        changeCheckListSelected(checkListSelected);
+        if(checkListSelected !== null){
+            //console.log("checkListSelected:", checkListSelected?.data?.itemsCheckList);
+            changeCheckListSelected(checkListSelected);
+        }
         // if(checkListSelected?.data !== oldCheckListSelected?.data){
         //     console.log("checkListSelected:", checkListSelected?.data?.itemsCheckList);
         //     changeCheckListSelected(checkListSelected);

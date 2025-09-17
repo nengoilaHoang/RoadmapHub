@@ -1,4 +1,6 @@
 import RoadmapService from "../services/Roadmap.service.js";
+import LearnTopicService from "../services/LearnTopic.service.js";
+import CheckListAccountService from "../services/CheckListAccount.service.js";
 import { Buffer } from 'buffer';
 class RoadmapController {
     async createRoadmap(req, res) {
@@ -94,8 +96,32 @@ class RoadmapController {
         const {roadmapId} = req.params;
         try {
             const roadmap = await RoadmapService.viewRoadmap(roadmapId);
-            //console.log("run to here and this is nodes and edges: ",roadmap);
-            return res.json({status: "success", roadmap})
+            return res.json({status: "success", roadmap});
+        } catch (error) {
+            console.log(error);
+            return res.json({status: "failed", error});
+        }
+    }
+    async viewRoadmapPublic(req, res){
+        const {roadmapId} = req.params;
+        try {
+            const roadmap = await RoadmapService.viewRoadmap(roadmapId);
+            const nodes = roadmap.nodes;
+            const accountId = req.authenticate.id;
+            const nodesWithStatus = await Promise.all(
+                nodes.map(async (node) => {
+                    if (node.type === "topic") {
+                        const learnTopic = await LearnTopicService.getLearnTopic(accountId, node.id);
+                        if (learnTopic) {
+                            return { ...node,selected:false,data:{...node.data, topicStatus: learnTopic.topicProgress }};
+                        }
+                    }
+                    return node;
+                })
+            );
+            const roadmapWithStatus = {...roadmap, nodes: nodesWithStatus};
+            const roadmapWithStatusAndCheckList = await CheckListAccountService.getCheckListAccountByRoadmapId(accountId, roadmapId, roadmapWithStatus);
+            return res.json({status: "success", roadmap: {...roadmapWithStatusAndCheckList, edges: roadmap.edges}});
         } catch (error) {
             console.log(error);
             return res.json({status: "failed", error});

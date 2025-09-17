@@ -16,28 +16,28 @@ class LearnTopicController {
             return res.status(500).json({ error: "Internal server error"});
         }
     };
-    async getNodesWithTopicStatus(req, res, next) {
-        try {
-            const { nodes } = req.body;
-            const accountId = req.authenticate.id;
-            // Dùng Promise.all để chạy song song nhanh hơn
-            const updatedNodes = await Promise.all(
-                nodes.map(async (node) => {
-                    if (node.type === "topic") {
-                        const learnTopic = await LearnTopicService.getLearnTopic(accountId, node.id);
-                        if (learnTopic) {
-                            return { ...node,selected:false,data:{...node.data, topicStatus: learnTopic.topicProgress }};
-                        }
-                    }
-                    return node;
-                })
-            );
-            return res.status(200).json({ success: true, nodes: updatedNodes });
-        }catch (error) {
-            console.error("Error in getNodesWithTopicStatus:", error);
-            return res.status(500).json({success: false, error: "Internal server error" });
-        }
-    }
+    // async getNodesWithTopicStatus(req, res, next) {
+    //     try {
+    //         const { nodes } = req.body;
+    //         const accountId = req.authenticate.id;
+    //         // Dùng Promise.all để chạy song song nhanh hơn
+    //         const updatedNodes = await Promise.all(
+    //             nodes.map(async (node) => {
+    //                 if (node.type === "topic") {
+    //                     const learnTopic = await LearnTopicService.getLearnTopic(accountId, node.id);
+    //                     if (learnTopic) {
+    //                         return { ...node,selected:false,data:{...node.data, topicStatus: learnTopic.topicProgress }};
+    //                     }
+    //                 }
+    //                 return node;
+    //             })
+    //         );
+    //         return res.status(200).json({ success: true, nodes: updatedNodes });
+    //     }catch (error) {
+    //         console.error("Error in getNodesWithTopicStatus:", error);
+    //         return res.status(500).json({success: false, error: "Internal server error" });
+    //     }
+    // }
     createLearnTopic = async (req, res, next) => {
         try {
             const {topicId, process} = req.body;
