@@ -7,6 +7,7 @@ import profileRoute from './routes/profile.route.js'
 import roadmapRoutes from './routes/Roadmap.route.js'
 import teamRoutes from './routes/team.route.js'
 import friendRoutes from './routes/friend.route.js'
+import checkListAccountRoutes from './routes/checkListAccount.route.js'
 import cors from 'cors'
 import authenticate from './middlewares/AuthMiddleware.js';
 import learnTopicRoutes from './routes/learnTopic.route.js'
@@ -31,6 +32,7 @@ app.use('/api/roadmaps', roadmapRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/friends', friendRoutes);
 app.use('/api/learnTopic',learnTopicRoutes);
+app.use('/api/checkListAccount',checkListAccountRoutes);
 app.listen(process.env.PORT, async () => {
     await connectDB();
     console.log(`Server is running at http://localhost:${process.env.PORT}`)

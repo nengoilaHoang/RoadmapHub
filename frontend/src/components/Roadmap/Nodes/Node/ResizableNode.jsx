@@ -102,9 +102,20 @@ export function ResizableNode(props) {
       const newList = checkList.map((item, i) =>
         i === index ? { ...item, checked: value } : item
       );
+      //console.log("newList:", newList);
       setCheckList(newList);
       data.itemsCheckList = newList;
     };
+    // const onCheckChange = (index, value) => {
+    //   const newList = checkList.map((item, i) =>
+    //     i === index ? { ...item, checked: value } : item
+    //   );
+    //   setCheckList(newList);
+    //   data.itemsCheckList = newList;
+    //   //console.log(data);
+    //   //data.onNodeDataChange(id, { itemsCheckList: newList });
+    // };
+
     return(
         <div
         style={style}

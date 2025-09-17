@@ -22,7 +22,6 @@ import HorizontalLine from '#components/Roadmap/Nodes/HorizontalLine/HorizontalL
 import VerticalLine from '#components/Roadmap/Nodes/VerticalLine/VerticalLine.jsx';
 import Paragraph from '#components/Roadmap/Nodes/Paragraph/Paragraph.jsx';
 import Edge from '#components/Roadmap/Nodes/Edge/Edge.jsx';
-import axios from "axios";
 import api from "../../../utils/api";
 import RightBarView from "#components/Roadmap/NodesView/RightBarView/RightBarView.jsx";
 import RightBarPopUp from "#components/Roadmap/NodesView/RightBarPopUp/RightBarPopUp.jsx"
@@ -32,6 +31,9 @@ const edgeTypes = { default :Edge}
 export default function RoadmapView(){
     const [isReload, setIsReload] = useState(false);
     const [nodes, setNodes] = useState();
+    // 1 cái lưu checklist đang chọn 1 cái lưu checklist cũ để so sánh nếu thay đổi thì mới call api
+    const [checkListSelected, setCheckListSelected] = useState(null);
+    //const [oldCheckListSelected, setOldCheckListSelected] = useState(null);
     const [edges, setEdges] = useState();
     const [selectedNode, setSelectedNode] = useState(null);
     const {roadmapId} = useParams();
@@ -49,13 +51,31 @@ export default function RoadmapView(){
         setNodes(secondRes.data.nodes);
         setEdges(res.data.roadmap?.edges);
     };
+    const changeCheckListSelected = async(node) => {
+        const res = await api.post(`checkListAccount/change-item-checklist`,{checkListSelected: node},{withCredentials: true});
+        console.log(res.data);
+    }
     useEffect(()=>{
         fetchAPI();
     },[isReload])
-    const onNodeClick = useCallback((_, node) => {
+    useEffect(()=>{
+        console.log("checkListSelected:", checkListSelected?.data?.itemsCheckList);
+        changeCheckListSelected(checkListSelected);
+        // if(checkListSelected?.data !== oldCheckListSelected?.data){
+        //     console.log("checkListSelected:", checkListSelected?.data?.itemsCheckList);
+        //     changeCheckListSelected(checkListSelected);
+        //     setOldCheckListSelected(checkListSelected);
+        // }
+    },[checkListSelected])
+    const onNodeClick = useCallback(async (_, node) => {
         if(node.type==="topic"){
             setSelectedNode(node);
             console.log(node);
+        }
+        else if(node.type==="checklist"){
+            setCheckListSelected(node);
+            //await changeCheckListSelected(node);
+            //console.log(node?.data?.itemsCheckList);
         }
     }, [setSelectedNode]);
     const onPaneClick = useCallback(() => {
