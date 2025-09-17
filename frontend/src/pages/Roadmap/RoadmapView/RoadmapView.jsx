@@ -29,13 +29,17 @@ import RightBarPopUp from "#components/Roadmap/NodesView/RightBarPopUp/RightBarP
 
 const nodeTypes = {  topic: Topic, title: Title, button: Button, section: Section, checklist: CheckList, horizontalline: HorizontalLine, verticalline: VerticalLine, paragraph: Paragraph };
 const edgeTypes = { default :Edge}
-export default function RoadmapVuew(){
+export default function RoadmapView(){
+    const [isReload, setIsReload] = useState(false);
     const [nodes, setNodes] = useState();
     const [edges, setEdges] = useState();
     const [selectedNode, setSelectedNode] = useState(null);
     const {roadmapId} = useParams();
     const fetchAPI = async () => {
         const res = await api.get(`roadmaps/view/${roadmapId}`,{
+            headers: {
+                'Content-Type': 'application/json',
+            },
             withCredentials: true
         })
         //console.log(res.data)
@@ -47,7 +51,7 @@ export default function RoadmapVuew(){
     };
     useEffect(()=>{
         fetchAPI();
-    },[selectedNode])
+    },[isReload])
     const onNodeClick = useCallback((_, node) => {
         if(node.type==="topic"){
             setSelectedNode(node);
@@ -56,7 +60,7 @@ export default function RoadmapVuew(){
     }, [setSelectedNode]);
     const onPaneClick = useCallback(() => {
         setSelectedNode(null);
-    }, []);
+    });
     return(
         <div style={{ display: 'flex',width:'100%', height:'130vh', flexDirection: "column", margin: 0}}>
             <TopBarView />
@@ -87,7 +91,7 @@ export default function RoadmapVuew(){
                     }} />
                 </ReactFlow>
                 <RightBarPopUp show={!!selectedNode} onClose={onPaneClick}>
-                    {selectedNode && <RightBarView node={selectedNode} />}
+                    {selectedNode && <RightBarView node={selectedNode} setIsReload={setIsReload} isReload={isReload} />}
                 </RightBarPopUp>
             </div>
         </div>

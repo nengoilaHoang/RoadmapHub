@@ -4,6 +4,10 @@ import { NodeResizer } from "@xyflow/react";
 import './ResizableNode.css'
 export function ResizableNode(props) {
     const {data,id,selected,type } = props;
+    const [checkList, setCheckList] = useState(data.itemsCheckList || []);
+    useEffect(() => {
+      setCheckList(data.itemsCheckList || []);
+    }, [data.itemsCheckList]);
     const sizes = {
     'S': '12px',
     'M': '14px',
@@ -52,15 +56,6 @@ export function ResizableNode(props) {
       case "topic":
         style={
           ...style,
-          //background: colorTopic[data.backGroundColorTopic] ||"#FFEB3B",
-          // border:
-          //   data.topicStatus === "done"
-          //     ? "10px solid green"
-          //     : data.topicStatus === "progress"
-          //     ? "10px solid gold"
-          //     : data.topicStatus === "skip"
-          //     ? "10px solid gray"
-          //     : "2px solid #555" // default
           background:
             data.topicStatus === "done"
               ? "linear-gradient(to right, green, white, green)"
@@ -103,10 +98,13 @@ export function ResizableNode(props) {
       case "title":
         break;
     }
-    //console.log(data)
-    const onCheckChange =(Index,value)=>{
-      data.itemsCheckList.map((item, index) =>{index == Index? item.checked = value:""})
-    }
+    const onCheckChange = (index, value) => {
+      const newList = checkList.map((item, i) =>
+        i === index ? { ...item, checked: value } : item
+      );
+      setCheckList(newList);
+      data.itemsCheckList = newList;
+    };
     return(
         <div
         style={style}
@@ -120,17 +118,18 @@ export function ResizableNode(props) {
         }}
       />
       {type==="checklist"?(<div style={{ padding: "5px" }}>
-        {data.itemsCheckList && data.itemsCheckList.length > 0 ? (
-          data.itemsCheckList.map((item, index) => (
+        {checkList && checkList.length > 0 ? (
+          checkList.map((item, index) => (
             <div key={index} style={{ display: "flex", alignItems: "center" }}>
               <input
                 type="checkbox"
+                className="nodrag"
                 checked={item.checked}
                 onChange={(e) =>
                   onCheckChange(index, e.target.checked) 
                 }
               />
-              <span style={{ marginLeft: "5px",  marginBottom:"2px", textDecoration: item.checked== true? "line-through":""}}>{item.text}</span>
+              <span className="nodrag" style={{ marginLeft: "5px",  marginBottom:"2px", textDecoration: item.checked== true? "line-through":""}}>{item.text}</span>
             </div>
           ))
         ) : (

@@ -5,13 +5,16 @@ import QuizItem from "../SmallItem/QuizItem/QuizItem";
 import ItemTopic from "../SmallItem/ItemTopic/ItemTopic";
 import api from '../../../../utils/api.js';
 
-export default function TopicRightBar({ selectedNode }) {
+export default function TopicRightBar({ selectedNode, setIsReload, isReload }) {
+  //const [isUpdating, setIsUpdating] = useState(false);
   const [activeTab, setActiveTab] = useState("content");
   const [topicStatus, setTopicStatus] = useState();
   const [items, setItems] = useState(selectedNode?.data?.itemsTopic ?? [])
   useEffect(()=>{
+    console.log(selectedNode);
     setTopicStatus(selectedNode.data?.topicStatus??"none");
-    console.log(topicStatus)
+    console.log(selectedNode.data?.topicStatus??"none");
+    //console.log(topicStatus);
   },[])
   const getLearnTopic = async() =>{
     try {
@@ -33,23 +36,25 @@ export default function TopicRightBar({ selectedNode }) {
     await api.post(`learnTopic/delete-learnTopic`,{topicId: selectedNode?.id, process: topicStatus},{withCredentials: true});
   }
   const changeTopicStatus = async(newValue) =>{
+    console.log(newValue);
+    const learnTopic = await getLearnTopic();
+    setIsReload(!isReload);
+    console.log(learnTopic);
     if(newValue === "none"){
-      const learnTopic = await getLearnTopic();
       if(learnTopic){
         console.log("delete");
-        deleteLearnTopic();
+        await deleteLearnTopic();
       }
     }
     else if(newValue !== null && newValue !== undefined){
-      const learnTopic = await getLearnTopic();
       console.log(learnTopic);
       if(!learnTopic){
         console.log("create new");
-        createLearnTopic();
+        await createLearnTopic();
       }
       else{
         console.log("update old");
-        updateLearnTopic();
+        await updateLearnTopic();
       }
     }
   }

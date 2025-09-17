@@ -10,5 +10,5 @@ export default knex({
         password:process.env.DB_PASS,
         database:process.env.DB_NAME
     },
-    pool:{min:0,max:7}
+    pool:{min:0,max:20}
 })

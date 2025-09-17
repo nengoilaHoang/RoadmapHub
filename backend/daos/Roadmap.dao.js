@@ -56,7 +56,7 @@ class RoadmapDAO {
         .join('account', 'roadmap.accountId', 'account.id')
         .where('account.id', accountId)
         .select('roadmap.*');
-        console.log("rows: ", rows);
+        //console.log("rows: ", rows);
         if (rows.length === 0) {
             return null;
         }
@@ -78,12 +78,12 @@ class RoadmapDAO {
     //====================mongoDB
     async editNodeRoadmap(accountId,name,roadmapId,nodes,edges) {
         //console.log("lll",accountId,name,nodes,edges); 
-        await connectDB();
+        //await connectDB();
         const roadmap = RoadmapSchemaModel({accountId,name,roadmapId,nodes,edges});
         await roadmap.save();
     }
     async updateRoadmap(accountId, name, nodes, edges) {
-        await connectDB();
+        //await connectDB();
         const roadmap = await RoadmapSchemaModel.findOneAndUpdate(
             { accountId, name },                
             { $set: { nodes, edges } },         
@@ -95,24 +95,24 @@ class RoadmapDAO {
         return roadmap;
     }
     async checkRoadmapExist(accountId, name) {
-        console.log("account Id:", accountId, "; roadmap name:", name);
-        await connectDB();
+        //console.log("account Id:", accountId, "; roadmap name:", name);
+        //await connectDB();
 
         const roadmap = await RoadmapSchemaModel.findOne(
             { accountId, name },
             { _id: 1 } // chỉ lấy _id cho nhẹ
         );
 
-        console.log("roadmap exist:", !!roadmap);
+        //console.log("roadmap exist:", !!roadmap);
         return !!roadmap; // trả về true nếu tồn tại, false nếu không
     }
     async viewRoadmap(roadmapId) {
-        await connectDB();
+        //await connectDB();
         const roadmap = await RoadmapSchemaModel.findOne(
             { roadmapId },
             { nodes: 1, edges: 1, _id: 0 }
         );
-        console.log("roadmap: ", roadmap)
+        //console.log("roadmap: ", roadmap)
         if (!roadmap) {
             return { nodes: [], edges: [] };
         }

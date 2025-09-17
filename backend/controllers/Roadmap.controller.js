@@ -94,7 +94,7 @@ class RoadmapController {
         const {roadmapId} = req.params;
         try {
             const roadmap = await RoadmapService.viewRoadmap(roadmapId);
-            console.log("run to here and this is nodes and edges: ",roadmap);
+            //console.log("run to here and this is nodes and edges: ",roadmap);
             return res.json({status: "success", roadmap})
         } catch (error) {
             console.log(error);
