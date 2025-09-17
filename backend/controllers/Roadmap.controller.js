@@ -17,7 +17,7 @@ class RoadmapController {
     async editRoadmap(req, res) {
         const { name,description,accountId,roadmapId} = req.body;
         const responseCheck = await RoadmapService.checkRoadmap(name, accountId);
-        console.log("Response Check:", responseCheck);
+        //console.log("Response Check:", responseCheck);
         if (!responseCheck.success) {
                 res.json(responseCheck);
             }
@@ -36,13 +36,13 @@ class RoadmapController {
         const accountId = req.authenticate.id
         try {
             const findRoadmap = await RoadmapService.checkRoadmapExist(accountId, name);
-            console.log("findRoadmap: ",findRoadmap);
+            //console.log("findRoadmap: ",findRoadmap);
             if(findRoadmap){ 
                 await RoadmapService.updateRoadmap(accountId,name,nodes,edges);
             }
             else{
                 const roadmap = await RoadmapService.getRoadmapByAccountIdAndName(accountId,name);
-                console.log("roadmap in my sql", roadmap);
+                //console.log("roadmap in my sql", roadmap);
                 await RoadmapService.editNodeRoadmap(accountId,name,roadmap.id,nodes,edges);
             }
         } catch (error) {
@@ -82,9 +82,9 @@ class RoadmapController {
     }
     async getRoadmapByUserId(req, res) {
         const userId = req.authenticate.id;
-        console.log("Account ID:", userId);
+        //console.log("Account ID:", userId);
         const roadmaps = await RoadmapService.getRoadmapByUserId(userId);
-        console.log("Roadmaps:", roadmaps);
+        //console.log("Roadmaps:", roadmaps);
         res.json({status: "success", data: roadmaps});
     }
     async getRoadmapByTeamId(req, res) {
@@ -105,7 +105,8 @@ class RoadmapController {
     async viewRoadmapPublic(req, res){
         const {roadmapId} = req.params;
         try {
-            const roadmap = await RoadmapService.viewRoadmap(roadmapId);
+            const roadmapFromDB = await RoadmapService.viewRoadmap(roadmapId);
+            const roadmap = await RoadmapService.addNoHandleToNodeOfRoadmap(roadmapFromDB);
             const nodes = roadmap.nodes;
             const accountId = req.authenticate.id;
             const nodesWithStatus = await Promise.all(

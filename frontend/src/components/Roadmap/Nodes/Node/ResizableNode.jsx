@@ -2,9 +2,51 @@ import React, { useEffect, useState } from "react";
 import { Handle, Position } from "@xyflow/react";
 import { NodeResizer } from "@xyflow/react";
 import './ResizableNode.css'
+
+let allNodeHandles = 
+  <div>
+    {/* TOP */}
+    <Handle  type="source" position="top" id="top-source" style={{ left: '50%' }} />
+    <Handle  type="target" position="top" id="top-target" style={{ left: '50%' }} />
+
+    {/* BOTTOM */}
+    <Handle  type="source" position="bottom" id="bottom-source" style={{ left: '50%' }} />
+    <Handle  type="target" position="bottom" id="bottom-target" style={{ left: '50%' }} />
+
+    {/* LEFT */}
+    <Handle  type="source" position="left" id="left-source" style={{ top: '50%' }} />
+    <Handle  type="target" position="left" id="left-target" style={{ top: '50%' }} />
+
+      {/* RIGHT */}
+    <Handle  type="source" position="right" id="right-source" style={{ top: '50%' }} />
+    <Handle  type="target" position="right" id="right-target" style={{ top: '50%' }} />
+  </div>
+
 export function ResizableNode(props) {
     const {data,id,selected,type } = props;
     const [checkList, setCheckList] = useState(data.itemsCheckList || []);
+    useEffect(() => {
+      if(data?.handle === "none"){
+        allNodeHandles = 
+        <div>
+          {/* TOP */}
+          <Handle className="hidden-handle"  type="source" position="top" id="top-source" style={{ left: '50%' }} />
+          <Handle className="hidden-handle"  type="target" position="top" id="top-target" style={{ left: '50%' }} />
+
+          {/* BOTTOM */}
+          <Handle className="hidden-handle" type="source" position="bottom" id="bottom-source" style={{ left: '50%' }} />
+          <Handle className="hidden-handle" type="target" position="bottom" id="bottom-target" style={{ left: '50%' }} />
+
+          {/* LEFT */}
+          <Handle className="hidden-handle" type="source" position="left" id="left-source" style={{ top: '50%' }} />
+          <Handle className="hidden-handle" type="target" position="left" id="left-target" style={{ top: '50%' }} />
+
+            {/* RIGHT */}
+          <Handle className="hidden-handle" type="source" position="right" id="right-source" style={{ top: '50%' }} />
+          <Handle className="hidden-handle" type="target" position="right" id="right-target" style={{ top: '50%' }} />
+        </div>
+      }
+    }, []);
     useEffect(() => {
       setCheckList(data.itemsCheckList || []);
     }, [data.itemsCheckList]);
@@ -115,7 +157,6 @@ export function ResizableNode(props) {
     //   //console.log(data);
     //   //data.onNodeDataChange(id, { itemsCheckList: newList });
     // };
-
     return(
         <div
         style={style}
@@ -148,21 +189,7 @@ export function ResizableNode(props) {
         )}
       </div>):(data.label)
       }
-               {/* TOP */}
-                <Handle  type="source" position="top" id="top-source" style={{ left: '50%' }} />
-                <Handle  type="target" position="top" id="top-target" style={{ left: '50%' }} />
-
-                {/* BOTTOM */}
-               <Handle  type="source" position="bottom" id="bottom-source" style={{ left: '50%' }} />
-               <Handle  type="target" position="bottom" id="bottom-target" style={{ left: '50%' }} />
-
-                {/* LEFT */}
-                <Handle  type="source" position="left" id="left-source" style={{ top: '50%' }} />
-                <Handle  type="target" position="left" id="left-target" style={{ top: '50%' }} />
-
-                 {/* RIGHT */}
-                <Handle  type="source" position="right" id="right-source" style={{ top: '50%' }} />
-                <Handle  type="target" position="right" id="right-target" style={{ top: '50%' }} />
+        {allNodeHandles}
       </div>
     )
 }

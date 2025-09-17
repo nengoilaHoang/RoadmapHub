@@ -3,6 +3,20 @@ class RoadmapService {
     constructor(roadmapDAO) {
         this.RoadmapDAO = roadmapDAO;
     }
+    //function service
+    async addNoHandleToNodeOfRoadmap(roadmap) {
+        if (!Array.isArray(roadmap.nodes)) {
+            roadmap.nodes = [];
+        }
+        roadmap.nodes = roadmap.nodes.map(node => ({
+            ...node,
+            data: {
+                ...node.data,
+                handle: "none"
+        }
+}));
+        return roadmap;
+    }
     //====================My sql
     async createRoadmap(name, description, accountId) {
         return await RoadmapDAO.createRoadmap(name, description, accountId);
