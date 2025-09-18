@@ -20,101 +20,112 @@ export default function Home() {
         // Handle bookmark logic here
     };
 
-    // Sample data for different sections
+    // Sample data for different sections (with added `author` field)
     const markedRoadmaps = [
-        {
-            id: 1,
-            name: "Learn Cooking",
-            description: "Master the art of cooking",
-            learning: 12500,
-            teaching: 45,
-            isUserCard: true
-        },
-        {
-            id: 2,
-            name: "Learn Drawing",
-            description: "Creative art techniques",
-            learning: 8300,
-            teaching: 23,
-            isUserCard: true
-        }
+    {
+        id: 1,
+        name: "Learn Cooking",
+        description: "Master the art of cooking",
+        author: "Alice Nguyen",
+        learning: 12500,
+        teaching: 45,
+        isUserCard: true
+    },
+    {
+        id: 2,
+        name: "Learn Drawing",
+        description: "Creative art techniques",
+        author: "Minh Tran",
+        learning: 8300,
+        teaching: 23,
+        isUserCard: true
+    }
     ];
 
     const customRoadmaps = [
-        {
-            id: 3,
-            name: "For Newbie in Gym",
-            description: "Complete beginner's guide to fitness",
-            learning: 156,
-            teaching: 12,
-            isUserCard: true
-        },
-        {
-            id: 4,
-            name: "Advanced Workout Plans",
-            description: "Intensive training programs",
-            learning: 89,
-            teaching: 8,
-            isUserCard: true
-        }
+    {
+        id: 3,
+        name: "For Newbie in Gym",
+        description: "Complete beginner's guide to fitness",
+        author: "Tuan Le",
+        learning: 156,
+        teaching: 12,
+        isUserCard: true
+    },
+    {
+        id: 4,
+        name: "Advanced Workout Plans",
+        description: "Intensive training programs",
+        author: "Phuong Hoang",
+        learning: 89,
+        teaching: 8,
+        isUserCard: true
+    }
     ];
 
     const teachingClasses = [
-        {
-            id: 5,
-            name: "Gym Class",
-            description: "Fitness training sessions",
-            learning: 25,
-            teaching: 1,
-            isUserCard: true
-        }
+    {
+        id: 5,
+        name: "Gym Class",
+        description: "Fitness training sessions",
+        author: "Quang Bui",
+        learning: 25,
+        teaching: 1,
+        isUserCard: true
+    }
     ];
 
     const learningClasses = [
-        {
-            id: 6,
-            name: "Cooking Class",
-            description: "Interactive cooking lessons",
-            learning: 1,
-            teaching: 0,
-            isUserCard: true
-        }
+    {
+        id: 6,
+        name: "Cooking Class",
+        description: "Interactive cooking lessons",
+        author: "Lan Pham",
+        learning: 1,
+        teaching: 0,
+        isUserCard: true
+    }
     ];
 
     const recommendedRoadmaps = [
-        {
-            id: 7,
-            name: "React Advanced Patterns",
-            description: "Master advanced React concepts",
-            learning: 15600,
-            teaching: 89,
-            isUserCard: false
-        },
-        {
-            id: 8,
-            name: "Node.js Backend Development",
-            description: "Server-side JavaScript mastery",
-            learning: 9800,
-            teaching: 67,
-            isUserCard: false
-        },
-        {
-            id: 9,
-            name: "Database Design Fundamentals",
-            description: "Learn database architecture",
-            learning: 7200,
-            teaching: 34,
-            isUserCard: false
-        },
-        {
-            id: 10,
-            name: "Database Design Fundamentals",
-            description: "Learn database architecture",
-            learning: 7200,
-            teaching: 34,
-            isUserCard: false
-        }
+    {
+        id: 7,
+        name: "React Advanced Patterns",
+        description: "Master advanced React concepts",
+        author: "Hieu Vo",
+        learning: 15600,
+        teaching: 89,
+        isUserCard: false
+    },
+    {
+        id: 8,
+        name: "Node.js Backend Development",
+        description: "Server-side JavaScript mastery",
+        author: "Bao Nguyen",
+        learning: 9800,
+        teaching: 67,
+        isUserCard: false
+    },
+    {
+        id: 9,
+        name: "Database Design Fundamentals",
+        description: "Learn database architecture",
+        author: "Dung Cao",
+        learning: 7200,
+        teaching: 34,
+        isUserCard: false
+    },
+    {
+        id: 10,
+        name: "TypeScript Essentials",
+        description: "Strongly-typed JavaScript",
+        author: "Khanh Vu",
+        learning: 7200,
+        teaching: 34,
+        isUserCard: false
+    }
     ];
+
 
     return (
         <>
@@ -142,6 +153,7 @@ export default function Home() {
                                             id={roadmap.id}
                                             name={roadmap.name}
                                             description={roadmap.description}
+                                            author={roadmap.author}
                                             learning={roadmap.learning}
                                             teaching={roadmap.teaching}
                                             isUserCard={roadmap.isUserCard}
@@ -164,6 +176,7 @@ export default function Home() {
                                             id={roadmap.id}
                                             name={roadmap.name}
                                             description={roadmap.description}
+                                            author={roadmap.author}
                                             learning={roadmap.learning}
                                             teaching={roadmap.teaching}
                                             isUserCard={roadmap.isUserCard}
@@ -192,6 +205,7 @@ export default function Home() {
                                             id={roadmap.id}
                                             name={roadmap.name}
                                             description={roadmap.description}
+                                            author={roadmap.author}
                                             learning={roadmap.learning}
                                             teaching={roadmap.teaching}
                                             isUserCard={roadmap.isUserCard}
@@ -220,6 +234,7 @@ export default function Home() {
                                             id={roadmap.id}
                                             name={roadmap.name}
                                             description={roadmap.description}
+                                            author={roadmap.author}
                                             learning={roadmap.learning}
                                             teaching={roadmap.teaching}
                                             isUserCard={roadmap.isUserCard}
@@ -242,6 +257,7 @@ export default function Home() {
                                             id={roadmap.id}
                                             name={roadmap.name}
                                             description={roadmap.description}
+                                            author={roadmap.author}
                                             learning={roadmap.learning}
                                             teaching={roadmap.teaching}
                                             isUserCard={roadmap.isUserCard}
