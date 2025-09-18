@@ -29,6 +29,7 @@ export default function Home() {
         author: "Alice Nguyen",
         learning: 12500,
         teaching: 45,
+        isMarked: true,
         isUserCard: true
     },
     {
@@ -38,6 +39,7 @@ export default function Home() {
         author: "Minh Tran",
         learning: 8300,
         teaching: 23,
+        isMarked: true,
         isUserCard: true
     }
     ];
@@ -55,7 +57,7 @@ export default function Home() {
     {
         id: 4,
         name: "Advanced Workout Plans",
-        description: "Intensive training programs",
+        description: "Intensive training programs, Intensive training programs, Intensive training programs, Intensive training programs, Intensive training programs, Intensive training programs.",
         author: "Phuong Hoang",
         learning: 89,
         teaching: 8,
@@ -156,7 +158,8 @@ export default function Home() {
                                             author={roadmap.author}
                                             learning={roadmap.learning}
                                             teaching={roadmap.teaching}
-                                            isUserCard={roadmap.isUserCard}
+                                            isUserCard={false}
+                                            isMarked={roadmap.isMarked}
                                             onBookmarkToggle={handleBookmarkToggle}
                                         />
                                     </div>
@@ -179,7 +182,8 @@ export default function Home() {
                                             author={roadmap.author}
                                             learning={roadmap.learning}
                                             teaching={roadmap.teaching}
-                                            isUserCard={roadmap.isUserCard}
+                                            isUserCard={true}
+                                            isMarked={roadmap.isMarked}
                                             onBookmarkToggle={handleBookmarkToggle}
                                         />
                                     </div>
@@ -208,7 +212,8 @@ export default function Home() {
                                             author={roadmap.author}
                                             learning={roadmap.learning}
                                             teaching={roadmap.teaching}
-                                            isUserCard={roadmap.isUserCard}
+                                            isUserCard={false}
+                                            isMarked={roadmap.isMarked}
                                             onBookmarkToggle={handleBookmarkToggle}
                                         />
                                     </div>
@@ -237,7 +242,8 @@ export default function Home() {
                                             author={roadmap.author}
                                             learning={roadmap.learning}
                                             teaching={roadmap.teaching}
-                                            isUserCard={roadmap.isUserCard}
+                                            isUserCard={true}
+                                            isMarked={roadmap.isMarked}
                                             onBookmarkToggle={handleBookmarkToggle}
                                         />
                                     </div>
@@ -260,7 +266,8 @@ export default function Home() {
                                             author={roadmap.author}
                                             learning={roadmap.learning}
                                             teaching={roadmap.teaching}
-                                            isUserCard={roadmap.isUserCard}
+                                            isUserCard={true}
+                                            isMarked={roadmap.isMarked}
                                             onBookmarkToggle={handleBookmarkToggle}
                                         />
                                     </div>

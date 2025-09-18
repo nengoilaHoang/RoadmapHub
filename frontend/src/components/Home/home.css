@@ -1,49 +1,313 @@
-.auth-buttons {
-  display: flex;
-  gap: 16px;
-  align-items: center;
+/* home.css - Premium NavBar Design với Dropdown rõ nét */
+
+:root {
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-accent: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-gold: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
+  --color-glass: rgba(255, 255, 255, 0.15);
+  --color-glass-hover: rgba(255, 255, 255, 0.25);
+  --shadow-primary: 0 8px 32px rgba(102, 126, 234, 0.3);
+  --shadow-elegant: 0 4px 20px rgba(0, 0, 0, 0.15);
+  --shadow-hover: 0 12px 40px rgba(102, 126, 234, 0.4);
+  --border-gradient: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
 }
 
-.auth-buttons .btn {
-  padding: 10px 22px;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
+/* Override Bootstrap Navbar */
+.navbar {
+  background: var(--gradient-primary) !important;
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: var(--shadow-elegant);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border-gradient);
+  opacity: 0.6;
+}
+
+/* Brand Section */
+.navbar .cursor-pointer {
+  transition: transform 0.3s ease;
+}
+
+.navbar .cursor-pointer:hover {
+  transform: translateY(-2px);
+}
+
+.navbar img {
+  border-radius: 12px;
+  border-radius: 50% !important;
+  background: var(--color-glass);
+  padding: 4px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.navbar .cursor-pointer:hover img {
+  box-shadow: var(--shadow-primary);
+  transform: rotate(5deg) scale(1.05);
+}
+
+.navbar .h4 {
+  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 10px rgba(255, 255, 255, 0.1);
+  font-weight: 700;
+}
+
+/* Search Form */
+.navbar form {
+  position: relative;
+  max-width: 700px;
+  width: 100%; /* Đảm bảo full width trong container */
+  flex: 1; /* Cho phép expand trong flexbox */
+  margin: 0 2rem; /* Tăng margin để có không gian */
+}
+
+.navbar form::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: var(--gradient-accent);
+  border-radius: 50px;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: subtract;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.navbar form:focus-within::before {
+  opacity: 1;
+}
+
+.navbar .form-control {
+  background: var(--color-glass) !important;
+  backdrop-filter: blur(10px);
+  border: none !important;
+  border-radius: 50px 0 0 50px !important;
+  color: #ffffff !important;
+  padding: 0.8rem 1.2rem !important;
+  transition: all 0.3s ease;
+}
+
+.navbar .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.navbar .form-control:focus {
+  background: var(--color-glass-hover) !important;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+
+.navbar .btn-outline-light {
+  border-radius: 0 50px 50px 0 !important;
+  background: var(--gradient-accent) !important;
+  border: none !important;
   font-weight: 600;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.navbar .btn-outline-light::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  transition: left 0.5s;
+}
+
+.navbar .btn-outline-light:hover::before {
+  left: 100%;
+}
+
+.navbar .btn-outline-light:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover);
+}
+
+/* Auth Buttons */
+.auth-buttons .login-btn,
+.auth-buttons .signup-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 50px;
   cursor: pointer;
-  transition: background-color 0.25s ease, color 0.25s ease;
-  min-width: 100px;
-}
-
-/* Login button: solid color */
-.auth-buttons .login-btn {
-  background-color: #007bff;
-  color: white;
-}
-
-.auth-buttons .login-btn:hover {
-  background-color: #0056b3;
-}
-
-/* Logout button: outline style */
-.auth-buttons .logout-btn {
-  background-color: transparent;
-  border: 2px solid #dc3545;
-  color: #dc3545;
-}
-
-.auth-buttons .logout-btn:hover {
-  background-color: #dc3545;
-  color: white;
-}
-
-.dropdown-item{
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  z-index: 1000;
+  overflow: hidden;
+  border: 2px solid transparent;
 }
 
-.navbar{
+.login-btn {
+  background: var(--color-glass) !important;
+  backdrop-filter: blur(10px);
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.login-btn:hover {
+  background: var(--color-glass-hover) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+  color: #ffffff !important;
+}
+
+.signup-btn {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  color: #ffffff !important;
   position: relative;
-  z-index: 1000;
 }
 
+.signup-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-gold);
+  border-radius: 50px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: -1;
+}
+
+.signup-btn:hover::before {
+  opacity: 1;
+}
+
+.signup-btn:hover {
+  color: #333 !important;
+  border-color: transparent !important;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-primary);
+}
+
+/* Avatar */
+.dropdown .btn {
+  border: 3px solid var(--color-glass) !important;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.dropdown .btn:hover {
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: var(--shadow-primary);
+}
+
+/* Dropdown Menu - Cải thiện độ rõ nét */
+.dropdown-menu {
+  background: rgba(30, 30, 30, 0.95) !important; /* Đậm hơn để đọc rõ */
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  margin-top: 8px !important;
+  padding: 0.5rem !important;
+  min-width: 200px !important;
+  animation: dropdownFadeIn 0.3s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.dropdown-item {
+  color: #ffffff !important; /* Chữ trắng rõ ràng */
+  padding: 0.75rem 1.25rem !important;
+  border-radius: 12px !important;
+  margin: 0.25rem 0 !important;
+  transition: all 0.2s ease;
+  font-weight: 500 !important;
+  background: transparent !important;
+  border: none !important;
+  width: 100% !important;
+  text-align: left !important;
+  text-decoration: none !important;
+}
+
+.dropdown-item:hover {
+  background: rgba(102, 126, 234, 0.3) !important; /* Hover màu xanh nhẹ */
+  color: #ffffff !important;
+  transform: translateX(4px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+}
+
+.dropdown-item:focus {
+  background: rgba(102, 126, 234, 0.3) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.5);
+}
+
+.dropdown-divider {
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  margin: 0.75rem 0 !important;
+}
+
+/* Mobile Responsive */
+@media (max-width: 991px) {
+  .navbar-collapse {
+    background: rgba(30, 30, 30, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 16px;
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .navbar form {
+    margin: 1rem 0;
+    min-width: 400px;
+  }
+  
+  .auth-buttons {
+    margin-top: 1rem;
+    flex-direction: column !important;
+  }
+  
+  .auth-buttons .btn {
+    width: 100%;
+  }
+}
+
+/* Utilities */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+/* Page Load Animation */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

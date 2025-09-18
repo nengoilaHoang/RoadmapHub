@@ -1,0 +1,85 @@
+.search-page-container {
+  max-width: var(--container-xl);
+  margin: 0 auto;
+  padding: var(--space-24);
+  background: var(--color-background);
+}
+
+.search-page-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-24);
+}
+
+.search-roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-20);
+}
+
+/* Đảm bảo mỗi card có cùng kích thước */
+.search-card-wrapper {
+  width: 100%;
+  /* Nếu muốn cố định width, ví dụ max 280px: */
+  max-width: 280px;
+  /* Giữ chiều cao: */
+  height: 160px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Override card bên trong wrapper */
+.search-card-wrapper .roadmap-card {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* filter-bar container: nằm ngang, cách tử và buttons */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;                 /* khoảng cách giữa các phần tử */
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-card-border);
+  margin-bottom: 16px;
+}
+
+/* Tiêu đề */
+.filter-bar h3 {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+/* Style chung cho các nút */
+.filter-bar button {
+  padding: 6px 12px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: 
+    background 150ms var(--ease-standard),
+    border-color 150ms var(--ease-standard),
+    color 150ms var(--ease-standard);
+}
+
+/* Hover effect */
+.filter-bar button:hover {
+  background: var(--color-secondary-hover);
+  border-color: var(--color-primary);
+}
+
+/* Selected state */
+.filter-bar button.selected {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-on-primary);
+}

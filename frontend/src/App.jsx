@@ -19,6 +19,7 @@ import Home from '#pages/Home/Home.jsx'
 import ChangeEmailVerify from '#pages/ChangeEmailVerify/ChangeEmailVerify.jsx'
 import VerifyDeletePage from '#pages/ProfilePage/VerifyDeletePage/VerifyDeletePage.jsx'
 import RoadmapViewLayout from '#layouts/RoadmapViewLayout.jsx'
+import RoadmapSearchPage from '#pages/Roadmap/RoadmapSearchPage/RoadmapSearchPage.jsx'
 function App() {
   const router = createBrowserRouter(
   [
@@ -34,6 +35,7 @@ function App() {
       path:'/',
       element:<NavbarLayout/>,
       children:[
+        {path:'search/:query',element:<RoadmapSearchPage/>},
         {path:'signup',element:<SignUp/>},
         {path:'verify/:email',element:<VerifyEmail/>},
         {path:'login',element:<Login/>},

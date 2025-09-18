@@ -63,28 +63,25 @@
   white-space: nowrap;
 }
 
-/* Expanded overlay */
-.card-overlay {
+/* Portal overlay */
+.card-overlay-portal {
   position: absolute;
-  top: -40px;     /* extend 40px above */
-  bottom: -40px;  /* extend 40px below */
-  left: -20px;    /* extend 20px left */
-  right: -20px;   /* extend 20px right */
   background: #f3f4f6;
   border: 1px solid #d1d5db;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
   padding: var(--space-20);
+  z-index: 9999;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   animation: fadeInOverlay 150ms ease-out forwards;
-  z-index: 5;
+  pointer-events: auto;
 }
 
 @keyframes fadeInOverlay {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 /* Overlay content */
@@ -94,30 +91,43 @@
   flex-direction: column;
   gap: var(--space-12);
 }
+
 .overlay-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
+
 .overlay-title {
-  margin: 0 0 var(--space-12) 0;
+  margin: 0;
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text);
-  white-space: normal;       /* allow wrapping */
-  overflow: visible;
+  white-space: normal;
+  flex: 1;
+  margin-right: var(--space-12);
 }
+
 .overlay-desc {
   margin: 0;
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
   color: var(--color-text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word;
 }
+
 .overlay-row {
   display: flex;
   align-items: center;
   gap: var(--space-8);
 }
+
 .overlay-icon {
   width: var(--space-24);
   height: var(--space-24);
@@ -127,6 +137,7 @@
   padding: var(--space-4);
   flex-shrink: 0;
 }
+
 .overlay-label {
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
@@ -148,6 +159,7 @@
   transition: background var(--duration-fast) var(--ease-standard),
               transform var(--duration-fast) var(--ease-standard),
               border-color var(--duration-fast) var(--ease-standard);
+  flex-shrink: 0;
 }
 .bookmark-icon:hover {
   background: var(--color-secondary-hover);
@@ -166,7 +178,7 @@
     height: 120px;
     padding: var(--space-16);
   }
-  .card-overlay {
+  .card-overlay-portal {
     padding: var(--space-16);
   }
   .overlay-title {
