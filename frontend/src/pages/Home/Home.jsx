@@ -1,81 +1,266 @@
-import React, { use } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import CreateRoadmap  from '#components/Roadmap/CreateRoadmap/createRoadmap.jsx';
+import CreateRoadmap from '#components/Roadmap/CreateRoadmap/createRoadmap.jsx';
 import './Home.css';
 import { useState } from 'react';
-import {useCheckLogin} from '#hooks/userCheckLogin.jsx';
+import { useCheckLogin } from '#hooks/userCheckLogin.jsx';
+import RoadmapCardInHome from '#components/RoadmapView/RoadmapCardInHome/RoadmapCardInHome.jsx';
 
 export default function Home() {
     const [openCreateRoadmap, setOpenCreateRoadmap] = React.useState(false);
+    
     const onCreateRoadmap = () => {
         setOpenCreateRoadmap(true);
-    }
+    };
+    
     const { isLoggedIn, user } = useCheckLogin();
+
+    const handleBookmarkToggle = (id, isBookmarked) => {
+        console.log(`Card ${id} bookmarked: ${isBookmarked}`);
+        // Handle bookmark logic here
+    };
+
+    // Sample data for different sections
+    const markedRoadmaps = [
+        {
+            id: 1,
+            name: "Learn Cooking",
+            description: "Master the art of cooking",
+            learning: 12500,
+            teaching: 45,
+            isUserCard: true
+        },
+        {
+            id: 2,
+            name: "Learn Drawing",
+            description: "Creative art techniques",
+            learning: 8300,
+            teaching: 23,
+            isUserCard: true
+        }
+    ];
+
+    const customRoadmaps = [
+        {
+            id: 3,
+            name: "For Newbie in Gym",
+            description: "Complete beginner's guide to fitness",
+            learning: 156,
+            teaching: 12,
+            isUserCard: true
+        },
+        {
+            id: 4,
+            name: "Advanced Workout Plans",
+            description: "Intensive training programs",
+            learning: 89,
+            teaching: 8,
+            isUserCard: true
+        }
+    ];
+
+    const teachingClasses = [
+        {
+            id: 5,
+            name: "Gym Class",
+            description: "Fitness training sessions",
+            learning: 25,
+            teaching: 1,
+            isUserCard: true
+        }
+    ];
+
+    const learningClasses = [
+        {
+            id: 6,
+            name: "Cooking Class",
+            description: "Interactive cooking lessons",
+            learning: 1,
+            teaching: 0,
+            isUserCard: true
+        }
+    ];
+
+    const recommendedRoadmaps = [
+        {
+            id: 7,
+            name: "React Advanced Patterns",
+            description: "Master advanced React concepts",
+            learning: 15600,
+            teaching: 89,
+            isUserCard: false
+        },
+        {
+            id: 8,
+            name: "Node.js Backend Development",
+            description: "Server-side JavaScript mastery",
+            learning: 9800,
+            teaching: 67,
+            isUserCard: false
+        },
+        {
+            id: 9,
+            name: "Database Design Fundamentals",
+            description: "Learn database architecture",
+            learning: 7200,
+            teaching: 34,
+            isUserCard: false
+        },
+        {
+            id: 10,
+            name: "Database Design Fundamentals",
+            description: "Learn database architecture",
+            learning: 7200,
+            teaching: 34,
+            isUserCard: false
+        }
+    ];
+
     return (
-    <>
-    {isLoggedIn &&  <div className="home-container">
-            <div className="profile-header">
-                <div className="profile-info">
-                    <h2 className="profile-name">viethoangdz</h2>
-                </div>
-                <div className="teams-section">
-                    {/* <Link to="/team1" className="team-link">team1</Link>
-                    <Link to="/team2" className="team-link">team2</Link> */}
-                    <button className="btn-create-team">+ create team</button>
-                </div>
-            </div>
-
-            <div className="content-section">
-                <div className="section-block">
-                    <h3 className="section-title">
-                        <i className="bi bi-bookmark-fill"></i> Roadmap marked
-                    </h3>
-                    <div className="roadmap-grid">
-                        <div className="roadmap-card">
-                            <span className="roadmap-name">learn cooking</span>
-                            <i className="bi bi-bookmark-fill bookmark-icon"></i>
+        <>
+            {isLoggedIn && (
+                <div className="home-container">
+                    <div className="profile-header">
+                        <div className="profile-info">
+                            <h2 className="profile-name">viethoangdz</h2>
                         </div>
-                        <div className="roadmap-card">
-                            <span className="roadmap-name">learn drawing</span>
-                            <i className="bi bi-bookmark-fill bookmark-icon"></i>
+                        <div className="teams-section">
+                            <button className="btn-create-team">+ Create Team</button>
                         </div>
                     </div>
-                </div>
 
-                <div className="section-block">
-                    <h3 className="section-title">
-                        <i className="bi bi-map"></i> Your custom roadmaps
-                    </h3>
-                    <div className="roadmap-grid">
-                        <div className="roadmap-card">for newbie in gym</div>
-                        <div className="roadmap-card">for newbie in gym</div>
-                        <button className="btn-add" onClick={onCreateRoadmap}>+ Create your own roadmap</button>
+                    <div className="content-section">
+                        {/* Roadmap Marked Section */}
+                        <div className="section-block">
+                            <h3 className="section-title">
+                                <i className="bi bi-bookmark-fill"></i> Roadmap Marked
+                            </h3>
+                            <div className="roadmap-grid">
+                                {markedRoadmaps.map(roadmap => (
+                                    <div key={roadmap.id} className="roadmap-card-wrapper">
+                                        <RoadmapCardInHome
+                                            id={roadmap.id}
+                                            name={roadmap.name}
+                                            description={roadmap.description}
+                                            learning={roadmap.learning}
+                                            teaching={roadmap.teaching}
+                                            isUserCard={roadmap.isUserCard}
+                                            onBookmarkToggle={handleBookmarkToggle}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Custom Roadmaps Section */}
+                        <div className="section-block">
+                            <h3 className="section-title">
+                                <i className="bi bi-map"></i> Your Custom Roadmaps
+                            </h3>
+                            <div className="roadmap-grid">
+                                {customRoadmaps.map(roadmap => (
+                                    <div key={roadmap.id} className="roadmap-card-wrapper">
+                                        <RoadmapCardInHome
+                                            id={roadmap.id}
+                                            name={roadmap.name}
+                                            description={roadmap.description}
+                                            learning={roadmap.learning}
+                                            teaching={roadmap.teaching}
+                                            isUserCard={roadmap.isUserCard}
+                                            onBookmarkToggle={handleBookmarkToggle}
+                                        />
+                                    </div>
+                                ))}
+                                <div className="roadmap-card-wrapper">
+                                    <button className="btn-add-roadmap" onClick={onCreateRoadmap}>
+                                        <i className="bi bi-plus-circle"></i>
+                                        <span>Create Your Own Roadmap</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Teaching Classes Section */}
+                        <div className="section-block">
+                            <h3 className="section-title">
+                                <i className="bi bi-person-video3"></i> Your Class Teaching
+                            </h3>
+                            <div className="roadmap-grid">
+                                {teachingClasses.map(roadmap => (
+                                    <div key={roadmap.id} className="roadmap-card-wrapper">
+                                        <RoadmapCardInHome
+                                            id={roadmap.id}
+                                            name={roadmap.name}
+                                            description={roadmap.description}
+                                            learning={roadmap.learning}
+                                            teaching={roadmap.teaching}
+                                            isUserCard={roadmap.isUserCard}
+                                            onBookmarkToggle={handleBookmarkToggle}
+                                        />
+                                    </div>
+                                ))}
+                                <div className="roadmap-card-wrapper">
+                                    <button className="btn-add-roadmap">
+                                        <i className="bi bi-plus-circle"></i>
+                                        <span>Create Your Class</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Learning Classes Section */}
+                        <div className="section-block">
+                            <h3 className="section-title">
+                                <i className="bi bi-mortarboard"></i> Your Class Learning
+                            </h3>
+                            <div className="roadmap-grid">
+                                {learningClasses.map(roadmap => (
+                                    <div key={roadmap.id} className="roadmap-card-wrapper">
+                                        <RoadmapCardInHome
+                                            id={roadmap.id}
+                                            name={roadmap.name}
+                                            description={roadmap.description}
+                                            learning={roadmap.learning}
+                                            teaching={roadmap.teaching}
+                                            isUserCard={roadmap.isUserCard}
+                                            onBookmarkToggle={handleBookmarkToggle}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Recommended Roadmaps Section */}
+                        <div className="section-block">
+                            <h3 className="section-title">
+                                <i className="bi bi-lightbulb"></i> Recommended Roadmaps
+                            </h3>
+                            <div className="roadmap-grid">
+                                {recommendedRoadmaps.map(roadmap => (
+                                    <div key={roadmap.id} className="roadmap-card-wrapper">
+                                        <RoadmapCardInHome
+                                            id={roadmap.id}
+                                            name={roadmap.name}
+                                            description={roadmap.description}
+                                            learning={roadmap.learning}
+                                            teaching={roadmap.teaching}
+                                            isUserCard={roadmap.isUserCard}
+                                            onBookmarkToggle={handleBookmarkToggle}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div className="section-block">
-                    <h3 className="section-title">
-                        <i className="bi bi-person-video3"></i> Your class teaching
-                    </h3>
-                    <div className="roadmap-grid">
-                        <div className="roadmap-card">gym class</div>
-                        <button className="btn-add">+ Create your out class</button>
-                    </div>
-                </div>
-
-                <div className="section-block">
-                    <h3 className="section-title">
-                        <i className="bi bi-mortarboard"></i> Your class learning
-                    </h3>
-                    <div className="roadmap-grid">
-                        <div className="roadmap-card">cooking class</div>
-                    </div>
-                </div>
-            </div>
-    </div> }
-   
-    {openCreateRoadmap && <CreateRoadmap onClose={()=>setOpenCreateRoadmap(false) } user={user}/>}
-    </>
-       
+            )}
+            
+            {openCreateRoadmap && (
+                <CreateRoadmap 
+                    onClose={() => setOpenCreateRoadmap(false)} 
+                    user={user}
+                />
+            )}
+        </>
     );
 }

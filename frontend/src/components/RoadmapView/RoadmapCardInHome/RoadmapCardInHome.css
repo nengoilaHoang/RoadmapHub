@@ -737,301 +737,268 @@ select.form-control {
     format('woff2');
 }
 
-/* END PERPLEXITY DESIGN SYSTEM */
-/* Home.css - Grid layout với kích thước đồng nhất */
+/* RoadmapCard.css - Kích thước cố định và màu sắc rõ ràng */
 
-.home-container {
-    max-width: var(--container-xl);
-    margin: 0 auto;
-    padding: var(--space-24);
-    background-color: var(--color-background);
-    min-height: 100vh;
+.roadmap-card {
+  width: 320px;
+  height: 140px;
+  border-radius: var(--radius-lg);
+  padding: var(--space-20);
+  box-shadow: var(--shadow-md);
+  transition: all var(--duration-normal) var(--ease-standard);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
 }
 
-/* Profile Header */
-.profile-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: var(--space-24);
-    background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-md);
-    margin-bottom: var(--space-32);
+.roadmap-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
-.profile-info {
-    display: flex;
-    align-items: center;
-    gap: var(--space-16);
+/* User Card Style (có bookmark) - Màu tím */
+.roadmap-card.user-card {
+  background: var(--color-bg-5);
+  border: 1px solid var(--color-border);
 }
 
-.profile-name {
-    font-size: var(--font-size-3xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text);
-    margin: 0;
+.roadmap-card.user-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 25px -3px rgba(147, 51, 234, 0.2), 0 4px 6px -2px rgba(147, 51, 234, 0.15);
 }
 
-.teams-section {
-    display: flex;
-    align-items: center;
-    gap: var(--space-12);
+/* Guest Card Style (recommended) - Màu xanh dương */
+.roadmap-card.guest-card {
+  background: var(--color-bg-1);
+  border: 1px solid var(--color-border);
 }
 
-.btn-create-team {
-    padding: var(--space-10) var(--space-20);
-    background: var(--color-primary);
-    color: var(--color-btn-primary-text);
-    border: none;
-    border-radius: var(--radius-base);
-    font-weight: var(--font-weight-semibold);
-    cursor: pointer;
-    transition: all var(--duration-normal) var(--ease-standard);
-    box-shadow: var(--shadow-sm);
+.roadmap-card.guest-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 10px 25px -3px rgba(59, 130, 246, 0.2), 0 4px 6px -2px rgba(59, 130, 246, 0.15);
 }
 
-.btn-create-team:hover {
-    background: var(--color-primary-hover);
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: var(--space-16);
+  min-height: var(--space-32);
 }
 
-/* Content Sections */
-.content-section {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-24);
+.card-title-section {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  gap: var(--space-8);
 }
 
-.section-block {
-    background: var(--color-surface);
-    border-radius: var(--radius-lg);
-    padding: var(--space-24);
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--color-card-border);
+.card-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0;
+  line-height: var(--line-height-tight);
+  flex: 1;
+  min-width: 0;
 }
 
-.section-title {
-    font-size: var(--font-size-2xl);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-text);
-    margin-bottom: var(--space-20);
-    display: flex;
-    align-items: center;
-    gap: var(--space-12);
+.bookmark-icon {
+  cursor: pointer;
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  transition: all var(--duration-fast) var(--ease-standard);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  flex-shrink: 0;
+  width: var(--space-32);
+  height: var(--space-32);
 }
 
-.section-title i {
-    color: var(--color-primary);
-    font-size: var(--font-size-2xl);
+.bookmark-icon:hover {
+  background: var(--color-secondary-hover);
+  transform: scale(1.1);
+  border-color: var(--color-primary);
 }
 
-/* Grid Layout - Đảm bảo tất cả card cùng kích thước */
-.roadmap-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+.bookmark-icon:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.bookmark-icon.bookmarked {
+  background: rgba(var(--color-error-rgb), 0.15);
+  border-color: var(--color-error);
+}
+
+.bookmark-icon.bookmarked:hover {
+  background: rgba(var(--color-error-rgb), 0.25);
+}
+
+.card-stats {
+  display: flex;
   gap: var(--space-20);
-  align-items: stretch;
+  align-items: center;
 }
 
-/* Wrapper đảm bảo kích thước đồng nhất */
-.roadmap-card-wrapper {
-    width: 320px;
-    height: 140px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  flex: 1;
 }
 
-/* Override RoadmapCard để đảm bảo kích thước cố định */
-.roadmap-card-wrapper .roadmap-card {
-    width: 320px !important;
-    height: 140px !important;
-    flex-shrink: 0;
-    flex-grow: 0;
+.stat-icon {
+  width: var(--space-32);
+  height: var(--space-32);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-/* Add Roadmap Button - cùng kích thước với card */
-.btn-add-roadmap {
-    width: 320px !important;
-    height: 140px !important;
-    background: var(--color-secondary);
-    border: 2px dashed var(--color-border);
-    border-radius: var(--radius-lg);
-    color: var(--color-primary);
-    cursor: pointer;
-    transition: all var(--duration-normal) var(--ease-standard);
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-lg);
-    display: flex !important;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-8);
-    box-sizing: border-box;
+.learning-icon {
+  background: rgba(var(--color-success-rgb), 0.15);
+  border: 1px solid rgba(var(--color-success-rgb), 0.3);
 }
 
-.btn-add-roadmap:hover {
-    background: var(--color-secondary-hover);
-    border-color: var(--color-primary);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+.teaching-icon {
+  background: var(--color-bg-1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
-.btn-add-roadmap i {
-    font-size: var(--font-size-3xl);
-    margin-bottom: var(--space-4);
+.stat-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
 }
 
-.btn-add-roadmap span {
-    text-align: center;
-    line-height: var(--line-height-tight);
+.stat-number {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  line-height: var(--line-height-tight);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .home-container {
-        padding: var(--space-16);
-    }
-    
-    .profile-header {
-        flex-direction: column;
-        gap: var(--space-16);
-        text-align: center;
-    }
-    
-    .teams-section {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .roadmap-grid {
-        grid-template-columns: 1fr;
-        justify-items: center;
-        gap: var(--space-16);
-    }
-    
-    .roadmap-card-wrapper {
-        width: 100%;
-        max-width: 320px;
-    }
-    
-    .roadmap-card-wrapper .roadmap-card {
-        width: 100% !important;
-        max-width: 320px !important;
-    }
-    
-    .btn-add-roadmap {
-        width: 100% !important;
-        max-width: 320px !important;
-    }
-    
-    .section-block {
-        padding: var(--space-20);
-    }
-    
-    .section-title {
-        font-size: var(--font-size-xl);
-    }
+.stat-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
 }
 
+/* Mobile portrait responsive design - 480px */
 @media (max-width: 480px) {
-    .home-container {
-        padding: var(--space-12);
-    }
-    
-    .profile-header {
-        padding: var(--space-20);
-        flex-direction: column;
-        gap: var(--space-12);
-        text-align: center;
-    }
-    
-    .profile-name {
-        font-size: var(--font-size-2xl);
-    }
-    
-    .section-block {
-        padding: var(--space-16);
-    }
-    
-    .section-title {
-        font-size: var(--font-size-lg);
-        margin-bottom: var(--space-16);
-    }
-    
-    .roadmap-grid {
-        gap: var(--space-12);
-        grid-template-columns: 1fr;
-        justify-items: center;
-    }
-    
-    .roadmap-card-wrapper {
-        width: 100%;
-        max-width: 280px;
-        height: 120px;
-    }
-    
-    .roadmap-card-wrapper .roadmap-card {
-        width: 100% !important;
-        max-width: 280px !important;
-        height: 120px !important;
-    }
-    
-    .btn-add-roadmap {
-        width: 100% !important;
-        max-width: 280px !important;
-        height: 120px !important;
-        font-size: var(--font-size-base);
-    }
-    
-    .btn-add-roadmap i {
-        font-size: var(--font-size-2xl);
-    }
-    
-    .btn-create-team {
-        padding: var(--space-8) var(--space-16);
-        font-size: var(--font-size-base);
-    }
-    
-    .teams-section {
-        flex-direction: column;
-        gap: var(--space-8);
-    }
+  .roadmap-card {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    padding: var(--space-16);
+    height: 120px;
+  }
+  
+  .card-header {
+    margin-bottom: var(--space-12);
+    min-height: var(--space-24);
+  }
+  
+  .card-title {
+    font-size: var(--font-size-md);
+  }
+  
+  .bookmark-icon {
+    width: var(--space-24);
+    height: var(--space-24);
+    padding: var(--space-2);
+  }
+  
+  .card-stats {
+    gap: var(--space-12);
+  }
+  
+  .stat-item {
+    gap: var(--space-6);
+  }
+  
+  .stat-icon {
+    width: var(--space-24);
+    height: var(--space-24);
+  }
+  
+  .stat-number {
+    font-size: var(--font-size-sm);
+  }
+  
+  .stat-label {
+    font-size: var(--font-size-xs);
+  }
 }
 
-/* Animation for smooth transitions */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(var(--space-20));
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+/* Tablet responsive design */
+@media (max-width: 768px) {
+  .roadmap-card {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  
+  .card-stats {
+    gap: var(--space-16);
+  }
+  
+  .stat-item {
+    gap: var(--space-6);
+  }
+  
+  .stat-number {
+    font-size: var(--font-size-sm);
+  }
+  
+  .stat-label {
+    font-size: var(--font-size-xs);
+  }
+  
+  .card-title {
+    font-size: var(--font-size-md);
+  }
 }
 
-.section-block {
-    animation: fadeIn var(--duration-normal) var(--ease-standard);
+/* Animation for bookmark */
+@keyframes bookmarkPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
 }
 
-/* Focus states for accessibility */
-.btn-create-team:focus,
-.btn-add-roadmap:focus {
-    outline: none;
-    box-shadow: var(--focus-ring);
+.bookmark-icon.bookmarked svg {
+  animation: bookmarkPulse 0.4s var(--ease-standard);
 }
 
-.btn-create-team:focus-visible,
-.btn-add-roadmap:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
+/* Ensure consistent sizing */
+.roadmap-card,
+.roadmap-card * {
+  box-sizing: border-box;
 }
 
-/* Hover effects for better UX */
-.section-block:hover {
-    box-shadow: var(--shadow-md);
-    transition: box-shadow var(--duration-normal) var(--ease-standard);
+/* Prevent text overflow */
+.card-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.stat-number {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
