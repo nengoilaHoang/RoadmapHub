@@ -29,7 +29,7 @@ export default function NavBar() {
           onClick={() => navigate("/")}
         >
           <img
-            src="https://i.pinimg.com/736x/14/ce/13/14ce13dff4ba3a6255916b128dd9ec57.jpg"
+            src="../../../public/logo.png"
             alt="Logo"
             height="40"
             className="me-2"

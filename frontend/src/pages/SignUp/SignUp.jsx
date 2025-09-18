@@ -1,142 +1,155 @@
-
-import {GoogleLogin} from '@react-oauth/google'
+import React, { useState } from 'react';
+import { GoogleLogin } from '@react-oauth/google';
 import AlertError from '#components/SignUp/AlertError.jsx';
-import {jwtDecode} from "jwt-decode"
-import { useState } from 'react';
-import api from '#utils/api.js'
+import { jwtDecode } from "jwt-decode";
+import api from '#utils/api.js';
 import { useNavigate } from 'react-router-dom';
-export default function SignUp() {
+import './SignUp.css';
 
-    const [email,setEmail] = useState("");
-    const [fullname,setFullName] = useState("");
-    const [password,setPassWord] = useState("");
-    const [alertEmail,setAlertEmail] = useState(false);
-    const [alertUsername,setAlertUsername] = useState(false);
-    const [contentErrorEmail,setContentErrorEmail] = useState("")
-    const [contentErrorUsername,setContentErrorUsername] = useState("")
+export default function SignUp() {
+    const [email, setEmail] = useState("");
+    const [fullname, setFullName] = useState("");
+    const [password, setPassWord] = useState("");
+    const [alertEmail, setAlertEmail] = useState(false);
+    const [alertUsername, setAlertUsername] = useState(false);
+    const [contentErrorEmail, setContentErrorEmail] = useState("");
+    const [contentErrorUsername, setContentErrorUsername] = useState("");
     const navigate = useNavigate();
-    // const clientSecret = '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'
+
     const handleGoogleSuccess = async (credentialResponse) => {
         console.log(credentialResponse);
         console.log(jwtDecode(credentialResponse.credential));
-        // const decode = jwtDecode(credentialResponse.credential);
-        //const response = await api.post("/accounts/signup-google",{email:decode.email,password:decode.sub,fullname:decode.name})
-        const response = await api.post("/accounts/signup-google",{credential:credentialResponse.credential}
-            ,
+        
+        const response = await api.post("/accounts/signup-google", 
+            { credential: credentialResponse.credential },
             {
                 headers: {
                     "Content-Type": "application/json",
-                    // "Authorization": `Bearer ${localStorage.getItem("token")}`
                 },
                 withCredentials: true
             }
-        )
-        console.log(response)
-        if(!response.data.success){
+        );
+        
+        console.log(response);
+        if (!response.data.success) {
             navigate('/login');
-        }
-        else{
-            //Storage.setItem("token", response.data.token);
+        } else {
             navigate('/');
         }
-        // Xử lý đăng nhập thành công
     };
 
     const handleGoogleError = () => {
         console.log('Login Failed');
-        // Xử lý đăng nhập thất bại
     };
-    const handleSubmit =async (e)=>{
-        e.preventDefault();
-        // console.log(email,password,fullname)
-       
-        try {
-            const response = await api.post("/accounts/verify-email",{email:email,password:password,fullname:fullname},
-            );
-            if(response.data.success)
-            {
-                 navigate(`/verify/${email}`,{
-                    state:{
-                    email:email,
-                    password:password,
-                    fullname:fullname
-                }
-                })
-            }
-            else{
-                // if("message" in response.data){
 
-                // }
-                // else 
-                if("errors" in response.data){
-                    if("email" in response.data.errors){
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        try {
+            const response = await api.post("/accounts/verify-email", {
+                email: email,
+                password: password,
+                fullname: fullname
+            });
+            
+            if (response.data.success) {
+                navigate(`/verify/${email}`, {
+                    state: {
+                        email: email,
+                        password: password,
+                        fullname: fullname
+                    }
+                });
+            } else {
+                if ("errors" in response.data) {
+                    if ("email" in response.data.errors) {
                         setAlertEmail(true);
                         setContentErrorEmail(response.data.errors.email);
-                    }
-                    else {
+                    } else {
                         setAlertEmail(false);
                         setContentErrorEmail("");
                     }
-                    if("username" in response.data.errors){
+                    if ("username" in response.data.errors) {
                         setAlertUsername(true);
                         setContentErrorUsername(response.data.errors.username);
-                    }
-                    else {
+                    } else {
                         setAlertUsername(false);
                         setContentErrorUsername("");
                     }
-                    
                 }
-                
             }
-            // console.log(response)
         } catch (err) {
-            console.log(err)}
-      
-    }
+            console.log(err);
+        }
+    };
 
     return (
-        <div className="d-flex flex-column justify-content-center align-items-center mt-5">
-            <h1 className="fs-1 fw-bold">Sign Up</h1>
-            <p className="fs-3 ">Create an account to track your progress, showcase your skill-set and be a part of the community.</p>
-            
-            <form className="d-flex flex-column" onSubmit={handleSubmit}>
-               
-                <div className='mb-4'>
-                    <GoogleLogin
-                        onSuccess={handleGoogleSuccess}
-                        onError={handleGoogleError}
-                        theme="outline"
-                        size="large"
-                        text="continue_with"
-                        shape="rectangular"
+        <div className="signup-container">
+            <div className="signup-box">
+                <h2 className="signup-title">SIGN UP</h2>
+                <p className="signup-subtitle">
+                    Create an account to track your progress, showcase your skill-set and be a part of the community.
+                </p>
+
+                {/* Google button */}
+                <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleError}
+                    theme="outline"
+                    size="large"
+                    text="continue_with"
+                    shape="rectangular"
+                />
+
+                {/* Divider */}
+                <div className="divider">
+                    <span></span>
+                    <p>OR</p>
+                    <span></span>
+                </div>
+
+                {/* Form */}
+                <form className="signup-form" onSubmit={handleSubmit}>
+                    <input 
+                        type="text" 
+                        placeholder="Full Name" 
+                        onChange={(e) => setFullName(e.target.value)}
+                        required
                     />
+                    {alertUsername && <AlertError content={contentErrorUsername} />}
+                    
+                    <input 
+                        type="email" 
+                        placeholder="Email Address" 
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    {alertEmail && <AlertError content={contentErrorEmail} />}
+                    
+                    <input 
+                        type="password" 
+                        placeholder="Password" 
+                        onChange={(e) => setPassWord(e.target.value)}
+                        required
+                    />
+                    
+                    <button type="submit" className="continue-btn">
+                        Verify Email
+                    </button>
+                </form>
 
-                </div>
-                 <div className="d-flex align-items-center gap-3 mb-4">
-                    <div className="flex-grow-1 border-bottom"></div>
-                    <span className="text-secondary fw-semibold">OR</span>
-                    <div className="flex-grow-1 border-bottom"></div>
-                </div>
+                {/* Login link */}
+                <p className="login-text">
+                    Already have an account? <a href="/login">Login</a>
+                </p>
 
-                <div className="mb-3">
-                    <label htmlFor="fullName" className="form-label fs-4 fw-bold">Full Name</label>
-                    <input type="text" onChange={(e)=>setFullName(e.target.value)} className="form-control form-control-lg" id="fullName" placeholder="full name" required/>
-                </div>
-                {alertUsername?<AlertError content={contentErrorUsername}/>:""}
-                <div className="mb-3">
-                    <label htmlFor="email" className="form-label fs-4 fw-bold">Email address</label>
-                    <input type="email" onChange={(e)=>setEmail(e.target.value)} className="form-control form-control-lg" id="email" placeholder="email" required/>
-                </div>
-                {alertEmail?<AlertError content={contentErrorEmail}/>:""}
-                <div className="mb-3 ">
-                    <label htmlFor="password" className="form-label fs-4 fw-bold">Password</label>
-                    <input type="password" onChange={(e)=>setPassWord(e.target.value)} className="form-control form-control-lg" id="password" placeholder="password" required />
-                </div>
-                <button type="submit" className="btn btn-dark fs-4 fw-bold">Verify Email</button>
-                <div className="mt-3">Already have an account? <a href='/login' className="fw-bold text-decoration-none">Login</a></div>
-                <p>By continuing to use our services, you acknowledge that you have both read and agree to our <a href="/terms-of-service">Terms of Service</a> and <a href="/privacy-policy">Privacy Policy</a>.</p>
-            </form>
+                {/* Footer */}
+                <p className="footer-text">
+                    By continuing to use our services, you acknowledge that you have both
+                    read and agree to our <a href="/terms-of-service">Terms of Service</a> and{" "}
+                    <a href="/privacy-policy">Privacy Policy</a>.
+                </p>
+            </div>
         </div>
-    )
+    );
 }
