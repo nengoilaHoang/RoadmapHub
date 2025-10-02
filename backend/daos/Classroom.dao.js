@@ -52,5 +52,37 @@ class ClassroomDAO{
                 }
             }
     }
+    async addRoadmapIntoClass(accountId,roadmapId,classroomId){
+        await db('classroom').where({teacherId:accountId,id:classroomId}).update({roadmapId:roadmapId});
+        return {
+            success:true,
+            message:'Add roadmap into classroom successfully'
+        }
+    }
+    async getRoadmapInClass(classroomId){
+        const classroom = await db('classroom').where({id:classroomId});
+        return classroom;
+    }
+    async getLearningClass(accountId){
+        const rows = await db('classroom')
+                        .leftJoin('studentclassroom','studentclassroom.classroomId','classroom.id')
+                        .select('*')
+                        .where({studentId:accountId});
+        return rows;
+    }
+    async checkLearningClass(accountId,classroomId){
+        const studentId = accountId;
+        const check = await db('studentclassroom').where({studentId,classroomId:classroomId}).first();
+        if(check){
+            return {
+                success:true,
+                message:"You are already learning this class"
+            }
+        }
+        return {
+            success:false,
+            message:"You are not learning this class"
+        }
+    }
 }
 export default new ClassroomDAO();

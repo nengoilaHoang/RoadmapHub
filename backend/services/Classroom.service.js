@@ -12,5 +12,17 @@ class ClassroomService{
     async getNameAll(accountId){
         return await ClassroomDAO.getNameAll(accountId);
     }
+    async addRoadmapIntoClass(accountId,roadmapId,classroomId){
+        return await ClassroomDAO.addRoadmapIntoClass(accountId,roadmapId,classroomId);
+    }
+    async getRoadmapInClass(classroomId){
+        return await ClassroomDAO.getRoadmapInClass(classroomId);
+    }
+    async getLearningClass(accountId){
+        return await ClassroomDAO.getLearningClass(accountId);
+    }
+    async checkLearningClass(accountId,classroomId){
+        return await ClassroomDAO.checkLearningClass(accountId,classroomId);
+    }
 }
 export default new ClassroomService(ClassroomDAO)

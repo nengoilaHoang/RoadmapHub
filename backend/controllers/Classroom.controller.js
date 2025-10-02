@@ -40,5 +40,34 @@ class ClassroomController{
         const response = await ClassroomService.getNameAll(accountId);
         res.json(response);
     }
+    async addRoadmapIntoClass(req,res){
+        const accountId = req.authenticate.id;
+        const {roadmapId,classroomId} = req.body;
+        const response = await ClassroomService.addRoadmapIntoClass(accountId,roadmapId,classroomId);
+        res.json(response);
+    }
+    async getRoadmapInClass(req,res){
+        const {classroomId} = req.query;
+        const response = await ClassroomService.getRoadmapInClass(classroomId);
+        res.json(response);
+    }
+    async getLearningClass(req,res){
+        const accountId = req.authenticate.id;
+        const response = await ClassroomService.getLearningClass(accountId);
+        res.json(response);
+    }
+    async checkLearningClass(req,res){
+        if(req.authenticate?.id == null){
+            res.json({
+                success:false,
+                message:"You are not learning this class"
+            });
+        }
+        const {classroomId} = req.body;
+        const accountId = req.authenticate.id
+        console.log("sss",accountId,classroomId)
+        const responseCheck = await ClassroomService.checkLearningClass(accountId,classroomId);
+        res.json(responseCheck);
+    }
 }
 export default new ClassroomController(ClassroomService)
