@@ -10,4 +10,5 @@ router.post('/check-your-roadmap',RoadmapController.checkYourRoadmap)
 // router.get('/view/:name', RoadmapController.viewRoadmap);
 router.get('/getRoadmapByUserId', RoadmapController.getRoadmapByUserId);
 router.get('/getRoadmapByTeamId/:teamName', RoadmapController.getRoadmapByTeamId);
+router.get('/getTopicRoadmapByUserId',RoadmapController.getTopicRoadmapByUserId);
 export default router;

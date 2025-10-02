@@ -31,9 +31,9 @@ class RoadmapController {
         await RoadmapService.deleteRoadmap(name);
     }
     async editNodeRoadmap(req, res) {
-        const { name,nodes,edges } = req.body;
+        const { name,nodes,edges,id } = req.body;
         const accountId = req.authenticate.id
-        await RoadmapService.editNodeRoadmap(accountId,name,nodes,edges);
+        await RoadmapService.editNodeRoadmap(accountId,name,nodes,edges,id);
     }
     async getRoadmapByName(req, res) {
         const { name } = req.params;
@@ -67,15 +67,18 @@ class RoadmapController {
     }
     async getRoadmapByUserId(req, res) {
         const userId = req.authenticate.id;
-        console.log("Account ID:", userId);
         const roadmaps = await RoadmapService.getRoadmapByUserId(userId);
-        console.log("Roadmaps:", roadmaps);
         res.json({status: "success", data: roadmaps});
     }
     async getRoadmapByTeamId(req, res) {
         const { teamId } = req.params;
         const roadmaps = await RoadmapService.getRoadmapByTeamId(teamId);
         res.json({status: "success",roadmaps});
+    }
+    async getTopicRoadmapByUserId(req,res){
+        const {id} = req.query;
+        const response =  await RoadmapService.getTopicRoadmapByUserId(id);
+        res.json({success:true,roadmap:response})
     }
 }
 export default new RoadmapController(RoadmapService);
