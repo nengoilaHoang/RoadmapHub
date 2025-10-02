@@ -11,3 +11,6 @@
   border: 2px solid #ccc;
   width: 550px;
 }
+.comment-body{
+    word-break: break-word;
+}

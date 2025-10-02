@@ -3,13 +3,29 @@ import './ItemComment.css'
 import ReactQuill from "react-quill-new";   
 import "react-quill-new/dist/quill.snow.css";
 import DeleteComment from '../DeleteComment/DeleteComment';
+import { useEffect } from 'react';
 export default function ItemComment(props) {
-        const { comment,handleEditComment, handleDeleteComment} = props;
+        const {user,post,comment,handleEditComment, handleDeleteComment} = props;
         const [contentComment,setContentComment] = useState(comment.content);
         const [openEditComment,setOpenEditComment] = useState(false);
         const [openDeleteComment,setOpenDeleteComment] = useState(false);
         // const handleDelete = (e) => {
         // }
+        const [teacherEdit,setTeacherEdit] = useState(false);
+        const [userEdit,setUserEdit] = useState(false);
+        useEffect(()=>{
+                        if(user.accountId === comment.accountId){
+                            setUserEdit(true);
+                        }
+                        if(user.accountId === post.accountId){
+                                setTeacherEdit(true);
+                        }
+                        if(user.accountId==post.accountId && post.accountId === comment.accountId){
+                                setUserEdit(true);
+                                setTeacherEdit(false);
+                        }
+               
+        },[])
         const handleEdit=(e)=>{
         e.preventDefault();
         if (contentComment.trim()) {
@@ -54,11 +70,11 @@ export default function ItemComment(props) {
                                                 
                                                                 </div>
                                                             </div>
-                                                        </div>:<div dangerouslySetInnerHTML={{ __html: comment.content }} />}
+                                                        </div>:<div className='comment-body'><div dangerouslySetInnerHTML={{ __html: comment.content }} /></div>}
                                                 
                                         </div>
                                 </div>
-                               
+                               {userEdit &&(
                                 <div className='dropdown'>
                                         <button className='btn' id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i className="bi bi-three-dots-vertical"></i>
@@ -67,7 +83,17 @@ export default function ItemComment(props) {
                                                 <li><button type='button' className="dropdown-item" onClick={()=>setOpenEditComment(true)}>Edit</button></li>
                                                 <li ><button type='button'className="dropdown-item" onClick={()=>setOpenDeleteComment(true)}>Delete</button></li>
                                         </ul>
+                                </div>)}
+                                {teacherEdit &&(
+                                        <div className='dropdown'>
+                                        <button className='btn' id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i className="bi bi-three-dots-vertical"></i>
+                                        </button>
+                                        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                <li ><button type='button'className="dropdown-item" onClick={()=>setOpenDeleteComment(true)}>Delete</button></li>
+                                        </ul>
                                 </div>
+                                )}
 
                         </div>
                 </div>
