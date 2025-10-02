@@ -1,7 +1,6 @@
 import './SideBarClassroom.css'
 export default function SideBarClassroom(props){
     const {activeNav,navItems,handleNavClick,selectedClass,setSelectedClass,classes} = props;
-   
     return(
     <div className="sidebar">
             <div className="class-selector">
@@ -9,11 +8,11 @@ export default function SideBarClassroom(props){
             <select
                 id="class-select"
                 className="class-select"
-                value={selectedClass}
-                onChange={e => setSelectedClass(e.target.value)}
+                value={JSON.stringify(selectedClass)}
+                onChange={e => setSelectedClass(JSON.parse(e.target.value))}
             >
                 {classes.map((classItem, idx) => (
-                <option value={classItem} key={idx}>{classItem}</option>
+                <option value={JSON.stringify(classItem)} key={idx}>{classItem.name}</option>
                 ))}
             </select>
             </div>
