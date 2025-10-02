@@ -17,6 +17,7 @@
 }
 .body-post{
     padding: 20px;
+    word-break: break-word;
 }
 .comment{
      border-top: 2px solid #ccc;

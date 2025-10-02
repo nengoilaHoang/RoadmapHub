@@ -7,24 +7,18 @@ import EditPost from "../EditPost/EditPost.jsx"
 import api from '#utils/api.js'
 import DeletePost from '../DeletePost/DeletePost.jsx';
 export default function ItemPost(props){
-    const {post,comments,handleEditPost,handleDeletePost,handleComment,handleEditComment,handleDeleteComment} = props;
+    const {key,user,post,comments,handleEditPost,handleDeletePost,handleComment,handleEditComment,handleDeleteComment} = props;
     const [openComment,setComment] = useState(true);
     const [showAll, setShowAll] = useState(false);
     const [avatar,setAvatar] = useState("");
     const [openEdit,setOpenEdit] = useState(false);
     const [openDelete,setOpenDelete] = useState(false);
+    const [teacherEdit,setTeacherEdit] = useState(false);
     useEffect(()=>{
-        async function getAvatarComment(){
-            const response = await api.get('/profiles/get-profile',{
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            withCredentials: true
-            })
-        console.log(response)
-        setAvatar(response.data?.profile.avatar)
+        if(user.accountId === post.accountId){
+            setTeacherEdit(true);
         }
-        getAvatarComment();
+        setAvatar(user.avatar)
     },[])
     const visibleComments = showAll 
     ? comments 
@@ -34,7 +28,7 @@ export default function ItemPost(props){
     <>
     
     {/* <form onSubmit={handleDelete}> */}
-        <div className="item-post">
+        <div className="item-post" id={`post-${post.id}`} key={key}>
         <div className="header-post">
                 <div className='d-flex'>
                     <img src={post.avatar} className="rounded-circle me-4" width="40" height="40" alt="avatar"/>
@@ -43,7 +37,7 @@ export default function ItemPost(props){
                         <span>{post.createDate}</span>
                     </div>
                 </div>
-                    <div className='dropdown'>
+                    {teacherEdit &&(<div className='dropdown'>
                         <button className='btn ' id="dropdownMenu2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i className="bi bi-three-dots-vertical"></i>
                         </button>
@@ -51,7 +45,10 @@ export default function ItemPost(props){
                             <li><button data-bs-toggle="modal" data-bs-target="#exampleModal" className="dropdown-item" type='button' onClick={() => setOpenEdit(true)}>Edit</button></li>
                             <li><button className="dropdown-item" type='button' onClick={() => setOpenDelete(true)}>Delete</button></li>
                         </ul>
+                        
+                        
                     </div>
+                    )}
                
         </div>
         <div className="body-post">
@@ -59,7 +56,7 @@ export default function ItemPost(props){
         </div>
         <div className="comment">
             {visibleComments.map((comment)=>(
-                <ItemComment key={comment.id} comment={comment} handleEditComment={handleEditComment} handleDeleteComment={handleDeleteComment} />
+                <ItemComment key={comment.id} user={user}post={post}comment={comment} handleEditComment={handleEditComment} handleDeleteComment={handleDeleteComment} />
             ))}
             {comments.length > 3 && (
             <button
