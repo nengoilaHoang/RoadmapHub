@@ -6,6 +6,7 @@ import api from '#utils/api.js'
 export default function ForumClass(props) {
   const {classroomId}=props;
   const [posts,setPost]=useState([]);
+  const [user,setUser]=useState({});
    async function getPosts(){
             const response = await api.get('/posts/getPosts',{
                 withCredentials: true,
@@ -15,7 +16,13 @@ export default function ForumClass(props) {
            
         }
   useEffect(()=>{
-       
+        async function getAvatarComment(){
+                   const response = await api.get('/profiles/get-profile',{
+                   withCredentials: true
+                   })
+                    setUser(response.data?.profile);
+                  }
+        getAvatarComment();
         getPosts();
     },[])
   const handlePost = async (content) => {
@@ -71,6 +78,7 @@ export default function ForumClass(props) {
                   handleComment = {handleComment}
                   handleEditComment = {handleEditComment}
                   handleDeleteComment = {handleDeleteComment}
+                  user={user}
         />
          
     ))}
