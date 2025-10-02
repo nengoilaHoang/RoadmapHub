@@ -1,10 +1,11 @@
-import React, { use } from 'react';
+import React, { use, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CreateRoadmap  from '#components/Roadmap/CreateRoadmap/createRoadmap.jsx';
 import CreateClassroom from '#components/Classroom/CreateClassroom/CreateClassroom';
 import './Home.css';
 import { useState } from 'react';
 import {useCheckLogin} from '#hooks/userCheckLogin.jsx';
+import api from '#utils/api.js'
 
 export default function Home() {
     const [openCreateRoadmap, setOpenCreateRoadmap] = React.useState(false);
@@ -15,7 +16,18 @@ export default function Home() {
     const onCreateClassroom = () =>{
         setOpenCreateClassroom(true);
     }
+    const [listLearningClass,setListLearningClass] = useState([]);
     const { isLoggedIn, user } = useCheckLogin();
+    useEffect(() => {
+        const learningClass = async () => {
+            const response = await api.get('/classrooms/getLearningClass', {
+                withCredentials: true
+            });
+            console.log(response.data);
+            setListLearningClass(response.data);
+        }
+        learningClass();
+    },[isLoggedIn])
     return (
     <>
     {isLoggedIn &&  <div className="home-container">
@@ -72,9 +84,16 @@ export default function Home() {
                     <h3 className="section-title">
                         <i className="bi bi-mortarboard"></i> Your class learning
                     </h3>
-                    <div className="roadmap-grid">
-                        <div className="roadmap-card">cooking class</div>
-                    </div>
+                    {
+                        listLearningClass.length === 0 ? <p>You are not learning any class</p> :
+                        <div className="roadmap-grid">
+                        {
+                            listLearningClass.map((item,index) => (
+                                <a href={`classroom/view-student/${item.name}/${item.classroomId}`}><div key={index} className="roadmap-card">{item.name}</div></a>
+                            ))
+                        }
+                        </div>
+                    }
                 </div>
             </div>
     </div> }
