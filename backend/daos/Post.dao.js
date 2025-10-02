@@ -12,12 +12,14 @@ class PostDAO {
                 'p.id as postId',
                 'p.content as postContent',
                 'p.createDate as postDate',
+                'p.accountId as postAccountId',
                 'ap.fullname as postAuthorName',
                 'ap.avatar as postAuthorAvatar',
 
                 'c.id as commentId',
                 'c.content as commentContent',
                 'c.createDate as commentDate',
+                'c.accountId as commentAccountId',
                 'ac.fullname as commentAuthorName',
                 'ac.avatar as commentAuthorAvatar'
             )
@@ -34,7 +36,8 @@ class PostDAO {
                     content: row.postContent,
                     createDate: row.postDate,
                     name: row.postAuthorName,
-                    avatar: row.postAuthorAvatar
+                    avatar: row.postAuthorAvatar,
+                    accountId: row.postAccountId
                     },
                     comments: []
                 });
@@ -48,7 +51,8 @@ class PostDAO {
                     createDate: row.commentDate,
                     repCommentId: row.repCommentId,
                     name: row.commentAuthorName,
-                    avatar: row.commentAuthorAvatar
+                    avatar: row.commentAuthorAvatar,
+                    accountId: row.commentAccountId
                 });
             }
         });
@@ -62,7 +66,8 @@ class PostDAO {
         await await db('post').insert(post);
         return ({
             success: true,
-            message: "Creating post successfully"
+            message: "Creating post successfully",
+            post: post
         })
 
     }
