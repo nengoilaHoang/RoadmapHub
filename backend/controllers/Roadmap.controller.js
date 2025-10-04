@@ -32,7 +32,7 @@ class RoadmapController {
         await RoadmapService.deleteRoadmap(name);
     }
     async editNodeRoadmap(req, res) {
-        const { name,nodes,edges } = req.body;
+        const { name,nodes,edges,id } = req.body;
         const accountId = req.authenticate.id
         try {
             const findRoadmap = await RoadmapService.checkRoadmapExist(accountId, name);
@@ -41,13 +41,14 @@ class RoadmapController {
                 await RoadmapService.updateRoadmap(accountId,name,nodes,edges);
             }
             else{
-                const roadmap = await RoadmapService.getRoadmapByAccountIdAndName(accountId,name);
+                //const roadmap = await RoadmapService.getRoadmapByAccountIdAndName(accountId,name);
                 //console.log("roadmap in my sql", roadmap);
-                await RoadmapService.editNodeRoadmap(accountId,name,roadmap.id,nodes,edges);
+                await RoadmapService.editNodeRoadmap(accountId,name,nodes,edges,id);
             }
         } catch (error) {
             console.log(error)
         }
+
     }
     async getRoadmapByName(req, res) {
         const { name } = req.params;
@@ -62,10 +63,16 @@ class RoadmapController {
         res.json(roadmap);
     }
     async checkYourRoadmap(req,res){
+        if(req.authenticate?.id == null){
+            res.json({
+                success:false,
+                message:"Roadmap is not your user"
+            });
+        }
         const{name} = req.body;
         const accountId = req.authenticate.id
         const responseCheck = await RoadmapService.checkRoadmap(name, accountId);
-          if (!responseCheck.success) {
+        if (!responseCheck.success) {
                 res.json({
                     success:true,
                     message:"Roadmap is your user"
@@ -76,15 +83,12 @@ class RoadmapController {
                 res.json({
                     success:false,
                     message:"Roadmap is not your user"
-
                 });
             }
     }
     async getRoadmapByUserId(req, res) {
         const userId = req.authenticate.id;
-        //console.log("Account ID:", userId);
         const roadmaps = await RoadmapService.getRoadmapByUserId(userId);
-        //console.log("Roadmaps:", roadmaps);
         res.json({status: "success", data: roadmaps});
     }
     async getRoadmapByTeamId(req, res) {
@@ -127,6 +131,11 @@ class RoadmapController {
             console.log(error);
             return res.json({status: "failed", error});
         }
+    }
+    async getTopicRoadmapByUserId(req,res){
+        const {id} = req.query;
+        const response =  await RoadmapService.getTopicRoadmapByUserId(id);
+        res.json({success:true,roadmap:response})
     }
 }
 export default new RoadmapController(RoadmapService);

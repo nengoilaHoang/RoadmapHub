@@ -1,0 +1,43 @@
+.students-content-wrapper {
+  width: 100%;
+  max-width: 650px;
+  margin: 0 auto;
+  padding: 32px 0;
+  background: #fff;
+  border-radius: 8px;
+  min-height: 400px;
+}
+
+.students-tab-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.students-tab-btn {
+  border: 1.4px solid #bbb;
+  background: #fff;
+  color: #222;
+  font-size: 1rem;
+  padding: 8px 22px;
+  border-radius: 7px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.students-tab-btn.active {
+  background: #ebebeb;
+  border-color: #888;
+}
+
+.students-tab-btn.invite {
+  margin-left: auto;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 18px;
+}

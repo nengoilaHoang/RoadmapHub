@@ -1,0 +1,17 @@
+.postbox {
+  border-radius: 12px;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+  border: 2px solid #ccc;
+  width: 700px;
+}
+
+.icon-btn {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+

@@ -1,0 +1,16 @@
+.item-comment{
+    padding-top: 20px;
+    padding-left: 20px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content:space-between;
+}
+.postcomment {
+  border-radius: 12px;
+  box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+  border: 2px solid #ccc;
+  width: 550px;
+}
+.comment-body{
+    word-break: break-word;
+}

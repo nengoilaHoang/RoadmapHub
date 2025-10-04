@@ -176,6 +176,20 @@
   color: #ffffff !important;
   position: relative;
 }
+.notification-dropdown .dropdown-menu {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.notification-dropdown .dropdown-item {
+    white-space: normal;
+    padding: 10px 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.notification-dropdown .dropdown-item:last-child {
+    border-bottom: none;
+}
 
 .signup-btn::before {
   content: '';

@@ -12,7 +12,8 @@ class RoadmapDAO {
         await db('roadmap').insert(roadmap);
         return {
                 success:true,
-                message:'Create roadmap successfully'
+                message:'Create roadmap successfully',
+                roadmap:roadmap
         }
     }
     async editRoadmap(name, description,accountId,roadmapId) {
@@ -50,6 +51,11 @@ class RoadmapDAO {
                 message:"Roadmap already created successfully"
             }
         }
+    }
+    async editNodeRoadmap(accountId,name,nodes,edges,id) {
+        await connectDB();
+        const roadmap = RoadmapSchemaModel({accountId,name,nodes,edges,id});
+        await roadmap.save();
     }
     async getRoadmapByUserId(accountId) {
         const rows = await db('roadmap')
@@ -116,6 +122,10 @@ class RoadmapDAO {
         if (!roadmap) {
             return { nodes: [], edges: [] };
         }
+    }
+    async getTopicRoadmapByUserId(id){
+        await connectDB();
+        const roadmap = await RoadmapSchemaModel.findOne({id:id});
         return roadmap;
     }
 }

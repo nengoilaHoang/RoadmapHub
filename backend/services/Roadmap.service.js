@@ -30,6 +30,9 @@ class RoadmapService {
     async checkRoadmap(name, accountId) {
         return await RoadmapDAO.checkRoadmap(name, accountId);
     }
+    async editNodeRoadmap(accountId,name,nodes, edges,id) {
+        return await RoadmapDAO.editNodeRoadmap(accountId,name,nodes, edges,id);
+    }
     async getRoadmapByName(accountId,name) {
         return await RoadmapDAO.getRoadmapByName(accountId,name);
     }
@@ -54,6 +57,9 @@ class RoadmapService {
     }
     async updateRoadmap(accountId, name, nodes, edges){
         return await RoadmapDAO.updateRoadmap(accountId, name, nodes, edges)
+    }
+    async getTopicRoadmapByUserId(id){
+        return await RoadmapDAO.getTopicRoadmapByUserId(id);
     }
 }
 export default new RoadmapService(RoadmapDAO)

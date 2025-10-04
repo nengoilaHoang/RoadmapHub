@@ -12,4 +12,5 @@ router.get('/edit/view/:roadmapId', RoadmapController.viewRoadmap);
 router.get('/view/:roadmapId', RoadmapController.viewRoadmapPublic);
 router.get('/getRoadmapByUserId', RoadmapController.getRoadmapByUserId);
 router.get('/getRoadmapByTeamId/:teamName', RoadmapController.getRoadmapByTeamId);
+router.get('/getTopicRoadmapByUserId',RoadmapController.getTopicRoadmapByUserId);
 export default router;

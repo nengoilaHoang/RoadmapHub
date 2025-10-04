@@ -2,18 +2,33 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import CreateRoadmap from '#components/Roadmap/CreateRoadmap/createRoadmap.jsx';
 import './Home.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useCheckLogin } from '#hooks/userCheckLogin.jsx';
 import RoadmapCardInHome from '#components/RoadmapView/RoadmapCardInHome/RoadmapCardInHome.jsx';
+import CreateClassroom from '#components/Classroom/CreateClassroom/CreateClassroom';
+import api from '#utils/api.js'
 
 export default function Home() {
     const [openCreateRoadmap, setOpenCreateRoadmap] = React.useState(false);
-    
+    const [openCreateClassroom, setOpenCreateClassroom] = useState(false);
     const onCreateRoadmap = () => {
         setOpenCreateRoadmap(true);
     };
-    
+    const onCreateClassroom = () =>{
+        setOpenCreateClassroom(true);
+    }
+    const [listLearningClass ,setListLearningClass] = useState([]);
     const { isLoggedIn, user } = useCheckLogin();
+    useEffect(() => {
+        const learningClass = async () => {
+            const response = await api.get('/classrooms/getLearningClass', {
+                withCredentials: true
+            });
+            console.log(response.data);
+            setListLearningClass(response.data);
+        }
+        learningClass();
+    },[isLoggedIn])
 
     const handleBookmarkToggle = (id, isBookmarked) => {
         console.log(`Card ${id} bookmarked: ${isBookmarked}`);
@@ -127,8 +142,6 @@ export default function Home() {
         isUserCard: false
     }
     ];
-
-
     return (
         <>
             {isLoggedIn && (
@@ -219,7 +232,7 @@ export default function Home() {
                                     </div>
                                 ))}
                                 <div className="roadmap-card-wrapper">
-                                    <button className="btn-add-roadmap">
+                                    <button className="btn-add-roadmap" onClick={onCreateClassroom}>
                                         <i className="bi bi-plus-circle"></i>
                                         <span>Create Your Class</span>
                                     </button>
@@ -233,20 +246,22 @@ export default function Home() {
                                 <i className="bi bi-mortarboard"></i> Your Class Learning
                             </h3>
                             <div className="roadmap-grid">
-                                {learningClasses.map(roadmap => (
-                                    <div key={roadmap.id} className="roadmap-card-wrapper">
-                                        <RoadmapCardInHome
-                                            id={roadmap.id}
-                                            name={roadmap.name}
-                                            description={roadmap.description}
-                                            author={roadmap.author}
-                                            learning={roadmap.learning}
-                                            teaching={roadmap.teaching}
-                                            isUserCard={true}
-                                            isMarked={roadmap.isMarked}
-                                            onBookmarkToggle={handleBookmarkToggle}
-                                        />
-                                    </div>
+                                {listLearningClass.map(roadmap => (
+                                    <a href={`classroom/view-student/${roadmap.name}/${roadmap.classroomId}`}>
+                                        <div key={roadmap.id} className="roadmap-card-wrapper">
+                                            <RoadmapCardInHome
+                                                id={roadmap.id}
+                                                name={roadmap.name}
+                                                description={roadmap.description}
+                                                author={roadmap.author}
+                                                learning={roadmap.learning}
+                                                teaching={roadmap.teaching}
+                                                isUserCard={true}
+                                                isMarked={roadmap.isMarked}
+                                                onBookmarkToggle={handleBookmarkToggle}
+                                            />
+                                        </div>
+                                    </a>
                                 ))}
                             </div>
                         </div>
@@ -284,6 +299,7 @@ export default function Home() {
                     user={user}
                 />
             )}
+            {openCreateClassroom && <CreateClassroom onClose={()=>setOpenCreateClassroom(false) } user={user}/>}
         </>
     );
 }

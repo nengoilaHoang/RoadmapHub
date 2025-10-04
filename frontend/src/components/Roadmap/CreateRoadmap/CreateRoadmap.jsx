@@ -16,7 +16,7 @@ export default function CreateRoadmap(props) {
         console.log(response)
         
         if(response.data.success){
-            navigate(`/roadmap/edit/${title}`)
+            navigate(`/roadmap/edit/${title}/${response.data.roadmap.id}`)
             onClose();
         }
         else {

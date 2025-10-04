@@ -157,7 +157,7 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
 export default function RoadmapEditPage() {
     //const { isLoggedIn, user } = useCheckLogin();
     const navigate = useNavigate();
-    const { name } = useParams();
+    const { name,id } = useParams();
     useEffect( ()=>{
       async function checkLogin(){
         const response = await api.post('/roadmaps/check-your-roadmap',{name:name},{
@@ -204,7 +204,7 @@ export default function RoadmapEditPage() {
         e.preventDefault();
         console.log('Nodes:', nodes);
         console.log('Edges:', edges);
-        const response = await api.post('/roadmaps/edit-nodes',{name:name,nodes:nodes,edges:edges},{
+        const response = await api.post('/roadmaps/edit-nodes',{name:name,nodes:nodes,edges:edges,id:id},{
            withCredentials: true
         });
         console.log(response);
