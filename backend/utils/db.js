@@ -1,6 +1,7 @@
 import knex from 'knex'
 import dotenv from "dotenv";
 dotenv.config();
+
 export default knex({
     client:process.env.DB_CLIENT,
     connection:{
