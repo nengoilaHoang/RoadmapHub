@@ -61,11 +61,12 @@ const io = new Server(httpServer, {
   }
 });
 
-app.listen(process.env.PORT, async () => {
-    await connectDB();
-    console.log(`Server is running at http://localhost:${process.env.PORT}`)
-});
-httpServer.listen(process.env.PORT, () => {
+// app.listen(process.env.PORT, async () => {
+//     await connectDB();
+//     console.log(`Server is running at http://localhost:${process.env.PORT}`)
+// });
+httpServer.listen(process.env.PORT, async () => {
+  await connectDB();
   console.log(`Server is running at http://localhost:${process.env.PORT}`)
 });
 app.set("io", io);
