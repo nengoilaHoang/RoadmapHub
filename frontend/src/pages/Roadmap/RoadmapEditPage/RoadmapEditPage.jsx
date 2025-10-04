@@ -30,6 +30,7 @@ import api from '#utils/api.js'
 import { useParams,useNavigate } from "react-router-dom";
 import RightBarEdge from '#components/Roadmap/Nodes/RightBar/RightBarEdge/RightBarEdge';
 
+import ChatBox from '#components/Roadmap/AIChatBox/AIChatBox.jsx';
 const getRandomId = () => {
   return Math.floor(1000000000 + Math.random() * 9000000000).toString();
 }
@@ -147,7 +148,7 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
       <Background color="#ccc" variant={BackgroundVariant.Cross} />
       <Controls showFitView={false} style={{ left: 260, bottom:100 }} />
       <MiniMap pannable 
-      style={{ height: 150,  width: 250,    bottom: 100, right: rightBarOpen,     
+      style={{ height: 150,  width: 250,    bottom: 150, right: rightBarOpen,     
   }} />
     </ReactFlow>
   );
@@ -237,7 +238,8 @@ export default function RoadmapEditPage() {
             
             </DnDProvider>
         </ReactFlowProvider>
-        </div>
+        <ChatBox nodes={nodes} edges={edges} />
+      </div>
 
     );
 }

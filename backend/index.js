@@ -14,6 +14,7 @@ import learnTopicRoutes from './routes/learnTopic.route.js'
 import cookieParser from "cookie-parser";
 import connectDB from './utils/dbmongo.js';
 import mongoose from 'mongoose';
+import geminiRoutes from './routes/Gemini.route.js'
 const app = express()
 app.use(cookieParser());
 app.get('/', (req, res) => {
@@ -33,6 +34,7 @@ app.use('/api/teams', teamRoutes);
 app.use('/api/friends', friendRoutes);
 app.use('/api/learnTopic',learnTopicRoutes);
 app.use('/api/checkListAccount',checkListAccountRoutes);
+app.use('/api/gemini', geminiRoutes);
 app.listen(process.env.PORT, async () => {
     await connectDB();
     console.log(`Server is running at http://localhost:${process.env.PORT}`)
