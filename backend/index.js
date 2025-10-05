@@ -51,7 +51,7 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/quizzes',quizRoutes);
 app.use('/api/notifications', notificationRoutes);
 // app.listen(process.env.PORT, () => {
-//     console.log(`Server is running at http://localhost:${process.env.PORT}`)
+//     //console.log(`Server is running at http://localhost:${process.env.PORT}`)
 // });
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -63,18 +63,18 @@ const io = new Server(httpServer, {
 
 // app.listen(process.env.PORT, async () => {
 //     await connectDB();
-//     console.log(`Server is running at http://localhost:${process.env.PORT}`)
+//     //console.log(`Server is running at http://localhost:${process.env.PORT}`)
 // });
 httpServer.listen(process.env.PORT, async () => {
   await connectDB();
-  console.log(`Server is running at http://localhost:${process.env.PORT}`)
+  //console.log(`Server is running at http://localhost:${process.env.PORT}`)
 });
 app.set("io", io);
 io.on("connection", (socket) => {
-  console.log("a user connected:", socket.id);
+  //console.log("a user connected:", socket.id);
 
   socket.on("disconnect", () => {
-    console.log("user disconnected:", socket.id);
+    //console.log("user disconnected:", socket.id);
   });
 });
 

@@ -16,7 +16,7 @@ export default function RightBarCheckList({ selectedNode, onDeleteNode, onNodeCh
         onNodeChange(updateNode);
     };
     const changeSize = (dimension, value) => {
-      console.log(value,selectedNode)
+      //console.log(value,selectedNode)
       const updateNode = {
             ...selectedNode,
             data:{

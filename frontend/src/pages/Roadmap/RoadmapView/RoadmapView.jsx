@@ -45,30 +45,30 @@ export default function RoadmapView(){
             },
             withCredentials: true
         })
-        //console.log(res.data)
+        ////console.log(res.data)
         //const nodeFromRes = res.data.roadmap?.nodes;
-        console.log("nodeFromRes:", res);
+        //console.log("nodeFromRes:", res);
         setNodes(res.data.roadmap?.nodes);
         setEdges(res.data.roadmap?.edges);
         //const secondRes = await api.post(`learnTopic/solve-nodes-progress`,{nodes: nodeFromRes},{withCredentials: true});
-        //console.log(secondRes.data.nodes);
+        ////console.log(secondRes.data.nodes);
         //setNodes(secondRes.data.nodes);
         //setEdges(res.data.roadmap?.edges);
     };
     const changeCheckListSelected = async(node) => {
         const res = await api.post(`checkListAccount/change-item-checklist`,{checkListSelected: node, roadmapId},{withCredentials: true});
-        console.log(res.data);
+        //console.log(res.data);
     }
     useEffect(()=>{
         fetchAPI();
     },[isReload])
     useEffect(()=>{
         if(checkListSelected !== null){
-            //console.log("checkListSelected:", checkListSelected?.data?.itemsCheckList);
+            ////console.log("checkListSelected:", checkListSelected?.data?.itemsCheckList);
             changeCheckListSelected(checkListSelected);
         }
         // if(checkListSelected?.data !== oldCheckListSelected?.data){
-        //     console.log("checkListSelected:", checkListSelected?.data?.itemsCheckList);
+        //     //console.log("checkListSelected:", checkListSelected?.data?.itemsCheckList);
         //     changeCheckListSelected(checkListSelected);
         //     setOldCheckListSelected(checkListSelected);
         // }
@@ -76,12 +76,12 @@ export default function RoadmapView(){
     const onNodeClick = useCallback(async (_, node) => {
         if(node.type==="topic"){
             setSelectedNode(node);
-            console.log(node);
+            //console.log(node);
         }
         else if(node.type==="checklist"){
             setCheckListSelected(node);
             //await changeCheckListSelected(node);
-            //console.log(node?.data?.itemsCheckList);
+            ////console.log(node?.data?.itemsCheckList);
         }
     }, [setSelectedNode]);
     const onPaneClick = useCallback(() => {

@@ -65,7 +65,7 @@ class ClassroomController{
         }
         const {classroomId} = req.body;
         const accountId = req.authenticate.id
-        console.log("sss",accountId,classroomId)
+        //console.log("sss",accountId,classroomId)
         const responseCheck = await ClassroomService.checkLearningClass(accountId,classroomId);
         res.json(responseCheck);
     }

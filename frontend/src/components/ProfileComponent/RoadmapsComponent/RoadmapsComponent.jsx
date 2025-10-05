@@ -21,14 +21,14 @@ import axios from "axios";
 const RoadmapList = () => {
   const [roadmaps, setRoadmaps] = useState([]);
   //const {user ,isLoggedIn} = useCheckLogin();
-  //console.log("user", user);
+  ////console.log("user", user);
   useEffect(() => {
     // Simulate fetching data from an API
     const GetRoadmap = async () => {
       const response = await axios.get('http://localhost:5000/api/roadmaps/getRoadmapByUserId', {
           withCredentials: true
       });
-      console.log(response.data.data);
+      //console.log(response.data.data);
       setRoadmaps(response.data.data);
     };
     GetRoadmap();

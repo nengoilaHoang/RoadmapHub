@@ -38,9 +38,9 @@ export default function DoQuizDetail(props) {
         Array(questions.length).fill(null)
     );    
      const handleAnswerSelect = (index,currentIndex) => {
-        console.log("index",currentIndex);
+        //console.log("index",currentIndex);
         const newSelectedAnswers = [...selectedAnswers];
-        console.log("sdasdasdatt",newSelectedAnswers);
+        //console.log("sdasdasdatt",newSelectedAnswers);
         newSelectedAnswers[currentIndex] = index;
         setSelectedAnswers(newSelectedAnswers);
         const updatedQuestions = [ ...questions ];

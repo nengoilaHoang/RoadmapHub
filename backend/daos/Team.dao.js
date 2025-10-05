@@ -10,8 +10,8 @@ class teamDAO{
         .where('account.id', userId)
         .distinct('team.id')
         .select('team.*');
-        console.log("Account ID:", userId);
-        console.log("Rows:", rows);
+        //console.log("Account ID:", userId);
+        //console.log("Rows:", rows);
         const teams = rows.map(row => Team.teamList(row));
         if(teams.length > 0){
             return teams;

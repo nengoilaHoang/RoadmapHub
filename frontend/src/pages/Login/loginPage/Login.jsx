@@ -39,7 +39,7 @@ const Login = () => {
                 });
             }
             else{
-                console.log("Login failed:", res.data?.message);
+                //console.log("Login failed:", res.data?.message);
                 setError(res.data?.message || "Login failed");
             }
             // xử lý lưu token hoặc chuyển trang ở đây
@@ -50,7 +50,7 @@ const Login = () => {
     };
 
     const handleGoogleSuccess = async (credentialResponse) => {
-            console.log(credentialResponse);
+            //console.log(credentialResponse);
             const response = await axios.post("http://localhost:5000/api/auth/login",{credentialResponse: credentialResponse, type: "google"},
                 {
                     headers: {
@@ -59,10 +59,10 @@ const Login = () => {
                     withCredentials: true
                 }
             )
-            console.log(response)
-            console.log("Google login response:", response.data);
+            //console.log(response)
+            //console.log("Google login response:", response.data);
             if(!response.data.status){
-                console.log("Google login failed:", response.data?.message);
+                //console.log("Google login failed:", response.data?.message);
                 setError(response.data?.message || "Login failed");
             }
             else{
@@ -73,7 +73,7 @@ const Login = () => {
         };
     
         const handleGoogleError = () => {
-            console.log('Login Failed');
+            //console.log('Login Failed');
             // Xử lý đăng nhập thất bại
         };
 

@@ -35,7 +35,7 @@ export default function ClassroomView(){
             const response = await api.post('/classrooms/check-your-classroom',{name:name},{
               withCredentials: true
             }) ;
-            // console.log(response)
+            // //console.log(response)
             if(!response.data.success){
             navigate("/");
             }
@@ -48,7 +48,7 @@ export default function ClassroomView(){
                 const response = await api.get('/classrooms/getNameAll', {
                     withCredentials: true
                 });
-                console.log(response)
+                //console.log(response)
                 setClassess([...response.data.map(classItem => ({name:classItem.name,id:classItem.id}))]);
                 } 
         getClasses();

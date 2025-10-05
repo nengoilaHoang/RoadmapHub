@@ -28,7 +28,7 @@ export default function LoginVerify() {
             },
             withCredentials: true
         });
-        console.log(res.data);
+        //console.log(res.data);
         if (res.data?.status === true) {
           navigate("/");
         } else {

@@ -27,14 +27,14 @@ export default function NavBar() {
             const response = await api.get('/notifications/receiver', {
                         withCredentials: true
             });
-            console.log("Notifications:", response.data);
+            //console.log("Notifications:", response.data);
             setNotifications(response.data);
             setUnreadCount(response.data.filter(notif => !notif.isRead).length);
         }
     useEffect(() => {
         getNotifications();
         socket.on('newNotification', (data) => {
-            console.log("New notification received via socket:", data);
+            //console.log("New notification received via socket:", data);
             getNotifications();
         });
         return () => {
@@ -49,7 +49,7 @@ export default function NavBar() {
                 withCredentials: true
             });
             getNotifications();
-            console.log("Mark as read response:", response.data);
+            //console.log("Mark as read response:", response.data);
         }
         catch (error) {
             console.error("Error marking notification as read:", error);

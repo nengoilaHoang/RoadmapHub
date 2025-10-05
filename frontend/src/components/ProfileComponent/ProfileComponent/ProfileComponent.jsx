@@ -21,7 +21,7 @@ const ProfileComponent = ({ changeIntoSetting }) => {
             },
             withCredentials: true
         });
-        console.log("User data:", userData.data);
+        //console.log("User data:", userData.data);
         setEmail(userData.data.email);
         setFullname(userData.data.profile.fullname);
         setGithub(userData.data.profile.github);
@@ -35,7 +35,7 @@ const ProfileComponent = ({ changeIntoSetting }) => {
     //Hàm thay đổi input
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        //console.log(name, value);
+        ////console.log(name, value);
         switch (name) {
             case "fullname":
                 setFullname(value);
@@ -55,7 +55,7 @@ const ProfileComponent = ({ changeIntoSetting }) => {
         setUploading(true);
         const formData = new FormData();
         formData.append("avatar", file);   
-        console.log(formData.get("avatar"));
+        //console.log(formData.get("avatar"));
         const res = await axios.post("http://localhost:5000/api/profiles/update-avatar", formData, {
                 headers: { "Content-Type": "multipart/form-data" },
                 withCredentials: true,
@@ -78,7 +78,7 @@ const ProfileComponent = ({ changeIntoSetting }) => {
                 },
                 withCredentials: true
             });
-            console.log("Response data:", res.data);
+            //console.log("Response data:", res.data);
             if(!res.data?.status){
                 setError("Cập nhật thông tin không thành công");
                 setSuccess("");

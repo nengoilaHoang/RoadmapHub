@@ -3,7 +3,7 @@ import { Handle, Position } from "@xyflow/react";
 import { NodeResizer ,NodeResizeControl} from "@xyflow/react";
 export function Line(props) {
     const {data,id,selected,type } = props;
-    console.log(data)
+    //console.log(data)
     let style = {
       background: '#2196F3',
     }

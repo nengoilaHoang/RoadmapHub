@@ -5,7 +5,7 @@ import geneUUID from '../Helps/genUUID.js';
 class learnTopicDAO{
     //get
     async getLearnTopic(accountId, topicId){
-        //console.log("in DAO: ",accountId, topicId);
+        ////console.log("in DAO: ",accountId, topicId);
         const learnTopic = await db('learntopic')
             .where({accountId: accountId, topicId: topicId})
             .first();

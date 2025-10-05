@@ -9,8 +9,8 @@ export default function FriendList() {
             const response = await axios.get("http://localhost:5000/api/friends/friend-list",{
                 withCredentials: true
             });
-            console.log(response.data.data);
-            console.log("Friend List:", response.data.data);
+            //console.log(response.data.data);
+            //console.log("Friend List:", response.data.data);
             setFriends(response.data.data);
         } catch (error) {
             console.error("Error fetching friend requests:", error);

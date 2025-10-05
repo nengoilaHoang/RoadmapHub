@@ -163,7 +163,7 @@ export default function RoadmapEditPage() {
         const response = await api.post('/roadmaps/check-your-roadmap',{name:name},{
           withCredentials: true
         }) ;
-        console.log(response)
+        //console.log(response)
         if(!response.data.success){
         navigate("/");
         }
@@ -182,7 +182,7 @@ export default function RoadmapEditPage() {
         const res = await axios.get(`http://localhost:5000/api/roadmaps/edit/view/${roadmap.data?.id}`,{
             withCredentials: true
         })
-        console.log(res.data)
+        //console.log(res.data)
         if(res.data.status==="success"){
           setNodes(res.data.roadmap?.nodes);
           setEdges(res.data.roadmap?.edges);
@@ -202,12 +202,12 @@ export default function RoadmapEditPage() {
     };
     const onSaveNodes = async (e) => {
         e.preventDefault();
-        console.log('Nodes:', nodes);
-        console.log('Edges:', edges);
+        //console.log('Nodes:', nodes);
+        //console.log('Edges:', edges);
         const response = await api.post('/roadmaps/edit-nodes',{name:name,nodes:nodes,edges:edges,id:id},{
            withCredentials: true
         });
-        console.log(response);
+        //console.log(response);
     }
     
    const handleNodeChange = (updatedNode)=>{

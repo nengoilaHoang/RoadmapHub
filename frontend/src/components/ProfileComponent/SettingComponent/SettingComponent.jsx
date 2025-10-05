@@ -20,7 +20,7 @@ const SettingComponent = () => {
     const handleUpdateEmail = async () => {
         try {
             if(emailCurrent && emailNew) {
-                console.log(emailCurrent, emailNew);
+                //console.log(emailCurrent, emailNew);
                 const res = await axios.post(`http://localhost:5000/api/accounts/change-email`, {oldEmail: emailCurrent, newEmail: emailNew },
                 {
                     headers: {
@@ -49,10 +49,10 @@ const SettingComponent = () => {
 
     const handleUpdatePassword = async () => {
         try {
-            console.log(passCurrent, passNew, passConfirm);
+            //console.log(passCurrent, passNew, passConfirm);
             if(passCurrent && passNew && passConfirm) {
                 if((passCurrent !== passConfirm) && (passConfirm == passNew)) {
-                    console.log("run to here");
+                    //console.log("run to here");
                     const res = await axios.post('http://localhost:5000/api/accounts/change-password', { oldPassword: passCurrent, newPassword: passNew },
                     {
                         headers: {

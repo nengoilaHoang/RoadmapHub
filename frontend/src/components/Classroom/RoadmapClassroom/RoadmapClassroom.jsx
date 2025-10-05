@@ -66,7 +66,7 @@ export default function RoadmapClassroom(props) {
     if (selectedRoadmap) {
         const fetchAll = async()=>{
         const response = await api.get('/quizzes/getQuiz',{params:{userCreateQuiz:selectedRoadmap?.data.roadmap.accountId,roadmapId:selectedRoadmap?.data.roadmap.id, classroomId:classroomId}});
-        console.log(response)
+        //console.log(response)
         if(selectedRoadmap.data.roadmap.accountId === user.accountId) setEdit(true);  
         if(response.data.length === 0)
         {
@@ -121,7 +121,7 @@ export default function RoadmapClassroom(props) {
     const response = await api.post('/quizzes/updateQuiz',{quiz:copy},{
       withCredentials: true
     })
-    console.log(response);
+    //console.log(response);
   };
   const updateQuiz = async (selectedTopic, quizIndex, updatedQuiz) => {
       const copy = { ...quizzes };
@@ -134,7 +134,7 @@ export default function RoadmapClassroom(props) {
     const response = await api.post('/quizzes/updateQuiz',{quiz:copy},{
       withCredentials: true
     })
-    console.log(response);
+    //console.log(response);
     
   };
   const removeQuiz = async (selectedTopic, quizIndex) => {
@@ -147,7 +147,7 @@ export default function RoadmapClassroom(props) {
     const response = await api.post('/quizzes/updateQuiz',{quiz:copy},{
       withCredentials: true
       })
-      console.log(response);
+      //console.log(response);
   };
 
   return (

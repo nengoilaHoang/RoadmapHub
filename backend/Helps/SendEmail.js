@@ -34,8 +34,8 @@ export function SendEmail(mailData){
                 console.error(error);
                 return resolve(false); // hoặc reject(error) nếu muốn bắt lỗi riêng
             }
-            console.log('Email Sent Successfully');
-            console.log(info);
+            //console.log('Email Sent Successfully');
+            //console.log(info);
             return resolve(true);
         });
     });

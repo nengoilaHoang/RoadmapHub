@@ -28,7 +28,7 @@ export default function StudentClassroomView(){
             const response = await api.post('/classrooms/checkLearningClass',{classroomId:classroomId},{
               withCredentials: true
             }) ;
-            // console.log(response)
+            // //console.log(response)
             if(!response.data.success){
             navigate("/");
             }
@@ -40,7 +40,7 @@ export default function StudentClassroomView(){
                 const response = await api.get('/classrooms/getLearningClass', {
                     withCredentials: true
                 });
-                console.log(response)
+                //console.log(response)
                 setClassess([...response.data.map(classItem => ({name:classItem.name,id:classItem.classroomId}))]);
                 } 
         getClasses();

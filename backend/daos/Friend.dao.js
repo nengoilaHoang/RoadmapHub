@@ -10,7 +10,7 @@ class FriendDAO{
             .select('friend.*', 'b.email as senderEmail', 'a.email as receiverEmail')
             .where({senderId: accountId, requestState: 'pending'});
         const friends = rows.map(row => Friend.fromRow(row));
-        //console.log(friends);
+        ////console.log(friends);
         return friends;
     }
     async getFriendRequestsTo(accountId){
@@ -20,7 +20,7 @@ class FriendDAO{
             .select('friend.*', 'b.email as senderEmail', 'a.email as receiverEmail')
             .where({receiverId: accountId, requestState: 'pending'});
         const friends = rows.map(row => Friend.fromRow(row));
-        //console.log(friends);
+        ////console.log(friends);
         return friends;
     }
     async sendFriendRequest(senderId, receiverId){
@@ -35,7 +35,7 @@ class FriendDAO{
         return row;
     }
     async acceptFriendRequest(requestId){
-        console.log("accept rq ID: ",requestId);
+        //console.log("accept rq ID: ",requestId);
         const row = await db('friend')
             .where({id: requestId})
             .update({requestState: 'accepted'});
@@ -54,7 +54,7 @@ class FriendDAO{
         return row;
     }
     async getFriendsList(accountId){
-        //console.log("Get friends list for account ID in DB:", accountId);
+        ////console.log("Get friends list for account ID in DB:", accountId);
         const rows = await db('friend')
             .join('account as a', 'friend.receiverId', 'a.id')
             .join('account as b', 'friend.senderId', 'b.id')
@@ -64,7 +64,7 @@ class FriendDAO{
                 this.where({senderId: accountId}).orWhere({receiverId: accountId});
             });
         const friends = rows.map(row => Friend.fromRow(row));
-        //console.log(friends);
+        ////console.log(friends);
         return friends;
     }
     async removeFriend(requestId){

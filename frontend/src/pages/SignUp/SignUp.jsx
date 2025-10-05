@@ -17,8 +17,8 @@ export default function SignUp() {
     const navigate = useNavigate();
 
     const handleGoogleSuccess = async (credentialResponse) => {
-        console.log(credentialResponse);
-        console.log(jwtDecode(credentialResponse.credential));
+        //console.log(credentialResponse);
+        //console.log(jwtDecode(credentialResponse.credential));
         
         const response = await api.post("/accounts/signup-google", 
             { credential: credentialResponse.credential },
@@ -30,7 +30,7 @@ export default function SignUp() {
             }
         );
         
-        console.log(response);
+        //console.log(response);
         if (!response.data.success) {
             navigate('/login');
         } else {
@@ -39,7 +39,7 @@ export default function SignUp() {
     };
 
     const handleGoogleError = () => {
-        console.log('Login Failed');
+        //console.log('Login Failed');
     };
 
     const handleSubmit = async (e) => {
@@ -79,7 +79,7 @@ export default function SignUp() {
                 }
             }
         } catch (err) {
-            console.log(err);
+            //console.log(err);
         }
     };
 

@@ -31,7 +31,7 @@ const ChatBox = ({ nodes = [], edges = [] }) => {
         { text: lowerMessage }, 
         { withCredentials: true }
       );
-      console.log('AI Response:', AIResponse);
+      //console.log('AI Response:', AIResponse);
       return AIResponse?.data?.response || "Xin lỗi, tôi không thể xử lý yêu cầu này.";
     } catch (error) {
       console.error('API Error:', error);

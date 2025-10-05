@@ -21,7 +21,7 @@ function VerifyDeletePage() {
                         },
                         withCredentials: true
                     });
-                console.log("Response:", res.data);
+                //console.log("Response:", res.data);
                 if(res.data?.status){
                     setSuccess("Xóa tài khoản thành công");
                     setError("");

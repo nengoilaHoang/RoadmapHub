@@ -3,7 +3,7 @@ import Post from '../models/Post.model.js'
 import db from '../utils/db.js'
 class PostDAO {
     async getPosts(classroomId) {
-        console.log(classroomId);
+        //console.log(classroomId);
         const rows = await db('post as p')
             .leftJoin('comment as c', 'c.postId', 'p.id')
             .leftJoin('profile as ap', 'ap.accountId', 'p.accountId')

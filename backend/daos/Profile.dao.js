@@ -20,7 +20,7 @@ class ProfileDAO {
   }
 
   async getProfileByAccountId(accountId) {
-    console.log(accountId);
+    //console.log(accountId);
     const row = await db('profile')
       .where({ accountId })
       .first();
@@ -41,7 +41,7 @@ class ProfileDAO {
 
   async updateProfile(id, fullname, github, linkedin) {
     // updateFields: { fullname, github, linkedin, avatar }
-    //console.log("Updating profile in DAO with id:", id, fullname, github, linkedin);
+    ////console.log("Updating profile in DAO with id:", id, fullname, github, linkedin);
     const rows = await db('profile')
       .where({ accountId: id })
       .update({ fullname, github, linkedin });

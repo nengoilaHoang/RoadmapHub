@@ -11,15 +11,15 @@ export default function TopicRightBar({ selectedNode, setIsReload, isReload }) {
   const [topicStatus, setTopicStatus] = useState();
   const [items, setItems] = useState(selectedNode?.data?.itemsTopic ?? [])
   useEffect(()=>{
-    console.log(selectedNode);
+    //console.log(selectedNode);
     setTopicStatus(selectedNode.data?.topicStatus??"none");
-    console.log(selectedNode.data?.topicStatus??"none");
-    //console.log(topicStatus);
+    //console.log(selectedNode.data?.topicStatus??"none");
+    ////console.log(topicStatus);
   },[])
   const getLearnTopic = async() =>{
     try {
       const res = await api.get(`/learnTopic/get-learnTopic/${selectedNode?.id}`,{withCredentials: true})
-      console.log("run here: ",res.data);
+      //console.log("run here: ",res.data);
       return res.data.success;
     } catch (error) {
       console.error("error status:", error.response?.status);
@@ -36,24 +36,24 @@ export default function TopicRightBar({ selectedNode, setIsReload, isReload }) {
     await api.post(`learnTopic/delete-learnTopic`,{topicId: selectedNode?.id, process: topicStatus},{withCredentials: true});
   }
   const changeTopicStatus = async(newValue) =>{
-    console.log(newValue);
+    //console.log(newValue);
     const learnTopic = await getLearnTopic();
     setIsReload(!isReload);
-    console.log(learnTopic);
+    //console.log(learnTopic);
     if(newValue === "none"){
       if(learnTopic){
-        console.log("delete");
+        //console.log("delete");
         await deleteLearnTopic();
       }
     }
     else if(newValue !== null && newValue !== undefined){
-      console.log(learnTopic);
+      //console.log(learnTopic);
       if(!learnTopic){
-        console.log("create new");
+        //console.log("create new");
         await createLearnTopic();
       }
       else{
-        console.log("update old");
+        //console.log("update old");
         await updateLearnTopic();
       }
     }

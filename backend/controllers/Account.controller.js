@@ -58,7 +58,7 @@ class AccountController {
                     SendEmail({ to: account.email, text: text });
                     return res.status(200).json({status: true, message: "Login successful", account, hashedPin, encodeToken, encodeRefreshToken});
                 }
-                //console.log("this is token aaa:", token);
+                ////console.log("this is token aaa:", token);
                 res.cookie("token", token, { httpOnly: true,secure: false,sameSite: "lax" });
                 return res.status(200).json({status: true, message: "Login successful", account, token});
 
@@ -70,12 +70,12 @@ class AccountController {
         // Verify the hashedPin
         let validPin = await bcrypt.compare(pin, hashedPin);
         // If valid, log the user in
-        console.log("Valid pin:", validPin);
+        //console.log("Valid pin:", validPin);
         if (validPin) {
             // Create a new session or token for the user
             const decodedToken = CryptoJS.AES.decrypt(encodeToken, process.env.CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
             //const decodeRefreshToken = CryptoJS.AES.decrypt(encodeRefreshToken, process.env.CRYPTO_SECRET).toString(CryptoJS.enc.Utf8);
-            //console.log("Login successful", { decodedToken });
+            ////console.log("Login successful", { decodedToken });
             res.cookie("token", decodedToken, {
                 httpOnly: true,
                 secure: false,
@@ -106,7 +106,7 @@ class AccountController {
     };
     checkLogin = async (req, res, next) => {
         if (req.authenticate) {
-            //console.log("User is logged in", req.authenticate);
+            ////console.log("User is logged in", req.authenticate);
             const profile = await ProfileService.getProfileByAccountId(req.authenticate.id);
             return res.status(200).json({ status: true, message: "User is logged in", user: req.authenticate, profile });
         }
@@ -168,7 +168,7 @@ class AccountController {
                 // Ký token (expiresIn = thời hạn, ví dụ 1h)
                 const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
                 res.cookie("token", accessToken, { httpOnly: true, sameSite: "lax" });
-                //console.log("this is password:", req.body.password);
+                ////console.log("this is password:", req.body.password);
                 await AccountService.changePassword(email, req.body.password);
             return res.status(200).json({ status: true, message: "Token is valid" });
         }
@@ -200,7 +200,7 @@ class AccountController {
                     <p>This link will expire in 10 minutes.</p>
                 `
             const success = SendEmail({to:email,html:html});
-            //console.log("Send email success:", success);
+            ////console.log("Send email success:", success);
             if(success) return res.json({success:true,message:'Email Sent Successfully'});
             else return res.json({success:false,message:'Failed to send email'});
         }
@@ -220,7 +220,7 @@ class AccountController {
         // Verifying the JWT token 
         jwt.verify(token, process.env.JWT_SECRET||'ourSecretKey', async function(err, decoded) {
         if (err) {
-            //console.log(err);
+            ////console.log(err);
             res.send("Email verification failed, possibly the link is invalid or expired");
             // return {
             //     success:false,
@@ -243,33 +243,33 @@ class AccountController {
             res.cookie("token", newToken, { httpOnly: true,sameSite: "lax" }); 
             res.redirect('http://localhost:3000/')
             // res.send("Email verifified successfully");
-            // console.log(response)
+            // //console.log(response)
             
         }
     });
     }
     signUpGoogle = async (req,res)=>{
         const {credential} = req.body; 
-        //console.log(credential);
+        ////console.log(credential);
         const decode = jwtDecode(credential);
         const email = decode.email;
         const username = decode.name;
         const password = decode.sub;
-        //console.log(decode, email, username, password);
+        ////console.log(decode, email, username, password);
         const resultCheckAccountEmail = await AccountService.checkExitAccountEmail(email);
         if(resultCheckAccountEmail.success ){
-            //console.log('Google password:',password);
+            ////console.log('Google password:',password);
             await AccountService.createAccount(email,username,password);
             //tạo profile cho account với fullname là username
-            //console.log("run to here: ",email,username,password);
+            ////console.log("run to here: ",email,username,password);
             const newaccount = await AccountService.getAccountByEmail(email);
-            //console.log("New account created via Google:", newaccount);
+            ////console.log("New account created via Google:", newaccount);
             await ProfileService.createProfile(newaccount.id,username);
             //
             const passWordInDB = await AccountService.getPassWord(email);
             const isMatch = await bcrypt.compare(password, passWordInDB);
             const account = await AccountService.login(email, isMatch ? passWordInDB : null);
-            //console.log("Account created via Google:", account);
+            ////console.log("Account created via Google:", account);
             const payload = {
                     id: account.id,
                     userName: account.username,
@@ -277,7 +277,7 @@ class AccountController {
                 };
                 // Ký token (expiresIn = thời hạn, ví dụ 1h)
             const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
-            //console.log("this is token in signupGG: ",token);
+            ////console.log("this is token in signupGG: ",token);
             res.cookie("token", token, { httpOnly: true,sameSite: "lax" }); 
             res.json ({
                 success:true,
@@ -298,20 +298,20 @@ class AccountController {
     }
     changePassword = async (req, res, next) => {
         if(!req.authenticate) {
-            //console.log("User is not logged in");
+            ////console.log("User is not logged in");
             return res.status(401).json({status: false, message: "User is not logged in"});
         }
         else{
             const { oldPassword, newPassword } = req.body;
-            //console.log("Change password request received", req.authenticate, oldPassword, newPassword, typeof newPassword);
+            ////console.log("Change password request received", req.authenticate, oldPassword, newPassword, typeof newPassword);
             if (!oldPassword || !newPassword) {
                 return res.status(400).json({ status: false, message: "Old password and new password are required" });
             }
             // Check if the old password is correct
             const account = await AccountService.getAccountByEmail(req.authenticate.email);
-            //console.log("Account retrieved:", account);
+            ////console.log("Account retrieved:", account);
             const isMatch = await bcrypt.compare(oldPassword, account.passWord);
-            //console.log("Old password match:", isMatch);
+            ////console.log("Old password match:", isMatch);
             if (!isMatch) {
                 return res.status(401).json({ status: false, message: "Old password is incorrect"});
             }
@@ -326,7 +326,7 @@ class AccountController {
         }
         else{
             const { oldEmail, newEmail } = req.body;
-            //console.log("oldEmail:", oldEmail, "newEmail: ", newEmail);
+            ////console.log("oldEmail:", oldEmail, "newEmail: ", newEmail);
             if (!newEmail && !oldEmail) {
                 return res.status(400).json({ status: false, message: "New email is required" });
             }
@@ -351,7 +351,7 @@ class AccountController {
     changeEmailVerify = async (req, res, next) => {
         const { hashedPin, oldEmail, newEmail } = req.params;
         const { pin } = req.body;
-        //console.log("hashedPin:", hashedPin, "pin: ", pin);
+        ////console.log("hashedPin:", hashedPin, "pin: ", pin);
         try {
             const decoded = jwt.verify(hashedPin, process.env.JWT_SECRET);
             if (!decoded) {
@@ -378,7 +378,7 @@ class AccountController {
                 id: req.authenticate.id,
                 email: req.authenticate.email
             }
-            console.log("Payload:", payload);
+            //console.log("Payload:", payload);
             const verifyToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
             const toEmail = req.authenticate.email;
             const html = `<p>here is your link to delete account <a href="http://localhost:3000/delete-account/verify/${verifyToken}/${toEmail}">click here</a></p>`
@@ -388,10 +388,10 @@ class AccountController {
     }
     deleteAccountVerify = async (req, res, next) => {
         const { verifyToken, email } = req.body;
-        console.log("verifyToken:", verifyToken, "email: ", email);
+        //console.log("verifyToken:", verifyToken, "email: ", email);
         try {
             const decoded = jwt.verify(verifyToken, process.env.JWT_SECRET);
-            console.log("Decoded JWT:", decoded);
+            //console.log("Decoded JWT:", decoded);
             if (decoded.email !== email) {
                 return res.status(400).json({ status: false, message: "Invalid token" });
             }

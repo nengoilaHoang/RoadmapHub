@@ -8,8 +8,8 @@ class CheckListAccountService {
     }
     async getCheckListAccountByRoadmapId(accountId, roadmapId, roadmap) {
         const checkListAccounts = await CheckListAccountDao.getCheckListAccountByRoadmapId(accountId, roadmapId);
-        console.log("roadmap:", roadmap);
-        console.log("checkListAccounts:", checkListAccounts);
+        //console.log("roadmap:", roadmap);
+        //console.log("checkListAccounts:", checkListAccounts);
         const mergeList = {...roadmap};
         if (!Array.isArray(mergeList.nodes)) {
             mergeList.nodes = [];

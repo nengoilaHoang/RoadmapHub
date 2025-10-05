@@ -13,7 +13,7 @@ export default function CreateRoadmap(props) {
         e.preventDefault();
         // Handle roadmap creation logic here
         const response = await api.post('/roadmaps/create', { name:title, description:description, accountId:user.id });
-        console.log(response)
+        //console.log(response)
         
         if(response.data.success){
             navigate(`/roadmap/edit/${title}/${response.data.roadmap.id}`)

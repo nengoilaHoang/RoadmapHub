@@ -17,7 +17,7 @@ class RoadmapController {
     async editRoadmap(req, res) {
         const { name,description,accountId,roadmapId} = req.body;
         const responseCheck = await RoadmapService.checkRoadmap(name, accountId);
-        //console.log("Response Check:", responseCheck);
+        ////console.log("Response Check:", responseCheck);
         if (!responseCheck.success) {
                 res.json(responseCheck);
             }
@@ -36,18 +36,18 @@ class RoadmapController {
         const accountId = req.authenticate.id
         try {
             const findRoadmap = await RoadmapService.checkRoadmapExist(accountId, name);
-            //console.log("findRoadmap: ",findRoadmap);
+            ////console.log("findRoadmap: ",findRoadmap);
             if(findRoadmap){ 
                 await RoadmapService.updateRoadmap(accountId,name,nodes,edges);
             }
             else{
                 //const roadmap = await RoadmapService.getRoadmapByAccountIdAndName(accountId,name);
-                //console.log("roadmap in my sql", roadmap);
+                ////console.log("roadmap in my sql", roadmap);
                 await RoadmapService.editNodeRoadmap(accountId,name,id,nodes,edges);
                 //await RoadmapService.editNodeRoadmap(accountId,name,nodes,edges,id);
             }
         } catch (error) {
-            console.log(error)
+            //console.log(error)
         }
 
     }
@@ -103,7 +103,7 @@ class RoadmapController {
             const roadmap = await RoadmapService.viewRoadmap(roadmapId);
             return res.json({status: "success", roadmap});
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             return res.json({status: "failed", error});
         }
     }
@@ -111,7 +111,7 @@ class RoadmapController {
         const {roadmapId} = req.params;
         try {
             const roadmapFromDB = await RoadmapService.viewRoadmap(roadmapId);
-            console.log(roadmapFromDB);
+            //console.log(roadmapFromDB);
             const roadmap = await RoadmapService.addNoHandleToNodeOfRoadmap(roadmapFromDB);
             const nodes = roadmap.nodes;
             const accountId = req.authenticate.id;
@@ -130,7 +130,7 @@ class RoadmapController {
             const roadmapWithStatusAndCheckList = await CheckListAccountService.getCheckListAccountByRoadmapId(accountId, roadmapId, roadmapWithStatus);
             return res.json({status: "success", roadmap: {...roadmapWithStatusAndCheckList, edges: roadmap.edges}});
         } catch (error) {
-            console.log(error);
+            //console.log(error);
             return res.json({status: "failed", error});
         }
     }

@@ -32,7 +32,7 @@ export default function TopBar(props) {
     const roadmap = await api.get(`/roadmaps/getYourRoadmap/${name}`,{
         withCredentials: true
     })
-    console.log("this is your roadmap id: ",roadmap.id)
+    //console.log("this is your roadmap id: ",roadmap.id)
     if(roadmap.data?.id)
       navigate(`/roadmap/view/${roadmap.data.id}`);
   }

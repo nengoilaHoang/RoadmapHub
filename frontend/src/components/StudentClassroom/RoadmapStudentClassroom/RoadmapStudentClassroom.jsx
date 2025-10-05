@@ -86,7 +86,7 @@ export default function RoadmapStudentClassroom(props) {
   //   if (selectedRoadmap) {
   //       const fetchAll = async()=>{
   //       const response = await api.get('/quizzes/getQuiz',{params:{userCreateQuiz:selectedRoadmap?.data.roadmap.accountId,roadmapId:selectedRoadmap?.data.roadmap.id, classroomId:classroomId}});
-  //       console.log("kkk",response);
+  //       //console.log("kkk",response);
   //       if(response.data === null)
   //       {
   //         setQuizzes({
@@ -133,12 +133,12 @@ export default function RoadmapStudentClassroom(props) {
       if (index !== -1) {
         copy.topics[index].tests[quizIndex] = updatedQuiz;
       }
-      console.log("hhh",copy);
+      //console.log("hhh",copy);
       setQuizzes(copy);
     const response = await api.post('/quizzes/doQuiz',{quiz:copy},{
       withCredentials: true
     })
-    console.log(response);
+    //console.log(response);
     
   };
   const submitQuiz = async (selectedTopic, quizIndex,timeLeft) => {
@@ -161,7 +161,7 @@ export default function RoadmapStudentClassroom(props) {
     const response = await api.post('/quizzes/doQuiz',{quiz:copy},{
       withCredentials: true
     })
-    console.log(response);
+    //console.log(response);
   };
 
   return (

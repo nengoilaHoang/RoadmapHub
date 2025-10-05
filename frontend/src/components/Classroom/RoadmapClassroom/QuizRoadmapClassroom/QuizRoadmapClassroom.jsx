@@ -13,7 +13,7 @@ export default function QuizRoadmapClassroom(props) {
     selectedTopic
   } = props;
   const [selectedQuizIndex, setSelectedQuizIndex] = useState(null);
-  console.log("dd",quizzes)
+  //console.log("dd",quizzes)
   const topic = quizzes.topics.find(t => t.topicId === selectedTopic.id);
   const [newQuiz, setQuiz] = useState({
     title: "",

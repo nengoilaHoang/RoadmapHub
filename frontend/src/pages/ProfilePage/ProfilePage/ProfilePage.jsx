@@ -14,7 +14,7 @@ const ProfilePage = () => {
     const [selectedTeam, setSelectedTeam] = useState('your account');
     const [activeNav, setActiveNav] = useState('Profile');
     // const { user } = useCheckLogin();
-    // console.log(user);
+    // //console.log(user);
     const [teams, setTeams] = useState(['your account']);
 
     const changeIntoSetting = () => {

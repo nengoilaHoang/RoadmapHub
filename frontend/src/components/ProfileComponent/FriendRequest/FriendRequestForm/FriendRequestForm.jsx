@@ -11,9 +11,9 @@ export default function FriendRequestForm() {
     const res = await axios.post('http://localhost:5000/api/friends/friend-requests/send', { receiverEmail: email },{
       withCredentials: true
     });
-    console.log(res.data);
+    //console.log(res.data);
     if (res.data.status === "success") {
-      console.log("Friend request sent");
+      //console.log("Friend request sent");
     }
     setEmail("");
   };
