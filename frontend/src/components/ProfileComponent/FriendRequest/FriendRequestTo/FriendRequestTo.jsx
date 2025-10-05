@@ -1,12 +1,13 @@
 import React,{useState, useEffect} from "react";
 import "./FriendRequestTo.css";
 import axios from "axios";
+import api from "../../../../utils/api";
 
 export default function FriendRequestTo() {
   const [requests, setRequests] = useState([]);
   const fetchRequests = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/friends/friend-requests/to", {
+      const response = await api.get("/friends/friend-requests/to", {
         withCredentials: true
       });
       //console.log(response.data.data);
@@ -20,14 +21,14 @@ export default function FriendRequestTo() {
   }, []);
   const onAccept = async (id) =>{
     //console.log("hí")
-    await axios.post("http://localhost:5000/api/friends/friend-requests/to/accept",{id}, {
+    await api.post("/friends/friend-requests/to/accept",{id}, {
       withCredentials: true
     });
     fetchRequests();
   }
   const onReject = async (id) =>{
     //console.log("hí")
-    await axios.post("http://localhost:5000/api/friends/friend-requests/to/reject",{id}, {
+    await api.post("/friends/friend-requests/to/reject",{id}, {
       withCredentials: true
     });
     fetchRequests();

@@ -179,7 +179,7 @@ export default function RoadmapEditPage() {
         const roadmap = await api.get(`/roadmaps/getYourRoadmap/${name}`,{
             withCredentials: true
         })
-        const res = await axios.get(`http://localhost:5000/api/roadmaps/edit/view/${roadmap.data?.id}`,{
+        const res = await api.get(`/roadmaps/edit/view/${roadmap.data?.id}`,{
             withCredentials: true
         })
         //console.log(res.data)

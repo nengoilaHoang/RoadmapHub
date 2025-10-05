@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import './ResetPassword.css';
+import api from '../../../utils/api';
 
 function ResetPassword() {
   const [password, setPassword] = useState('');
@@ -23,7 +24,7 @@ function ResetPassword() {
       return;
     }
     // Logic đổi mật khẩu ở đây (gọi API, v.v)
-    await axios.post(`http://localhost:5000/api/accounts/reset-password/${token}/${email}`, { password }, {
+    await api.post(`/accounts/reset-password/${token}/${email}`, { password }, {
         headers: {
             "Content-Type": "application/json",
         },

@@ -6,6 +6,7 @@ import FriendsComponent from '../../../components/ProfileComponent/FriendsCompon
 import RoadmapsComponent from '../../../components/ProfileComponent/RoadmapsComponent/RoadmapsComponent.jsx';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import api from '../../../utils/api.js';
 //import {useCheckLogin} from '../../../hooks/userCheckLogin.jsx'
 
 const ProfilePage = () => {
@@ -25,7 +26,7 @@ const ProfilePage = () => {
     useEffect(() => {
         const getTeams = async () =>{
             try {
-                const response = await axios.get(`http://localhost:5000/api/teams/get-teams`, {
+                const response = await api.get(`/teams/get-teams`, {
                     withCredentials: true
                 });
                 if(response.data.status === true)

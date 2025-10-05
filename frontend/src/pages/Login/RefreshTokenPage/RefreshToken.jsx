@@ -1,11 +1,12 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../../../utils/api";
 
 const RefreshToken = () => {
     const navigate = useNavigate();
     const handleRefresh = async () => {
         try {
-            const response = await axios.post("http://localhost:5000/api/auth/refresh-token", {
+            const response = await api.post("/auth/refresh-token", {
                 refreshToken: localStorage.getItem("refreshToken")
             });
             //console.log("Response from refresh-token:", response.data);

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useCheckLogin } from "../../../hooks/userCheckLogin";
 import {GoogleLogin} from '@react-oauth/google'
 import AlertError from "#components/SignUp/AlertError.jsx";
+import api from "../../../utils/api";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [passWord, setPassWord] = useState("");
@@ -21,7 +22,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault(); // chặn reload trang mặc định
         try {
-            const res = await axios.post("http://localhost:5000/api/auth/login",
+            const res = await api.post("/auth/login",
                 { email, passWord ,type: "normal"}, // body
                 {
                     headers: {
@@ -51,7 +52,7 @@ const Login = () => {
 
     const handleGoogleSuccess = async (credentialResponse) => {
             //console.log(credentialResponse);
-            const response = await axios.post("http://localhost:5000/api/auth/login",{credentialResponse: credentialResponse, type: "google"},
+            const response = await api.post("/auth/login",{credentialResponse: credentialResponse, type: "google"},
                 {
                     headers: {
                         "Content-Type": "application/json",

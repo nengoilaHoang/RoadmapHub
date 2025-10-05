@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import AlertError from "#components/SignUp/AlertError.jsx";
 import AlertSuccess from "#components/SignUp/AlertSuccess.jsx";
 import axios from "axios";
+import api from "../../../utils/api";
 function VerifyDeletePage() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
@@ -11,7 +12,7 @@ function VerifyDeletePage() {
     useEffect(() => {
         const deleteAccount = async () => {
             try {
-                const res = await axios.post(`http://localhost:5000/api/accounts/delete-account/verify`, {
+                const res = await api.post(`/accounts/delete-account/verify`, {
                     verifyToken,
                     email
                 },

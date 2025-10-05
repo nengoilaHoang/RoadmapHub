@@ -2,6 +2,7 @@ import React, {useState, useEffect} from "react";
 import "./RoadmapsComponent.css";
 import RoadmapViewInList from "#components/RoadmapView/RoadmapViewInList/RoadmapViewInList.jsx";
 import axios from "axios";
+import api from "../../../utils/api";
 //import {useCheckLogin} from '../../../hooks/userCheckLogin.jsx';
 // const roadmapList = [
 //   {
@@ -25,7 +26,7 @@ const RoadmapList = () => {
   useEffect(() => {
     // Simulate fetching data from an API
     const GetRoadmap = async () => {
-      const response = await axios.get('http://localhost:5000/api/roadmaps/getRoadmapByUserId', {
+      const response = await api.get('/roadmaps/getRoadmapByUserId', {
           withCredentials: true
       });
       //console.log(response.data.data);

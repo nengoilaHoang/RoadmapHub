@@ -14,7 +14,7 @@ export default function NavBar() {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     async function onLogout() {
-        await axios.post(`http://localhost:5000/api/accounts/logout`,{}, {
+        await api.post(`/accounts/logout`,{}, {
             headers: {
                 "Content-Type": "application/json",
             },

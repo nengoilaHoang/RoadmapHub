@@ -1,12 +1,13 @@
 import React,{useState, useEffect} from "react";
 import "./FriendList.css";
 import axios from "axios";
+import api from "../../../../utils/api";
 
 export default function FriendList() {
     const [friends, setFriends] = useState([]);
     const fetchRequests = async () => {
         try {
-            const response = await axios.get("http://localhost:5000/api/friends/friend-list",{
+            const response = await api.get("/friends/friend-list",{
                 withCredentials: true
             });
             //console.log(response.data.data);
@@ -21,7 +22,7 @@ export default function FriendList() {
     }, []);
 
     const onRemove = async(id)=>{
-        await axios.post("http://localhost:5000/api/friends/friend-list/remove",{id},{
+        await api.post("/friends/friend-list/remove",{id},{
             withCredentials: true
         });
         fetchRequests();
