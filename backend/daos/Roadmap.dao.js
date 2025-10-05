@@ -52,11 +52,10 @@ class RoadmapDAO {
             }
         }
     }
-    async editNodeRoadmap(accountId,name,nodes,edges,id) {
-        await connectDB();
-        const roadmap = RoadmapSchemaModel({accountId,name,nodes,edges,id});
-        await roadmap.save();
-    }
+    // async editNodeRoadmap(accountId,name,nodes,edges,id) {
+    //     const roadmap = RoadmapSchemaModel({accountId,name, roadmapId: id,nodes,edges,id});
+    //     await roadmap.save();
+    // }
     async getRoadmapByUserId(accountId) {
         const rows = await db('roadmap')
         .join('account', 'roadmap.accountId', 'account.id')
@@ -122,6 +121,7 @@ class RoadmapDAO {
         if (!roadmap) {
             return { nodes: [], edges: [] };
         }
+        return roadmap;
     }
     async getTopicRoadmapByUserId(id){
         await connectDB();

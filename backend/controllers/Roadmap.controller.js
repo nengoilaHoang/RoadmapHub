@@ -43,7 +43,8 @@ class RoadmapController {
             else{
                 //const roadmap = await RoadmapService.getRoadmapByAccountIdAndName(accountId,name);
                 //console.log("roadmap in my sql", roadmap);
-                await RoadmapService.editNodeRoadmap(accountId,name,nodes,edges,id);
+                await RoadmapService.editNodeRoadmap(accountId,name,id,nodes,edges);
+                //await RoadmapService.editNodeRoadmap(accountId,name,nodes,edges,id);
             }
         } catch (error) {
             console.log(error)
@@ -110,6 +111,7 @@ class RoadmapController {
         const {roadmapId} = req.params;
         try {
             const roadmapFromDB = await RoadmapService.viewRoadmap(roadmapId);
+            console.log(roadmapFromDB);
             const roadmap = await RoadmapService.addNoHandleToNodeOfRoadmap(roadmapFromDB);
             const nodes = roadmap.nodes;
             const accountId = req.authenticate.id;

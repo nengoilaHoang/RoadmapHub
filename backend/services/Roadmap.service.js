@@ -5,7 +5,7 @@ class RoadmapService {
     }
     //function service
     async addNoHandleToNodeOfRoadmap(roadmap) {
-        if (!Array.isArray(roadmap.nodes)) {
+        if (!Array.isArray(roadmap?.nodes)) {
             roadmap.nodes = [];
         }
         roadmap.nodes = roadmap.nodes.map(node => ({
@@ -30,9 +30,9 @@ class RoadmapService {
     async checkRoadmap(name, accountId) {
         return await RoadmapDAO.checkRoadmap(name, accountId);
     }
-    async editNodeRoadmap(accountId,name,nodes, edges,id) {
-        return await RoadmapDAO.editNodeRoadmap(accountId,name,nodes, edges,id);
-    }
+    // async editNodeRoadmap(accountId,name,nodes, edges,id) {
+    //     return await RoadmapDAO.editNodeRoadmap(accountId,name,nodes, edges,id);
+    // }
     async getRoadmapByName(accountId,name) {
         return await RoadmapDAO.getRoadmapByName(accountId,name);
     }
@@ -46,8 +46,8 @@ class RoadmapService {
         return await RoadmapDAO.getRoadmapByAccountIdAndName(accountId,name);
     }
     //====================mongoDB
-    async editNodeRoadmap(accountId,name,nodes, edges) {
-        return await RoadmapDAO.editNodeRoadmap(accountId,name,nodes, edges);
+    async editNodeRoadmap(accountId,name,roadmapId,nodes, edges) {
+        return await RoadmapDAO.editNodeRoadmap(accountId,name,roadmapId,nodes, edges);
     }
     async viewRoadmap(roadmapId){
         return await RoadmapDAO.viewRoadmap(roadmapId);
