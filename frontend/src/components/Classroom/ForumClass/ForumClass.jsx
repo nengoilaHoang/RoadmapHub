@@ -30,7 +30,7 @@ export default function ForumClass(props) {
       classroomId:classroomId,
       content:content
     },{ withCredentials: true})
-    // //console.log(response);
+    // console.log(response);
     await getPosts();
   };
   const handleEditPost = async(content,id)=>{
@@ -49,7 +49,7 @@ export default function ForumClass(props) {
       postId:postId,
       content:content
     },{ withCredentials: true})
-    // //console.log(response);
+    // console.log(response);
     await getPosts();
   }
   const handleEditComment = async(content,id)=>{
@@ -66,7 +66,7 @@ export default function ForumClass(props) {
   return (
     <div className="container mt-4">
       <Post
-        onCancel={() => //console.log("Cancel")}
+        onCancel={() => console.log("Cancel")}
         onPost={handlePost}
       />
       {posts.map((post) => (
