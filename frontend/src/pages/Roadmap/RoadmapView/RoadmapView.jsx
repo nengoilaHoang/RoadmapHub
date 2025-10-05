@@ -30,6 +30,7 @@ import RightBarPopUp from "#components/Roadmap/NodesView/RightBarPopUp/RightBarP
 const nodeTypes = {  topic: Topic, title: Title, button: Button, section: Section, checklist: CheckList, horizontalline: HorizontalLine, verticalline: VerticalLine, paragraph: Paragraph };
 const edgeTypes = { default :Edge}
 export default function RoadmapView(){
+    //
     const [isReload, setIsReload] = useState(false);
     const [nodes, setNodes] = useState();
     // 1 cái lưu checklist đang chọn 1 cái lưu checklist cũ để so sánh nếu thay đổi thì mới call api
@@ -50,6 +51,9 @@ export default function RoadmapView(){
         //console.log("nodeFromRes:", res);
         setNodes(res.data.roadmap?.nodes);
         setEdges(res.data.roadmap?.edges);
+        console.log(res);
+        console.log(nodes);
+        console.log(edges);
         //const secondRes = await api.post(`learnTopic/solve-nodes-progress`,{nodes: nodeFromRes},{withCredentials: true});
         ////console.log(secondRes.data.nodes);
         //setNodes(secondRes.data.nodes);

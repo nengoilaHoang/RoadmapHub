@@ -3,7 +3,32 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 dotenv.config();
 
-class GeminiService {
+class LLMService {
+  //LLM local
+  async getLLMResponse(req, res, next){
+    try {
+      const { text } = req.body;
+      const response = await fetch("http://127.0.0.1:1234/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "meta-llama-3-8b-instruct",
+        messages: [{ role: "user", content: text }]
+        }),
+      });
+      const data = await response.json();
+      console.log(data?.choices?.[0]?.message?.content);
+      const responseText = data?.choices?.[0]?.message?.content||"vui lòng thử lại"
+      return res.status(200).json({status: "success", data: responseText});
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({
+        status: "fail",
+        message: error.message,
+      });
+    }
+  }
+  //=====================gemini
   constructor() {
     if (!process.env.GEMINI_API_KEY) {
       throw new Error("GEMINI_API_KEY is required in environment variables");
@@ -313,4 +338,4 @@ class GeminiService {
   };
 }
 
-export default new GeminiService();
+export default new LLMService();

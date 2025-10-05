@@ -738,253 +738,313 @@ select.form-control {
 }
 
 /* END PERPLEXITY DESIGN SYSTEM */
-.chat-toggle {
+/* RoadmapDemo.css - Styles cho popup */
+
+/* Overlay phủ toàn màn hình */
+.roadmap-demo-overlay {
   position: fixed;
-  bottom: var(--space-20);
-  right: var(--space-20);
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
-  padding: var(--space-12) var(--space-16);
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  box-shadow: var(--shadow-md);
-  font-size: var(--font-size-base);
-  font-family: var(--font-family-base);
-  font-weight: var(--font-weight-medium);
-  border: none;
-  z-index: 1000;
-  transition: all var(--duration-normal) var(--ease-standard);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(var(--color-slate-900-rgb), 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: var(--space-20);
+  animation: fadeIn var(--duration-normal) var(--ease-standard);
 }
 
-.chat-toggle:hover {
-  background: var(--color-primary-hover);
-}
-
-.chat-toggle:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring), var(--shadow-md);
-}
-
-.chat-container {
-  position: fixed;
-  bottom: var(--space-20);
-  right: var(--space-20);
-  width: 350px;
-  height: 450px;
+/* Container chính của popup */
+.roadmap-demo-container {
   background: var(--color-surface);
-  border: 1px solid var(--color-card-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+  width: 98vw;
+  height: 95vh;
+  max-width: var(--container-xl);
   display: flex;
   flex-direction: column;
-  z-index: 1000;
-  font-family: var(--font-family-base);
+  box-shadow: var(--shadow-lg);
+  animation: slideUp var(--duration-normal) var(--ease-standard);
+  overflow: hidden;
+  border: 1px solid var(--color-card-border);
 }
 
-.chat-header {
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
-  padding: var(--space-12) var(--space-16);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+/* Header với nút đóng */
+.roadmap-demo-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-base);
+  padding: var(--space-16) var(--space-24);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-background);
+  min-height: var(--space-16);
 }
 
-.chat-close {
+.roadmap-demo-title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  font-family: var(--font-family-base);
+  flex: 1;
+}
+
+.roadmap-demo-close-btn {
   background: none;
   border: none;
-  color: var(--color-btn-primary-text);
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-3xl);
+  color: var(--color-text-secondary);
   cursor: pointer;
-  padding: var(--space-4);
-  border-radius: var(--radius-sm);
-  transition: background-color var(--duration-fast) var(--ease-standard);
+  padding: var(--space-8);
+  border-radius: var(--radius-base);
+  transition: all var(--duration-fast) var(--ease-standard);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-32);
+  height: var(--space-32);
 }
 
-.chat-close:hover {
-  background: rgba(var(--color-slate-900-rgb), 0.1);
+.roadmap-demo-close-btn:hover {
+  background: var(--color-secondary);
+  color: var(--color-text);
 }
 
-.chat-close:focus-visible {
+.roadmap-demo-close-btn:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
 }
 
-.chat-messages {
+/* Content chính */
+.roadmap-demo-content {
   flex: 1;
-  padding: var(--space-10);
-  overflow-y: auto;
-  background: var(--color-background);
-}
-
-.message {
-  margin-bottom: var(--space-10);
   display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
-.message.user {
-  justify-content: flex-end;
+/* TopBar trong popup */
+.roadmap-demo-topbar {
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
-.message.ai {
-  justify-content: flex-start;
+/* Container cho ReactFlow */
+.roadmap-demo-flow-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
 }
 
-.message-content {
-  max-width: 80%;
-  padding: var(--space-8) var(--space-12);
-  border-radius: var(--radius-lg);
-  font-size: var(--font-size-base);
+/* ReactFlow styles */
+.roadmap-demo-reactflow {
+  width: 100%;
+  height: 100%;
+}
+
+.roadmap-demo-reactflow .react-flow__controls {
+  bottom: 150px !important;
+  left: var(--space-10) !important;
+}
+
+.roadmap-demo-reactflow .react-flow__minimap {
+  border-radius: var(--radius-base) !important;
+}
+
+/* Footer */
+.roadmap-demo-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-16) var(--space-24);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-background);
+  min-height: var(--space-16);
+}
+
+/* Stats trong footer */
+.roadmap-demo-stats {
+  display: flex;
+  gap: var(--space-20);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  font-family: var(--font-family-base);
+}
+
+.stats-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+/* Actions trong footer */
+.roadmap-demo-actions {
+  display: flex;
+  gap: var(--space-12);
+}
+
+/* Button styles */
+.btn-primary {
+  background: var(--color-primary);
+  color: var(--color-btn-primary-text);
+  border: none;
+  padding: var(--space-10) var(--space-20);
+  border-radius: var(--radius-base);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family-base);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-standard);
+  font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
 
-.message.user .message-content {
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
-}
-
-.message.ai .message-content {
-  background: var(--color-surface);
-  color: var(--color-text);
-  border: 1px solid var(--color-card-border);
-}
-
-.typing {
-  font-style: italic;
-  color: var(--color-text-secondary);
-}
-
-.chat-input {
-  padding: var(--space-10);
-  border-top: 1px solid var(--color-border);
-  display: flex;
-  gap: var(--space-8);
-  background: var(--color-surface);
-}
-
-.chat-input input {
-  flex: 1;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-full);
-  padding: var(--space-8) var(--space-16);
-  font-size: var(--font-size-base);
-  font-family: var(--font-family-base);
-  color: var(--color-text);
-  background: var(--color-surface);
-  outline: none;
-  transition: border-color var(--duration-fast) var(--ease-standard);
-}
-
-.chat-input input:focus {
-  border-color: var(--color-primary);
-  box-shadow: var(--focus-ring);
-}
-
-.chat-input input::placeholder {
-  color: var(--color-text-secondary);
-}
-
-.chat-input button {
-  background: var(--color-primary);
-  color: var(--color-btn-primary-text);
-  border: none;
-  border-radius: var(--radius-full);
-  padding: var(--space-8) var(--space-16);
-  cursor: pointer;
-  font-size: var(--font-size-base);
-  font-family: var(--font-family-base);
-  font-weight: var(--font-weight-medium);
-  transition: all var(--duration-normal) var(--ease-standard);
-}
-
-.chat-input button:hover:not(:disabled) {
+.btn-primary:hover {
   background: var(--color-primary-hover);
+  transform: translateY(-1px);
 }
 
-.chat-input button:focus-visible {
+.btn-primary:active {
+  background: var(--color-primary-active);
+  transform: translateY(0);
+}
+
+.btn-primary:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
 }
 
-.chat-input button:disabled {
-  background: var(--color-text-secondary);
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-/* Mobile responsive */
-@media (max-width: 480px) {
-  .chat-container {
-    width: calc(100vw - var(--space-32));
-    height: 350px;
-    right: var(--space-16);
-    left: var(--space-16);
-    bottom: var(--space-16);
-  }
-  
-  .chat-toggle {
-    right: var(--space-16);
-    bottom: var(--space-16);
-    padding: var(--space-10) var(--space-12);
-    font-size: var(--font-size-sm);
-  }
-  
-  .chat-header {
-    padding: var(--space-10) var(--space-12);
-    font-size: var(--font-size-sm);
-  }
-  
-  .chat-close {
-    font-size: var(--font-size-lg);
-  }
-  
-  .message-content {
-    max-width: 90%;
-    padding: var(--space-6) var(--space-10);
-    font-size: var(--font-size-sm);
-  }
-  
-  .chat-input {
-    padding: var(--space-8);
-  }
-  
-  .chat-input input {
-    padding: var(--space-6) var(--space-12);
-    font-size: var(--font-size-sm);
-  }
-  
-  .chat-input button {
-    padding: var(--space-6) var(--space-12);
-    font-size: var(--font-size-sm);
-  }
-}
-
-@media (max-width: 768px) {
-  .chat-container {
-    width: calc(100vw - var(--space-24));
-    height: 400px;
-    right: var(--space-12);
-    left: var(--space-12);
-  }
-  
-  .chat-toggle {
-    right: var(--space-12);
-  }
-}
-
-.view-demo-roadmap{
+.btn-secondary {
   background: var(--color-secondary);
-  color: var(--color-btn-primary-text);
-  border: solid 1px black;
-  border-radius: 10px;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  padding: var(--space-10) var(--space-20);
+  border-radius: var(--radius-base);
+  font-family: var(--font-family-base);
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-standard);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
 }
 
-.view-demo-roadmap:hover{
+.btn-secondary:hover {
   background: var(--color-secondary-hover);
-  color: var(--color-btn-primary-text);
-  border: solid 1px black;
-  border-radius: 10px;
+}
+
+.btn-secondary:active {
+  background: var(--color-secondary-active);
+}
+
+.btn-secondary:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(var(--space-32));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile responsive at 480px */
+@media (max-width: 480px) {
+  .roadmap-demo-overlay {
+    padding: var(--space-10);
+  }
+  
+  .roadmap-demo-container {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+  }
+  
+  .roadmap-demo-header {
+    padding: var(--space-12) var(--space-16);
+  }
+  
+  .roadmap-demo-title {
+    font-size: var(--font-size-xl);
+  }
+  
+  .roadmap-demo-footer {
+    padding: var(--space-12) var(--space-16);
+    flex-direction: column;
+    gap: var(--space-12);
+    align-items: stretch;
+  }
+  
+  .roadmap-demo-stats {
+    justify-content: center;
+  }
+  
+  .roadmap-demo-actions {
+    justify-content: center;
+  }
+  
+  .roadmap-demo-reactflow .react-flow__controls {
+    bottom: 120px !important;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    padding: var(--space-12) var(--space-16);
+    font-size: var(--font-size-base);
+  }
+}
+
+/* Tablet responsive */
+@media (max-width: 768px) {
+  .roadmap-demo-overlay {
+    padding: var(--space-16);
+  }
+  
+  .roadmap-demo-container {
+    width: 100vw;
+    height: 98vh;
+    border-radius: var(--radius-base);
+  }
+  
+  .roadmap-demo-header {
+    padding: var(--space-14) var(--space-20);
+  }
+  
+  .roadmap-demo-title {
+    font-size: var(--font-size-xl);
+  }
+  
+  .roadmap-demo-footer {
+    padding: var(--space-14) var(--space-20);
+    flex-wrap: wrap;
+    gap: var(--space-12);
+  }
+  
+  .roadmap-demo-stats {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .roadmap-demo-actions {
+    flex: 1;
+    justify-content: center;
+  }
+  
+  .roadmap-demo-reactflow .react-flow__controls {
+    bottom: 130px !important;
+  }
 }

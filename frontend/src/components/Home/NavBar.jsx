@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useCheckLogin } from "../../hooks/userCheckLogin";
 import "./home.css";
 import socket from '#utils/socket';
@@ -153,7 +152,7 @@ export default function NavBar() {
                 style={{ width: "60px", height: "60px" }}
               >
                 <img
-                  src={profile.avatar || ""}
+                  src={profile.avatar || "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/avatar-trang-66.jpg"}
                   alt="User Avatar"
                   className="w-100 h-100"
                   style={{ objectFit: "cover" }}

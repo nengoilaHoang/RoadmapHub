@@ -127,10 +127,12 @@ class RoadmapController {
                 })
             );
             const roadmapWithStatus = {...roadmap, nodes: nodesWithStatus};
+            //console.log(roadmapWithStatus.nodes[2].data.itemsCheckList);
             const roadmapWithStatusAndCheckList = await CheckListAccountService.getCheckListAccountByRoadmapId(accountId, roadmapId, roadmapWithStatus);
+            //console.log(roadmapWithStatusAndCheckList.nodes[2].data.itemsCheckList);
             return res.json({status: "success", roadmap: {...roadmapWithStatusAndCheckList, edges: roadmap.edges}});
         } catch (error) {
-            //console.log(error);
+            console.log(error);
             return res.json({status: "failed", error});
         }
     }

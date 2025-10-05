@@ -12,7 +12,7 @@ class CheckListAccountDAO {
         return existing !== null;
     }
     async getCheckListAccountByRoadmapId(accountId, roadmapId) {
-        ////console.log("DAO - getCheckListAccountByRoadmapId:", accountId, roadmapId);
+        console.log("DAO - getCheckListAccountByRoadmapId:", accountId, roadmapId);
         return await CheckListAccount.findOne({ accountId, roadmapId });
     }
     async updateItemCheckList(accountId, checklistId, itemsCheckList) {

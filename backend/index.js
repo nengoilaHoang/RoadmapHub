@@ -20,7 +20,7 @@ import learnTopicRoutes from './routes/learnTopic.route.js'
 import cookieParser from "cookie-parser";
 import connectDB from './utils/dbmongo.js';
 import mongoose from 'mongoose';
-import geminiRoutes from './routes/Gemini.route.js'
+import LLMRoutes from './routes/LLM.route.js'
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 
@@ -43,7 +43,7 @@ app.use('/api/teams', teamRoutes);
 app.use('/api/friends', friendRoutes);
 app.use('/api/learnTopic',learnTopicRoutes);
 app.use('/api/checkListAccount',checkListAccountRoutes);
-app.use('/api/gemini', geminiRoutes);
+app.use('/api/LLM', LLMRoutes);
 app.use('/api/classrooms',classroomRoutes);
 app.use('/api/studentclassrooms',studentclassroomRoutes);
 app.use('/api/posts',postRoutes)
