@@ -173,8 +173,13 @@ export default function RoadmapEditPage() {
   },[])
   //const [nodes, setNodes] = useState(initialNodes);
   //const [edges, setEdges] = useState(initialEdges);
+
+  //nodes in page
   const [nodes, setNodes] = useState([]);
   const [edges, setEdges] = useState([]);
+  //nodes in demo
+  const [demoNodes, setDemoNodes] = useState([]);
+  const [demoEdges, setDemoEdges] = useState([]);
   // quản lý roadmap demo
   const { isOpen, openDemo, closeDemo, roadmapData } = useRoadmapDemo();
   const fetchAPI = async () => {
@@ -195,9 +200,9 @@ export default function RoadmapEditPage() {
   },[])
   // Hàm xử lý khi click vào nút "Xem Demo"
   const handleViewDemo = useCallback(() => {
-    openDemo([], [], "Roadmap Demo");
-    console.log(nodes);
-    console.log(edges);
+    // console.log(demoNodes);
+    // console.log(demoNodes);
+    openDemo(demoNodes, demoEdges, "Roadmap Demo");
   }, [openDemo]);
   const [selectedNode, setSelectedNode] = useState(null);
   const [rightBarOpen, setRightBarOpen] = useState(0);
@@ -245,13 +250,13 @@ export default function RoadmapEditPage() {
           {selectedEdge &&<RightBarEdge selectedEdge={selectedEdge}  onEdgeChange={handleEdgeChange} />}
           
           </DnDProvider>
-          <ChatBox nodes={nodes} edges={edges} handleViewDemo={handleViewDemo}/>
+          <ChatBox nodes={nodes} edges={edges} setDemoNodes={setDemoNodes} setDemoEdges={setDemoEdges} handleViewDemo={handleViewDemo}/>
           {/* Popup RoadmapDemo */}
           <RoadmapDemo
             isOpen={isOpen}
             onClose={closeDemo}
-            nodes={[]}
-            edges={[]}
+            nodes={demoNodes}
+            edges={demoEdges}
             roadmapName={roadmapData.name}
             showTopBar={true} // Có thể tùy chọn hiển thị TopBar
           />

@@ -16,7 +16,7 @@ import HorizontalLine from '#components/Roadmap/Nodes/HorizontalLine/HorizontalL
 import VerticalLine from '#components/Roadmap/Nodes/VerticalLine/VerticalLine.jsx';
 import Paragraph from '#components/Roadmap/Nodes/Paragraph/Paragraph.jsx';
 import Edge from '#components/Roadmap/Nodes/Edge/Edge.jsx';
-import './RoadmapDemo.css'; // CSS cho popup
+import './RoadmapDemo.css';
 
 const nodeTypes = {  
   topic: Topic, 
@@ -148,6 +148,8 @@ export const useRoadmapDemo = () => {
   const [roadmapData, setRoadmapData] = useState({ nodes: [], edges: [], name: '' });
 
   const openDemo = ((nodes = [], edges = [], name = 'Roadmap Demo') => {
+    console.log(nodes);
+    console.log(edges);
     setRoadmapData({ nodes, edges, name });
     setIsOpen(true);
   });
@@ -180,7 +182,7 @@ export const RoadmapDemoProvider = ({ children }) => {
         onClose={roadmapDemo.closeDemo}
         nodes={roadmapDemo.roadmapData.nodes}
         edges={roadmapDemo.roadmapData.edges}
-        roadmapName={roadmapDemo.roadmapData.name}
+        roadmapName={roadmapDemo.name}
       />
     </div>
   );

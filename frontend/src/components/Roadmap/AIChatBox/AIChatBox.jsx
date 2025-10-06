@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import './AIChatBox.css';
 import api from '#utils/api.js';
 
-const ChatBox = ({ nodes = [], edges = [], handleViewDemo}) => {
+const ChatBox = ({ nodes = [], edges = [], setDemoNodes, setDemoEdges, handleViewDemo}) => {
   const [messages, setMessages] = useState([
     { 
       id: 1, 
@@ -35,7 +35,7 @@ const ChatBox = ({ nodes = [], edges = [], handleViewDemo}) => {
       // return AIResponse?.data?.response || "Xin lỗi, tôi không thể xử lý yêu cầu này.";
       //dùng MML model host từ ML studio
       const AIResponse = await api.post('/LLM/generate-roadmap-local',
-        { text: lowerMessage },
+        { text: lowerMessage, nodes, edges},
         {
           withCredentials: true,
           headers: {
@@ -43,7 +43,9 @@ const ChatBox = ({ nodes = [], edges = [], handleViewDemo}) => {
           }
         }
       );
-      //console.log(AIResponse.data.data)
+      console.log(AIResponse.data)
+      setDemoNodes(AIResponse.data?.demoNodes);
+      setDemoEdges(AIResponse.data?.demoEdges);
       return AIResponse.data.data;
     } catch (error) {
       console.error('API Error:', error);
