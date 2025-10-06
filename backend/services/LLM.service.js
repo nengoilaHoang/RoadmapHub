@@ -12,40 +12,26 @@ class LLMService {
   revertToBasicForm = (nodesInput, edgesInput) => {
     // Lọc nodes chỉ lấy type = "topic"
     const topicNodes = nodesInput.filter(n => n.type === "topic");
-    // Tạo map id -> node để dễ lookup
-    const nodeMap = {};
-    topicNodes.forEach(n => {
-      nodeMap[n.id] = n;
-    });
-    // Tìm các topic cha (các node có edge source -> target)
-    // Giả sử topic chính là những node có Y nhỏ hơn subNode (subNode sẽ lệch X)
-    const mainTopics = topicNodes.filter(n => {
-      // Nếu node không phải là target của bất kỳ edge nào -> là main topic
-      const isSub = edgesInput.some(e => e.target === n.id && e.source !== null);
-      return !isSub;
-    });
-    const result = mainTopics.map(main => {
-      // Tìm các subNode kết nối từ main
-      const subNodes = edgesInput
-        .filter(e => e.source === main.id)
-        .map(e => {
-          const subNode = nodeMap[e.target];
-          return {
-            label: subNode.data.label,
-            titleTopic: subNode.data.label,
-            descriptionTopic: "", // không có dữ liệu gốc
-          };
-        });
-      return {
-        data: {
-          label: main.data.label,
-          titleTopic: main.data.label,
-          descriptionTopic: "", // không có dữ liệu gốc
-          subNodes: subNodes.length > 0 ? subNodes : undefined
-        }
-      };
-    });
-    return result;
+    // Tạo nodes tối giản
+    const simpleNodes = topicNodes.map(n => ({
+      id: n.id,
+      data: {
+        label: n.data.label||'',
+        titleTopic: n.data.titleTopic||'',
+        descriptionTopic: n.data.descriptionTopic ||'',
+      }
+    }));
+    // Tạo edges tối giản (chỉ giữ source và target, nếu source & target đều là topic)
+    const simpleEdges = edgesInput
+      .filter(e => topicNodes.some(n => n.id === e.source) && topicNodes.some(n => n.id === e.target))
+      .map(e => ({
+        source: e.source,
+        target: e.target
+      }));
+    return {
+      nodes: simpleNodes,
+      edges: simpleEdges
+    };
   };
   convertToFlow = (nodesInput) => {
     const nodes = [];
@@ -211,14 +197,99 @@ class LLMService {
       //console.log(jsonResponse);
       return jsonResponse;
   }
+  editRoadmapCase = async(text, nodes, edges) => {
+    const systemPrompt=
+    `
+    You are a JSON roadmap generator. Follow all rules strictly.
+
+    INPUT DESCRIPTION:
+    You are given:
+    - "nodes": an array of objects, each containing "id" and "data" (where "data.label" and "data.titleTopic" provide clues about the topic)
+    - "edges": an array of objects, each with "source" and "target" (representing directional relationships between nodes)
+
+    Your task is to analyze these inputs:
+    1. Use the text in "data.label" or "data.titleTopic" to understand what each node represents.
+    2. Use the "edges" to infer hierarchical or logical relationships (source → target means parent → child).
+    3. If relationships make sense (e.g., one topic can logically group others), organize output into main topics with "subNodes".
+    4. If no clear hierarchy exists, output all nodes as main topics only.
+
+    CRITICAL OUTPUT RULE:
+    Your response must contain ONLY valid JSON. No explanations, no introductory text, no code blocks, no markdown formatting.
+
+    STRUCTURE RULES:
+    The roadmap contains a "nodes" array.
+    Each node has a "data" object with required fields:
+    - "label": short, unique identifier (max 20 chars)
+    - "titleTopic": the topic title
+    - "descriptionTopic": brief description (max 100 chars)
+    Nodes may contain a "subNodes" array (optional)
+    SubNodes have the same structure as nodes but cannot contain further subNodes.
+
+    CONTENT RULES:
+    Generate topics relevant to the input theme inferred from the given nodes.
+    Use concise, professional language.
+    Avoid redundant or overly similar topics.
+
+    SCOPE RULES:
+    - If hierarchy is detected → Generate exactly 4–5 main nodes, each with 1–3 subNodes.
+    - If no hierarchy → Generate exactly 8–10 main nodes without subNodes.
+
+    OUTPUT FORMAT:
+    Start immediately with { and end with }.
+
+    {
+      "nodes": [
+        {
+          "data": {
+            "label": "Warm-up",
+            "titleTopic": "Warm-up and Stretching",
+            "descriptionTopic": "Essential exercises to prepare for your workout",
+            "subNodes": [
+              {
+                "label": "Treadmill",
+                "titleTopic": "Treadmill Workout",
+                "descriptionTopic": "Effective treadmill exercises for cardio"
+              }
+            ]
+          }
+        }
+      ]
+    }
+
+    input
+    input:
+    nodes: ${JSON.stringify(nodes, null, 2)}
+    edges: ${JSON.stringify(edges, null, 2)}
+    `
+    console.log(systemPrompt);
+    const response = await fetch("http://127.0.0.1:1234/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "meta-llama-3-8b-instruct",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: text } 
+        ],
+        temperature: 0.8,
+        top_k: 40,
+        top_p: 0.95,
+        repeat_penalty: 1.1,
+        }),
+      });
+      const data = await response.json();
+      const jsonResponse = data?.choices?.[0]?.message?.content;
+      //console.log(jsonResponse);
+      return jsonResponse;
+  }
   //LLM local
   getLLMResponse = async (req, res, next) => {
     try {
-      const { text, nodes, edges } = req.body;
+      const { text, nodes, edges, demoNodes, demoEdges } = req.body;
       // console.log(nodes);
       // console.log(edges);
-      let demoNodes;
-      let demoEdges;
+      let safeNodes = Array.isArray(demoNodes) ? demoNodes : [];
+      let safeEdges = Array.isArray(demoEdges) ? demoEdges : [];
       const systemPrompt = 
       `
       You are an intent classifier for roadmap messages. Classify any message into one of 4 intents: Create roadmap, Edit roadmap, Edit demo, or Other.
@@ -263,22 +334,34 @@ class LLMService {
       let responseText
       if(intent === "Create roadmap"){
         responseText="Đã tạo roadmap mẫu thành công. Bạn có thể xem nơi phần DEMO"
-        // const rawJsonResopnse = await this.createRoadmapCase(text);
-        // const jsonResponse = await this.getJsonInResponse(rawJsonResopnse);
-        // const roadampDemo = this.convertToFlow(jsonResponse.nodes);
-        // demoNodes = roadampDemo?.nodes;
-        // demoEdges = roadampDemo?.edges;
+        const rawJsonResopnse = await this.createRoadmapCase(text);
+        const jsonResponse = await this.getJsonInResponse(rawJsonResopnse);
+        const roadampDemo = this.convertToFlow(jsonResponse.nodes);
+        safeNodes = roadampDemo?.nodes;
+        safeEdges = roadampDemo?.edges;
       }
       else if(intent === "Edit roadmap"){
         responseText="Đã sửa roadmap thành công. Bạn có thể xem nơi phần DEMO"
+        const basicRoadmapForm = this.revertToBasicForm(nodes, edges)
+        const rawJsonResopnse = await this.editRoadmapCase(text, basicRoadmapForm.nodes, basicRoadmapForm.edges)
+        const jsonResponse = await this.getJsonInResponse(rawJsonResopnse);
+        const roadampDemo = this.convertToFlow(jsonResponse.nodes);
+        safeNodes = roadampDemo?.nodes;
+        safeEdges = roadampDemo?.edges;
       }
       else if(intent === "Edit demo"){
         responseText="Đã sửa tiếp roadmap mẫu thành công. Bạn có thể xem nơi phần DEMO"
+        const basicRoadmapForm = this.revertToBasicForm(safeNodes, safeEdges)
+        const rawJsonResopnse = await this.editRoadmapCase(text, basicRoadmapForm.nodes, basicRoadmapForm.edges)
+        const jsonResponse = await this.getJsonInResponse(rawJsonResopnse);
+        const roadampDemo = this.convertToFlow(jsonResponse.nodes);
+        safeNodes = roadampDemo?.nodes;
+        safeEdges = roadampDemo?.edges;
       }
       else{
         responseText="Ờm...! Tôi có thể giúp bạn tạo mới và sửa roadmap đó"
       }
-      return res.status(200).json({status: "success", data: responseText, demoNodes, demoEdges});
+      return res.status(200).json({status: "success", data: responseText, demoNodes: safeNodes, demoEdges: safeEdges});
     } catch (error) {
       console.log(error);
       return res.status(400).json({

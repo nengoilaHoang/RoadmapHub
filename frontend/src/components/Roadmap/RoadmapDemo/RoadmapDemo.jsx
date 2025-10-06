@@ -38,7 +38,9 @@ export default function RoadmapDemo({
   nodes = [], 
   edges = [], 
   roadmapName = "Roadmap Demo",
-  showTopBar = true 
+  showTopBar = true,
+  setNodes,
+  setEdges
 }) {
   // Không render gì khi popup không mở
   if (!isOpen) return null;
@@ -48,23 +50,11 @@ export default function RoadmapDemo({
       onClose();
     }
   };
-  // Xử lý phím ESC để đóng popup
-//   useEffect(() => {
-//     const handleEscKey = (e) => {
-//       if (e.key === 'Escape') {
-//         onClose();
-//       }
-//     };
-//     if (isOpen) {
-//       document.addEventListener('keydown', handleEscKey);
-//       // Ngăn scroll body khi popup mở
-//       document.body.style.overflow = 'hidden';
-//     }
-//     return () => {
-//       document.removeEventListener('keydown', handleEscKey);
-//       document.body.style.overflow = 'auto';
-//     };
-//   }, [isOpen, onClose]);
+  
+  const saveChangeFromDemo = () =>{
+    setNodes(nodes);
+    setEdges(edges);
+  }
 
   return (
     <div className="roadmap-demo-overlay" onClick={handleOverlayClick}>
@@ -132,8 +122,11 @@ export default function RoadmapDemo({
             <span className="stats-item">Edges: {edges.length}</span>
           </div>
           <div className="roadmap-demo-actions">
+            <button className="btn-primary" onClick={saveChangeFromDemo}>
+              Put into edit mode
+            </button>
             <button className="btn-secondary" onClick={onClose}>
-              Đóng
+              Close
             </button>
           </div>
         </div>

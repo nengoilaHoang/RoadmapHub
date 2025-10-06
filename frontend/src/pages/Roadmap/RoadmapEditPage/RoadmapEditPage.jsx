@@ -250,7 +250,7 @@ export default function RoadmapEditPage() {
           {selectedEdge &&<RightBarEdge selectedEdge={selectedEdge}  onEdgeChange={handleEdgeChange} />}
           
           </DnDProvider>
-          <ChatBox nodes={nodes} edges={edges} setDemoNodes={setDemoNodes} setDemoEdges={setDemoEdges} handleViewDemo={handleViewDemo}/>
+          <ChatBox nodes={nodes} edges={edges} demoNodes={demoNodes} demoEdges={demoEdges} setDemoNodes={setDemoNodes} setDemoEdges={setDemoEdges} handleViewDemo={handleViewDemo}/>
           {/* Popup RoadmapDemo */}
           <RoadmapDemo
             isOpen={isOpen}
@@ -259,6 +259,8 @@ export default function RoadmapEditPage() {
             edges={demoEdges}
             roadmapName={roadmapData.name}
             showTopBar={true} // Có thể tùy chọn hiển thị TopBar
+            setNodes={setNodes}
+            setEdges={setEdges}
           />
       </ReactFlowProvider>
     </div>
