@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import api from "../utils/api";
 export const useCheckLogin = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(null);
     const [user, setUser] = useState(null);
@@ -12,7 +12,7 @@ export const useCheckLogin = () => {
             setIsLoggedIn(false);
             return;
         }
-        axios.post('http://localhost:5000/api/auth/check-login', {}, {
+        api.post('/auth/check-login', {}, {
             headers: {
                 'Content-Type': 'application/json'
             },

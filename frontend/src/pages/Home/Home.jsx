@@ -24,14 +24,14 @@ export default function Home() {
             const response = await api.get('/classrooms/getLearningClass', {
                 withCredentials: true
             });
-            console.log(response.data);
+            //console.log(response.data);
             setListLearningClass(response.data);
         }
         learningClass();
     },[isLoggedIn])
 
     const handleBookmarkToggle = (id, isBookmarked) => {
-        console.log(`Card ${id} bookmarked: ${isBookmarked}`);
+        //console.log(`Card ${id} bookmarked: ${isBookmarked}`);
         // Handle bookmark logic here
     };
 

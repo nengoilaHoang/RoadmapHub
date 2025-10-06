@@ -15,7 +15,7 @@ export default function AddStudentForm(props) {
     const response = await api.post('/studentclassrooms/add', { email: email,classroomId:classroomId },{
       withCredentials: true
     });
-    console.log(response.data);
+    //console.log(response.data);
     if (response.data.success === false) {
         setError(response.data.message);
         setAlertEmail(true);

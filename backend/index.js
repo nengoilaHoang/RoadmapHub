@@ -20,7 +20,7 @@ import learnTopicRoutes from './routes/learnTopic.route.js'
 import cookieParser from "cookie-parser";
 import connectDB from './utils/dbmongo.js';
 import mongoose from 'mongoose';
-import geminiRoutes from './routes/Gemini.route.js'
+import LLMRoutes from './routes/LLM.route.js'
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 
@@ -43,7 +43,7 @@ app.use('/api/teams', teamRoutes);
 app.use('/api/friends', friendRoutes);
 app.use('/api/learnTopic',learnTopicRoutes);
 app.use('/api/checkListAccount',checkListAccountRoutes);
-app.use('/api/gemini', geminiRoutes);
+app.use('/api/LLM', LLMRoutes);
 app.use('/api/classrooms',classroomRoutes);
 app.use('/api/studentclassrooms',studentclassroomRoutes);
 app.use('/api/posts',postRoutes)
@@ -51,7 +51,7 @@ app.use('/api/comments', commentRoutes);
 app.use('/api/quizzes',quizRoutes);
 app.use('/api/notifications', notificationRoutes);
 // app.listen(process.env.PORT, () => {
-//     console.log(`Server is running at http://localhost:${process.env.PORT}`)
+//     //console.log(`Server is running at http://localhost:${process.env.PORT}`)
 // });
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -63,18 +63,18 @@ const io = new Server(httpServer, {
 
 // app.listen(process.env.PORT, async () => {
 //     await connectDB();
-//     console.log(`Server is running at http://localhost:${process.env.PORT}`)
+//     //console.log(`Server is running at http://localhost:${process.env.PORT}`)
 // });
 httpServer.listen(process.env.PORT, async () => {
   await connectDB();
-  console.log(`Server is running at http://localhost:${process.env.PORT}`)
+  //console.log(`Server is running at http://localhost:${process.env.PORT}`)
 });
 app.set("io", io);
 io.on("connection", (socket) => {
-  console.log("a user connected:", socket.id);
+  //console.log("a user connected:", socket.id);
 
   socket.on("disconnect", () => {
-    console.log("user disconnected:", socket.id);
+    //console.log("user disconnected:", socket.id);
   });
 });
 

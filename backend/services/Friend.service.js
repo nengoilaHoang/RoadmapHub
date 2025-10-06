@@ -17,7 +17,7 @@ class FriendService {
     }
 
     async getFriendList(accountId) {
-        //console.log("Get friends list for account ID in service:", accountId);
+        ////console.log("Get friends list for account ID in service:", accountId);
         return await this.FriendDao.getFriendsList(accountId);
     }
 

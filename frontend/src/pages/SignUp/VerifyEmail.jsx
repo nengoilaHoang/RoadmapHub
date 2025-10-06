@@ -14,7 +14,7 @@ export default function VerifyEmail(){
     )
     const handleResentEmail = ()=>{
         setResent(true);
-        console.log(email,password,fullname)
+        //console.log(email,password,fullname)
         api.post("/accounts/verify-email",{email:email,password:password,fullname:fullname})
     }
     return(

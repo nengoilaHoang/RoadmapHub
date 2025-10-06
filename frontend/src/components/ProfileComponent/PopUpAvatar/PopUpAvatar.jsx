@@ -9,7 +9,7 @@ const PopUpAvatar = ({ show, onClose, onUpload, uploading }) => {
   // Sửa tại đây: luôn chọn đúng 1 file
   const handleChange = (e) => {
     setSelectedFile(e.target.files[0]);
-    console.log(e.target.files[0]);
+    //console.log(e.target.files[0]);
   };
   const handleUploadClick = () => {
     if (selectedFile) onUpload(selectedFile);

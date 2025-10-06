@@ -11,7 +11,7 @@ export default function CreateClassroom(props){
     const onhandleSubmit = async (e) => {
         e.preventDefault();
         const response = await api.post('/classrooms/create', { name:name, description:description, accountId:user.id });
-        console.log("pp",response.data.classroomId)
+        //console.log("pp",response.data.classroomId)
         
         if(response.data.success){
             navigate(`/classroom/view/${name}/${response.data.classroomId}`)

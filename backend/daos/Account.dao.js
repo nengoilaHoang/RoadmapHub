@@ -31,7 +31,7 @@ class AccountDAO {
         try{
             const hashedPassword = await bcrypt.hash(password, 10);
             const account = new Account(genUUID(), username, email, hashedPassword, 1);
-            console.log("Account to be created:", account);
+            //console.log("Account to be created:", account);
             const result = await db('account').insert(account);
             return {
                     success:true,
@@ -39,7 +39,7 @@ class AccountDAO {
             }
         }
         catch(e){
-            console.log(e);
+            //console.log(e);
         }
         
     }

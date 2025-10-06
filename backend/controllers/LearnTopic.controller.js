@@ -6,7 +6,7 @@ class LearnTopicController {
         try {
             const {topicId} = req.params;
             const userId = req.authenticate.id;
-            //console.log("in controller: ",userId, topicId);
+            ////console.log("in controller: ",userId, topicId);
             const learnTopic = await LearnTopicService.getLearnTopic(userId,topicId);
             if (!!learnTopic) {
                 return res.status(200).json({success: true, learnTopic});

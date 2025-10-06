@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./FriendRequestForm.css";
 import axios from "axios";
+import api from "../../../../utils/api";
 
 export default function FriendRequestForm() {
   const [email, setEmail] = useState("");
@@ -8,12 +9,12 @@ export default function FriendRequestForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!email) return;
-    const res = await axios.post('http://localhost:5000/api/friends/friend-requests/send', { receiverEmail: email },{
+    const res = await api.post('/friends/friend-requests/send', { receiverEmail: email },{
       withCredentials: true
     });
-    console.log(res.data);
+    //console.log(res.data);
     if (res.data.status === "success") {
-      console.log("Friend request sent");
+      //console.log("Friend request sent");
     }
     setEmail("");
   };

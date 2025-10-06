@@ -144,7 +144,7 @@ export function ResizableNode(props) {
       const newList = checkList.map((item, i) =>
         i === index ? { ...item, checked: value } : item
       );
-      //console.log("newList:", newList);
+      ////console.log("newList:", newList);
       setCheckList(newList);
       data.itemsCheckList = newList;
     };
@@ -154,7 +154,7 @@ export function ResizableNode(props) {
     //   );
     //   setCheckList(newList);
     //   data.itemsCheckList = newList;
-    //   //console.log(data);
+    //   ////console.log(data);
     //   //data.onNodeDataChange(id, { itemsCheckList: newList });
     // };
     return(

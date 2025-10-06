@@ -16,10 +16,10 @@ class FriendController {
     }
 
     async acceptFriendRequest(req, res) {
-        //console.log("run here")
+        ////console.log("run here")
         const {id} = req.body;
         const requestId = id;
-        //console.log("accept Id: ", requestId)
+        ////console.log("accept Id: ", requestId)
         try {
             await FriendService.acceptFriendRequest(requestId);
             res.json({status: "success"});
@@ -29,10 +29,10 @@ class FriendController {
     }
 
     async rejectFriendRequest(req, res) {
-        //console.log("run here")
+        ////console.log("run here")
         const {id} = req.body;
         const requestId = id;
-        //console.log("accept Id: ", requestId)
+        ////console.log("accept Id: ", requestId)
         try {
             await FriendService.rejectFriendRequest(requestId);
             res.json({status: "success"});
@@ -45,7 +45,7 @@ class FriendController {
         const accountId = req.authenticate.id;
         try {
             const friendRequests = await FriendService.getFriendRequestsFrom(accountId);
-            //console.log("Friend Requests:", friendRequests);
+            ////console.log("Friend Requests:", friendRequests);
             res.json({status: "success", data: friendRequests});
         } catch (error) {
             res.status(500).json({status: "failed", error: "Failed to get friend requests"});
@@ -53,10 +53,10 @@ class FriendController {
     }
 
     async cancelFriendRequest(req, res) {
-        //console.log("run here")
+        ////console.log("run here")
         const {id} = req.body;
         const requestId = id;
-        //console.log("accept Id: ", requestId)
+        ////console.log("accept Id: ", requestId)
         try {
             await FriendService.cancelFriendRequest(requestId);
             res.json({status: "success"});
@@ -70,7 +70,7 @@ class FriendController {
         const receiverEmail = req.body.receiverEmail;
         try {
             const receiver = await AccountService.getAccountByEmail(receiverEmail);
-            //console.log("Receiver:", receiver);
+            ////console.log("Receiver:", receiver);
             await FriendService.sendFriendRequest(senderId, receiver.id);
             res.json({status: "success"});
         } catch (error) {
@@ -80,14 +80,14 @@ class FriendController {
 
     async getFriendList(req, res) {
         const userId = req.authenticate.id;
-        //console.log("Get friend list for account ID:", userId);
+        ////console.log("Get friend list for account ID:", userId);
         try {
             const friends = await FriendService.getFriendList(userId);
             const friendsWithEmail = friends.map(friend => ({
                 ...friend,
                 email: friend.senderId === userId ? friend.receiverEmail : friend.senderEmail
             }));
-            //console.log("Friend List:", friendsWithEmail);
+            ////console.log("Friend List:", friendsWithEmail);
             res.json({status: "success", data: friendsWithEmail});
         } catch (error) {
             res.status(500).json({status: "failed", error: "Failed to get friend list"+ error});
@@ -95,10 +95,10 @@ class FriendController {
     }
 
     async removeFriend(req, res) {
-        //console.log("run here")
+        ////console.log("run here")
         const {id} = req.body;
         const requestId = id;
-        //console.log("accept Id: ", requestId)
+        ////console.log("accept Id: ", requestId)
         try {
             await FriendService.cancelFriendRequest(requestId);
             res.json({status: "success"});

@@ -9,7 +9,7 @@ const authenticate = (req, res, next) => {
       const payload = jwt.verify(token, process.env.JWT_SECRET);
       req.authenticate = payload; // Set user nếu token hợp lệ
     } catch (e) {
-      console.log("auth exception:", e)
+      //console.log("auth exception:", e)
     }
   }
   next();

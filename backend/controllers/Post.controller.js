@@ -16,13 +16,13 @@ class PostController{
         const response  = await PostService.createPost(classroomId,accountId,content);
         const listStudent = await StudentClassroomService.getAll(classroomId);
         const classroom = await ClassroomService.getRoadmapInClass(accountId,classroomId);
-        console.log("ssdasd",response.post.id);
+        //console.log("ssdasd",response.post.id);
         for(const student of listStudent){
             const senderId = accountId;
             const receiverId = student.accountId;
             const plainText = stripHtmlAndCss(content);
             const truncated = truncateWords(plainText, 20);
-            console.log("truncated",truncated);
+            //console.log("truncated",truncated);
             const notificationContent = `Lớp ${classroom[0].name}: ${truncated}`;
             const link = `http://localhost:3000/classroom/view-student/${classroom[0].name}/${classroomId}#post-${response.post.id}`;
             await NotificationService.createNotification(receiverId,senderId,notificationContent,link);

@@ -3,7 +3,32 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 dotenv.config();
 
-class GeminiService {
+class LLMService {
+  //LLM local
+  async getLLMResponse(req, res, next){
+    try {
+      const { text } = req.body;
+      const response = await fetch("http://127.0.0.1:1234/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "meta-llama-3-8b-instruct",
+        messages: [{ role: "user", content: text }]
+        }),
+      });
+      const data = await response.json();
+      console.log(data?.choices?.[0]?.message?.content);
+      const responseText = data?.choices?.[0]?.message?.content||"vui lòng thử lại"
+      return res.status(200).json({status: "success", data: responseText});
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({
+        status: "fail",
+        message: error.message,
+      });
+    }
+  }
+  //=====================gemini
   constructor() {
     if (!process.env.GEMINI_API_KEY) {
       throw new Error("GEMINI_API_KEY is required in environment variables");
@@ -33,7 +58,7 @@ class GeminiService {
       return this.workingModel;
     }
 
-    console.log("🔍 Searching for available Gemini model...");
+    //console.log("🔍 Searching for available Gemini model...");
 
     for (const modelName of this.modelsToTry) {
       try {
@@ -41,14 +66,14 @@ class GeminiService {
         if (this.modelTestCache.has(modelName)) {
           const cached = this.modelTestCache.get(modelName);
           if (cached.works) {
-            console.log(`✅ Using cached working model: ${modelName}`);
+            //console.log(`✅ Using cached working model: ${modelName}`);
             this.workingModel = modelName;
             return modelName;
           }
           continue; // Skip if cached as non-working
         }
 
-        console.log(`🧪 Testing model: ${modelName}`);
+        //console.log(`🧪 Testing model: ${modelName}`);
 
         const model = this.genAI.getGenerativeModel({ 
           model: modelName,
@@ -66,35 +91,35 @@ class GeminiService {
 
         await Promise.race([testPromise, timeoutPromise]);
 
-        console.log(`✅ Found working model: ${modelName}`);
+        //console.log(`✅ Found working model: ${modelName}`);
         this.workingModel = modelName;
         this.modelTestCache.set(modelName, { works: true, tested: new Date() });
         return modelName;
 
       } catch (error) {
-        console.log(`❌ ${modelName} failed: ${error.message.substring(0, 100)}`);
+        //console.log(`❌ ${modelName} failed: ${error.message.substring(0, 100)}`);
         this.modelTestCache.set(modelName, { works: false, tested: new Date(), error: error.message });
         continue;
       }
     }
 
     // If no model works, try to fetch available models from API
-    console.log("🔍 No predefined models work, checking API for available models...");
+    //console.log("🔍 No predefined models work, checking API for available models...");
     try {
       const availableModels = await this.fetchAvailableModels();
       if (availableModels.length > 0) {
         for (const modelInfo of availableModels) {
           if (modelInfo.supportedGenerationMethods?.includes('generateContent')) {
-            console.log(`🧪 Testing API-discovered model: ${modelInfo.name}`);
+            //console.log(`🧪 Testing API-discovered model: ${modelInfo.name}`);
             try {
               const model = this.genAI.getGenerativeModel({ model: modelInfo.name });
               await model.generateContent("Hi");
 
-              console.log(`✅ API-discovered working model: ${modelInfo.name}`);
+              //console.log(`✅ API-discovered working model: ${modelInfo.name}`);
               this.workingModel = modelInfo.name;
               return modelInfo.name;
             } catch (error) {
-              console.log(`❌ ${modelInfo.name} failed: ${error.message.substring(0, 100)}`);
+              //console.log(`❌ ${modelInfo.name} failed: ${error.message.substring(0, 100)}`);
             }
           }
         }
@@ -180,8 +205,8 @@ class GeminiService {
         ]
       });
 
-      console.log(`🤖 Generating content using model: ${modelName}`);
-      console.log(`📝 Input length: ${text.length} characters`);
+      //console.log(`🤖 Generating content using model: ${modelName}`);
+      //console.log(`📝 Input length: ${text.length} characters`);
 
       const result = await model.generateContent(text.trim());
 
@@ -203,7 +228,7 @@ class GeminiService {
         throw new Error("Empty response from Gemini API");
       }
 
-      console.log(`✅ Success! Model: ${modelName}, Response length: ${responseText.length}`);
+      //console.log(`✅ Success! Model: ${modelName}, Response length: ${responseText.length}`);
 
       return res.status(200).json({
         status: "success",
@@ -223,7 +248,7 @@ class GeminiService {
 
       // Reset working model cache if it's a model-related error
       if (error.message?.includes("not found") || error.message?.includes("404")) {
-        console.log("🔄 Resetting model cache due to model error");
+        //console.log("🔄 Resetting model cache due to model error");
         this.workingModel = null;
         this.modelTestCache.clear();
       }
@@ -309,8 +334,8 @@ class GeminiService {
   clearModelCache = () => {
     this.workingModel = null;
     this.modelTestCache.clear();
-    console.log("🔄 Model cache cleared");
+    //console.log("🔄 Model cache cleared");
   };
 }
 
-export default new GeminiService();
+export default new LLMService();

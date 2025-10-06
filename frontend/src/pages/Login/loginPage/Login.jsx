@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useCheckLogin } from "../../../hooks/userCheckLogin";
 import {GoogleLogin} from '@react-oauth/google'
 import AlertError from "#components/SignUp/AlertError.jsx";
+import api from "../../../utils/api";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [passWord, setPassWord] = useState("");
@@ -21,7 +22,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault(); // chặn reload trang mặc định
         try {
-            const res = await axios.post("http://localhost:5000/api/auth/login",
+            const res = await api.post("/auth/login",
                 { email, passWord ,type: "normal"}, // body
                 {
                     headers: {
@@ -39,7 +40,7 @@ const Login = () => {
                 });
             }
             else{
-                console.log("Login failed:", res.data?.message);
+                //console.log("Login failed:", res.data?.message);
                 setError(res.data?.message || "Login failed");
             }
             // xử lý lưu token hoặc chuyển trang ở đây
@@ -50,8 +51,8 @@ const Login = () => {
     };
 
     const handleGoogleSuccess = async (credentialResponse) => {
-            console.log(credentialResponse);
-            const response = await axios.post("http://localhost:5000/api/auth/login",{credentialResponse: credentialResponse, type: "google"},
+            //console.log(credentialResponse);
+            const response = await api.post("/auth/login",{credentialResponse: credentialResponse, type: "google"},
                 {
                     headers: {
                         "Content-Type": "application/json",
@@ -59,10 +60,10 @@ const Login = () => {
                     withCredentials: true
                 }
             )
-            console.log(response)
-            console.log("Google login response:", response.data);
+            //console.log(response)
+            //console.log("Google login response:", response.data);
             if(!response.data.status){
-                console.log("Google login failed:", response.data?.message);
+                //console.log("Google login failed:", response.data?.message);
                 setError(response.data?.message || "Login failed");
             }
             else{
@@ -73,7 +74,7 @@ const Login = () => {
         };
     
         const handleGoogleError = () => {
-            console.log('Login Failed');
+            //console.log('Login Failed');
             // Xử lý đăng nhập thất bại
         };
 

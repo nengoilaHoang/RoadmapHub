@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import axios from "axios";
 import AlertError from "../../SignUp/AlertError";
 import AlertSuccess from "../../SignUp/AlertSuccess";
-
+import api from "../../../utils/api";
 const SettingComponent = () => {
     const [emailCurrent, setEmailCurrent] = useState('');
     const [emailNew, setEmailNew] = useState('');
@@ -20,8 +20,8 @@ const SettingComponent = () => {
     const handleUpdateEmail = async () => {
         try {
             if(emailCurrent && emailNew) {
-                console.log(emailCurrent, emailNew);
-                const res = await axios.post(`http://localhost:5000/api/accounts/change-email`, {oldEmail: emailCurrent, newEmail: emailNew },
+                //console.log(emailCurrent, emailNew);
+                const res = await api.post(`/accounts/change-email`, {oldEmail: emailCurrent, newEmail: emailNew },
                 {
                     headers: {
                         'Content-Type': 'application/json'
@@ -49,11 +49,11 @@ const SettingComponent = () => {
 
     const handleUpdatePassword = async () => {
         try {
-            console.log(passCurrent, passNew, passConfirm);
+            //console.log(passCurrent, passNew, passConfirm);
             if(passCurrent && passNew && passConfirm) {
                 if((passCurrent !== passConfirm) && (passConfirm == passNew)) {
-                    console.log("run to here");
-                    const res = await axios.post('http://localhost:5000/api/accounts/change-password', { oldPassword: passCurrent, newPassword: passNew },
+                    //console.log("run to here");
+                    const res = await api.post('/accounts/change-password', { oldPassword: passCurrent, newPassword: passNew },
                     {
                         headers: {
                             'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ const SettingComponent = () => {
     };
     const handleDeleteAccount = async () => {
         try {
-            const res = await axios.post('http://localhost:5000/api/accounts/delete-account', {},
+            const res = await api.post('/accounts/delete-account', {},
             {
                 headers: {
                     'Content-Type': 'application/json'

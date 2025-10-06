@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import './AIChatBox.css';
 import api from '#utils/api.js';
 
-const ChatBox = ({ nodes = [], edges = [] }) => {
+const ChatBox = ({ nodes = [], edges = [], handleViewDemo}) => {
   const [messages, setMessages] = useState([
     { 
       id: 1, 
@@ -27,12 +27,24 @@ const ChatBox = ({ nodes = [], edges = [] }) => {
   const getAIResponse = async (message) => {
     try {
       const lowerMessage = message.toLowerCase();
-      const AIResponse = await api.post('/gemini/generate-roadmap', 
-        { text: lowerMessage }, 
-        { withCredentials: true }
+      // dùng API gemeni
+      // const AIResponse = await api.post('/LLM/generate-roadmap', 
+      //   { text: lowerMessage }, 
+      //   { withCredentials: true }
+      // );
+      // return AIResponse?.data?.response || "Xin lỗi, tôi không thể xử lý yêu cầu này.";
+      //dùng MML model host từ ML studio
+      const AIResponse = await api.post('/LLM/generate-roadmap-local',
+        { text: lowerMessage },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json"
+          }
+        }
       );
-      console.log('AI Response:', AIResponse);
-      return AIResponse?.data?.response || "Xin lỗi, tôi không thể xử lý yêu cầu này.";
+      //console.log(AIResponse.data.data)
+      return AIResponse.data.data;
     } catch (error) {
       console.error('API Error:', error);
       return "Đã có lỗi xảy ra khi xử lý yêu cầu của bạn.";
@@ -96,6 +108,7 @@ const ChatBox = ({ nodes = [], edges = [] }) => {
     <div className="chat-container">
       <div className="chat-header">
         <span>🤖 AI Roadmap Assistant</span>
+        <button className='view-demo-roadmap' onClick={handleViewDemo}>view demo</button>
         <button className="chat-close" onClick={() => setIsOpen(false)}>✕</button>
       </div>
 
@@ -123,7 +136,7 @@ const ChatBox = ({ nodes = [], edges = [] }) => {
           value={inputMessage}
           onChange={(e) => setInputMessage(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="Hỏi AI về roadmap..."
+          placeholder="Bạn cần sửa roadmap ???"
           disabled={isLoading}
         />
         <button 

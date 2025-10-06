@@ -4,7 +4,7 @@ class CheckListAccountController {
         try {
             const {checkListSelected, roadmapId} = req.body;
             const accountId = req.authenticate.id;
-            //console.log(checkListSelected, roadmapId, accountId);
+            ////console.log(checkListSelected, roadmapId, accountId);
             const checkExit = await CheckListAccountService.checkListAccountExists(accountId, checkListSelected?.id); 
             if(!checkExit){
                 await CheckListAccountService.createCheckListAccount(accountId, roadmapId, checkListSelected?.id);
@@ -12,7 +12,7 @@ class CheckListAccountController {
             }
             else{
                 await CheckListAccountService.updateItemCheckList(accountId, checkListSelected.id, checkListSelected?.data?.itemsCheckList);
-                //console.log(checkListSelected?.data?.itemsCheckList);
+                ////console.log(checkListSelected?.data?.itemsCheckList);
                 return res.status(200).json({message: "Update checklist account successfully"});
             }
         } catch (error) {

@@ -99,7 +99,7 @@ export default function RightBarTopic({ selectedNode, onDeleteNode , onNodeChang
                 ]:[newItem]
             }})
     }
-    //console.log(selectedNode);
+    ////console.log(selectedNode);
   return (
     <div className={`rightbar ${selectedNode ? 'show' : ''}`}>
       <div className="tab-buttons">

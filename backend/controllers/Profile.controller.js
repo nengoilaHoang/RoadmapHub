@@ -8,12 +8,12 @@ class ProfileController{
     getProfile = async (req, res, next) => {
         const token = req.cookies?.token;
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-        console.log("Decoded token:", decodedToken);
+        //console.log("Decoded token:", decodedToken);
         const { id, email } = decodedToken;
         const profileId = id;
         const profile = await ProfileService.getProfileByAccountId(profileId);
-        //console.log("profileId: ", profileId);
-        //console.log("profile: ", profile);
+        ////console.log("profileId: ", profileId);
+        ////console.log("profile: ", profile);
         if (!profile) {
             return res.status(404).json({ status: false, message: "Profile not found" });
         }
@@ -27,7 +27,7 @@ class ProfileController{
         const { id } = decodedToken;
         const profileId = id
         const updatedProfile = await ProfileService.updateProfile(profileId, fullname, github, linkedin);
-        console.log("Updated profile:", updatedProfile);
+        //console.log("Updated profile:", updatedProfile);
         if (!updatedProfile) {
             return res.status(404).json({ status: false, message: "Profile not found" });
         }
@@ -38,9 +38,9 @@ class ProfileController{
         const {id} = req.authenticate;
         const file = req.file;
         try{
-            console.log("this is avatar file:", file.path);
+            //console.log("this is avatar file:", file.path);
             const avatar = await uploadToCloudinary(file.path);
-            console.log("this is avatar url:", avatar.url);
+            //console.log("this is avatar url:", avatar.url);
             await ProfileService.updateAvatar(id, avatar.url);
             return res.status(200).json({ status: true, message: "Avatar updated successfully", avatarUrl: avatar.url });
         } catch (error) {

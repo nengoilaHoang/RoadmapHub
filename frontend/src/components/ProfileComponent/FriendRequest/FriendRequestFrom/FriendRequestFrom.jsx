@@ -1,16 +1,17 @@
 import React, {useState,useEffect} from "react";
 import "./FriendRequestFrom.css";
 import axios from "axios";
+import api from "../../../../utils/api";
 
 export default function FriendRequestFrom() {
 
   const[requests, setRequests] = useState([]);
   const fetchRequests = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/friends/friend-requests/from",{
+        const response = await api.get("/friends/friend-requests/from",{
           withCredentials: true
         });
-        console.log(response.data.data);
+        //console.log(response.data.data);
         setRequests(response.data.data);
       } catch (error) {
         console.error("Error fetching friend requests:", error);
@@ -21,7 +22,7 @@ export default function FriendRequestFrom() {
   }, []);
 
   const onCancel = async(id)=>{
-    await axios.post("http://localhost:5000/api/friends/friend-requests/from/cancel",{id},{
+    await api.post("/friends/friend-requests/from/cancel",{id},{
       withCredentials: true
     });
     fetchRequests();

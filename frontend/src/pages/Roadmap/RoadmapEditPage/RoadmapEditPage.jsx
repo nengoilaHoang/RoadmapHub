@@ -30,6 +30,8 @@ import api from '#utils/api.js'
 import { useParams,useNavigate } from "react-router-dom";
 import RightBarEdge from '#components/Roadmap/Nodes/RightBar/RightBarEdge/RightBarEdge';
 
+import RoadmapDemo, {useRoadmapDemo} from "../../../components/Roadmap/RoadmapDemo/RoadmapDemo";
+
 import ChatBox from '#components/Roadmap/AIChatBox/AIChatBox.jsx';
 const getRandomId = () => {
   return Math.floor(1000000000 + Math.random() * 9000000000).toString();
@@ -125,8 +127,6 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
     setRightBarOpen(360);
   }, [setSelectedEdge]);
 
-
-
   return (
     <ReactFlow
       nodes={nodes}
@@ -155,91 +155,108 @@ function FlowCanvas({ nodes, setNodes, edges, setEdges, setSelectedNode , setRig
 }
 
 export default function RoadmapEditPage() {
-    //const { isLoggedIn, user } = useCheckLogin();
-    const navigate = useNavigate();
-    const { name,id } = useParams();
-    useEffect( ()=>{
-      async function checkLogin(){
-        const response = await api.post('/roadmaps/check-your-roadmap',{name:name},{
-          withCredentials: true
-        }) ;
-        console.log(response)
-        if(!response.data.success){
-        navigate("/");
-        }
+  //const { isLoggedIn, user } = useCheckLogin();
+  const navigate = useNavigate();
+  const { name,id } = useParams();
+  useEffect( ()=>{
+    async function checkLogin(){
+      const response = await api.post('/roadmaps/check-your-roadmap',{name:name},{
+        withCredentials: true
+      }) ;
+      //console.log(response)
+      if(!response.data.success){
+      navigate("/");
       }
-      checkLogin()
-     
-    },[])
-    //const [nodes, setNodes] = useState(initialNodes);
-    //const [edges, setEdges] = useState(initialEdges);
-    const [nodes, setNodes] = useState([]);
-    const [edges, setEdges] = useState([]);
-    const fetchAPI = async () => {
-        const roadmap = await api.get(`/roadmaps/getYourRoadmap/${name}`,{
-            withCredentials: true
-        })
-        const res = await axios.get(`http://localhost:5000/api/roadmaps/edit/view/${roadmap.data?.id}`,{
-            withCredentials: true
-        })
-        console.log(res.data)
-        if(res.data.status==="success"){
-          setNodes(res.data.roadmap?.nodes);
-          setEdges(res.data.roadmap?.edges);
-        }
-    };
-    useEffect(()=>{
-        fetchAPI();
-    },[])
-    const [selectedNode, setSelectedNode] = useState(null);
-    const [rightBarOpen, setRightBarOpen] = useState(0);
-    const [selectedEdge, setSelectedEdge] = useState(null);
-
-    const handleDeleteNode = (nodeId) => {
-    setNodes((nds) => nds.filter((n) => n.id !== nodeId));
-    setEdges((eds) => eds.filter((e) => e.source !== nodeId && e.target !== nodeId));
-    setSelectedNode(null);
-    };
-    const onSaveNodes = async (e) => {
-        e.preventDefault();
-        console.log('Nodes:', nodes);
-        console.log('Edges:', edges);
-        const response = await api.post('/roadmaps/edit-nodes',{name:name,nodes:nodes,edges:edges,id:id},{
-           withCredentials: true
-        });
-        console.log(response);
     }
+    checkLogin()  
     
-   const handleNodeChange = (updatedNode)=>{
-    setNodes((nds)=>nds.map((node)=>(
-      node.id === updatedNode.id ? updatedNode : node
-    )))
-    setSelectedNode(updatedNode);
-   }
-   const handleEdgeChange = (updatedEdge)=>{
-    setEdges((eds)=>eds.map((edge)=>(
-      edge.id === updatedEdge.id ? updatedEdge : edge
-    )))
-    setSelectedEdge(updatedEdge);
-   }
-    return (
-      <div style={{ display: 'flex',width:'100%',height:'100vh', flexDirection: "column"}}>
-        <TopBar onSaveNode={onSaveNodes}/>
-        <ReactFlowProvider>
-            <DnDProvider>
-            <NodesBar />
-            <div style={{ flexGrow: 1 }} >
-                <FlowCanvas nodes={nodes} setNodes={setNodes} edges={edges} setEdges={setEdges} 
-                setSelectedNode={setSelectedNode} setRightBarOpen={setRightBarOpen} rightBarOpen={rightBarOpen}
-                setSelectedEdge={setSelectedEdge}/>
-            </div>
-            {selectedNode &&<RightBar selectedNode={selectedNode} onDeleteNode={handleDeleteNode} onNodeChange={handleNodeChange} />}
-            {selectedEdge &&<RightBarEdge selectedEdge={selectedEdge}  onEdgeChange={handleEdgeChange} />}
-            
-            </DnDProvider>
-        </ReactFlowProvider>
-        <ChatBox nodes={nodes} edges={edges} />
-      </div>
+  },[])
+  //const [nodes, setNodes] = useState(initialNodes);
+  //const [edges, setEdges] = useState(initialEdges);
+  const [nodes, setNodes] = useState([]);
+  const [edges, setEdges] = useState([]);
+  // quản lý roadmap demo
+  const { isOpen, openDemo, closeDemo, roadmapData } = useRoadmapDemo();
+  const fetchAPI = async () => {
+      const roadmap = await api.get(`/roadmaps/getYourRoadmap/${name}`,{
+          withCredentials: true
+      })
+      const res = await api.get(`/roadmaps/edit/view/${roadmap.data?.id}`,{
+          withCredentials: true
+      })
+      //console.log(res.data)
+      if(res.data.status==="success"){
+        setNodes(res.data.roadmap?.nodes);
+        setEdges(res.data.roadmap?.edges);
+      }
+  };
+  useEffect(()=>{
+      fetchAPI();
+  },[])
+  // Hàm xử lý khi click vào nút "Xem Demo"
+  const handleViewDemo = useCallback(() => {
+    openDemo([], [], "Roadmap Demo");
+    console.log(nodes);
+    console.log(edges);
+  }, [openDemo]);
+  const [selectedNode, setSelectedNode] = useState(null);
+  const [rightBarOpen, setRightBarOpen] = useState(0);
+  const [selectedEdge, setSelectedEdge] = useState(null);
 
-    );
+  const handleDeleteNode = (nodeId) => {
+  setNodes((nds) => nds.filter((n) => n.id !== nodeId));
+  setEdges((eds) => eds.filter((e) => e.source !== nodeId && e.target !== nodeId));
+  setSelectedNode(null);
+  };
+  const onSaveNodes = async (e) => {
+      e.preventDefault();
+      //console.log('Nodes:', nodes);
+      //console.log('Edges:', edges);
+      const response = await api.post('/roadmaps/edit-nodes',{name:name,nodes:nodes,edges:edges,id:id},{
+          withCredentials: true
+      });
+      //console.log(response);
+  }
+  
+  const handleNodeChange = (updatedNode)=>{
+  setNodes((nds)=>nds.map((node)=>(
+    node.id === updatedNode.id ? updatedNode : node
+  )))
+  setSelectedNode(updatedNode);
+  }
+  const handleEdgeChange = (updatedEdge)=>{
+  setEdges((eds)=>eds.map((edge)=>(
+    edge.id === updatedEdge.id ? updatedEdge : edge
+  )))
+  setSelectedEdge(updatedEdge);
+  }
+  return (
+    <div style={{ display: 'flex',width:'100%',height:'100vh', flexDirection: "column"}}>
+      <TopBar onSaveNode={onSaveNodes}/>
+      <ReactFlowProvider>
+          <DnDProvider>
+          <NodesBar />
+          <div style={{ flexGrow: 1 }} >
+              <FlowCanvas nodes={nodes} setNodes={setNodes} edges={edges} setEdges={setEdges} 
+              setSelectedNode={setSelectedNode} setRightBarOpen={setRightBarOpen} rightBarOpen={rightBarOpen}
+              setSelectedEdge={setSelectedEdge}/>
+          </div>
+          {selectedNode &&<RightBar selectedNode={selectedNode} onDeleteNode={handleDeleteNode} onNodeChange={handleNodeChange} />}
+          {selectedEdge &&<RightBarEdge selectedEdge={selectedEdge}  onEdgeChange={handleEdgeChange} />}
+          
+          </DnDProvider>
+          <ChatBox nodes={nodes} edges={edges} handleViewDemo={handleViewDemo}/>
+          {/* Popup RoadmapDemo */}
+          <RoadmapDemo
+            isOpen={isOpen}
+            onClose={closeDemo}
+            nodes={[]}
+            edges={[]}
+            roadmapName={roadmapData.name}
+            showTopBar={true} // Có thể tùy chọn hiển thị TopBar
+          />
+      </ReactFlowProvider>
+    </div>
+
+  );
 }

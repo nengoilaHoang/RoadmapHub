@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { useCheckLogin } from "../../hooks/userCheckLogin";
 import "./home.css";
 import socket from '#utils/socket';
@@ -14,7 +13,7 @@ export default function NavBar() {
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
     async function onLogout() {
-        await axios.post(`http://localhost:5000/api/accounts/logout`,{}, {
+        await api.post(`/accounts/logout`,{}, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -27,14 +26,14 @@ export default function NavBar() {
             const response = await api.get('/notifications/receiver', {
                         withCredentials: true
             });
-            console.log("Notifications:", response.data);
+            //console.log("Notifications:", response.data);
             setNotifications(response.data);
             setUnreadCount(response.data.filter(notif => !notif.isRead).length);
         }
     useEffect(() => {
         getNotifications();
         socket.on('newNotification', (data) => {
-            console.log("New notification received via socket:", data);
+            //console.log("New notification received via socket:", data);
             getNotifications();
         });
         return () => {
@@ -49,7 +48,7 @@ export default function NavBar() {
                 withCredentials: true
             });
             getNotifications();
-            console.log("Mark as read response:", response.data);
+            //console.log("Mark as read response:", response.data);
         }
         catch (error) {
             console.error("Error marking notification as read:", error);
@@ -153,7 +152,7 @@ export default function NavBar() {
                 style={{ width: "60px", height: "60px" }}
               >
                 <img
-                  src={profile.avatar || ""}
+                  src={profile.avatar || "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/avatar-trang-66.jpg"}
                   alt="User Avatar"
                   className="w-100 h-100"
                   style={{ objectFit: "cover" }}

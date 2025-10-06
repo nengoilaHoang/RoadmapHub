@@ -4,6 +4,7 @@ import "./LoginVerify.css";
 import axios from "axios";
 import EnterPin from "../../../components/EnterPin/EnterPin";
 import AlertError from "#components/SignUp/AlertError.jsx";
+import api from "../../../utils/api";
 
 export default function LoginVerify() {
   // Lấy các tham số từ URL
@@ -20,7 +21,7 @@ export default function LoginVerify() {
 
   const handleVerify = async () => {
     try{
-      const res = await axios.post("http://localhost:5000/api/auth/login/verify",
+      const res = await api.post("/auth/login/verify",
         { hashedPin, encodeToken, pin: pin.join("")}, // body
         {
             headers: {
@@ -28,7 +29,7 @@ export default function LoginVerify() {
             },
             withCredentials: true
         });
-        console.log(res.data);
+        //console.log(res.data);
         if (res.data?.status === true) {
           navigate("/");
         } else {

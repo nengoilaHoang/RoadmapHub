@@ -1,17 +1,18 @@
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import api from "../../../utils/api";
 
 const RefreshToken = () => {
     const navigate = useNavigate();
     const handleRefresh = async () => {
         try {
-            const response = await axios.post("http://localhost:5000/api/auth/refresh-token", {
+            const response = await api.post("/auth/refresh-token", {
                 refreshToken: localStorage.getItem("refreshToken")
             });
-            console.log("Response from refresh-token:", response.data);
+            //console.log("Response from refresh-token:", response.data);
             if (response.data?.newAccessToken) {
                 localStorage.setItem("token", response.data.newAccessToken);
-                console.log("Token refreshed successfully", response.data.newAccessToken);
+                //console.log("Token refreshed successfully", response.data.newAccessToken);
                 navigate("/");
             } else {
                 localStorage.removeItem("token");
@@ -19,7 +20,7 @@ const RefreshToken = () => {
                 navigate("/login");
             }
         } catch (error) {
-            console.log(error)
+            //console.log(error)
             localStorage.removeItem("token");
             localStorage.removeItem("refreshToken");
             navigate("/login");

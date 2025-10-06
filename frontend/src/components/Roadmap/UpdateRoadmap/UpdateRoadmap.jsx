@@ -25,7 +25,7 @@ export default function UpdateRoadmap(props) {
         e.preventDefault();
         // Handle roadmap creation logic here
         const response = await api.post(`/roadmaps/edit/${nameRoadmap}`, { name:title, description:description, accountId:user.id, roadmapId: roadmapId });
-        console.log(response)
+        //console.log(response)
         
         if(response.data.success){
             navigate(`/roadmap/edit/${title}`)

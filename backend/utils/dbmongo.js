@@ -13,7 +13,7 @@ async function connectDB() {
             serverSelectionTimeoutMS: 5000, // ✅ Timeout nhanh hơn
             socketTimeoutMS: 45000,  // ✅ Timeout cho operations
         });
-        console.log("Connect to MongoDB successfully");   
+        //console.log("Connect to MongoDB successfully");   
     } catch (error) {
         console.error("Connect to MongoDB failed:", error);
         process.exit(1);
@@ -26,6 +26,6 @@ mongoose.connection.on('error', err => {
 });
 
 mongoose.connection.on('disconnected', () => {
-    console.log('MongoDB disconnected');
+    //console.log('MongoDB disconnected');
 });
 export default connectDB;

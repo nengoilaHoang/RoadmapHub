@@ -3,6 +3,7 @@ import axios from "axios";
 import AlertError from "../../SignUp/AlertError";
 import AlertSuccess from "../../SignUp/AlertSuccess";
 import PopUpAvatar from "../PopUpAvatar/PopUpAvatar";
+import api from "../../../utils/api";
 const ProfileComponent = ({ changeIntoSetting }) => {
     const [email, setEmail] = useState("");
     const [fullname, setFullname] = useState("");
@@ -15,13 +16,13 @@ const ProfileComponent = ({ changeIntoSetting }) => {
     const [uploading, setUploading] = useState(false);
     const [avatarUrl, setAvatarUrl] = useState();
     const getUserData = async () => {
-        const userData = await axios.get('http://localhost:5000/api/profiles/get-profile',{
+        const userData = await api.get('/profiles/get-profile',{
             headers: {
                 'Content-Type': 'application/json'
             },
             withCredentials: true
         });
-        console.log("User data:", userData.data);
+        //console.log("User data:", userData.data);
         setEmail(userData.data.email);
         setFullname(userData.data.profile.fullname);
         setGithub(userData.data.profile.github);
@@ -35,7 +36,7 @@ const ProfileComponent = ({ changeIntoSetting }) => {
     //Hàm thay đổi input
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        //console.log(name, value);
+        ////console.log(name, value);
         switch (name) {
             case "fullname":
                 setFullname(value);
@@ -55,8 +56,8 @@ const ProfileComponent = ({ changeIntoSetting }) => {
         setUploading(true);
         const formData = new FormData();
         formData.append("avatar", file);   
-        console.log(formData.get("avatar"));
-        const res = await axios.post("http://localhost:5000/api/profiles/update-avatar", formData, {
+        //console.log(formData.get("avatar"));
+        const res = await api.post("/profiles/update-avatar", formData, {
                 headers: { "Content-Type": "multipart/form-data" },
                 withCredentials: true,
             });
@@ -68,7 +69,7 @@ const ProfileComponent = ({ changeIntoSetting }) => {
 
     const handleSaveProfile = async () => {
         try {
-            const res = await axios.post('http://localhost:5000/api/profiles/update-profile',{
+            const res = await api.post('/profiles/update-profile',{
                 fullname,
                 github,
                 linkedin
@@ -78,7 +79,7 @@ const ProfileComponent = ({ changeIntoSetting }) => {
                 },
                 withCredentials: true
             });
-            console.log("Response data:", res.data);
+            //console.log("Response data:", res.data);
             if(!res.data?.status){
                 setError("Cập nhật thông tin không thành công");
                 setSuccess("");
