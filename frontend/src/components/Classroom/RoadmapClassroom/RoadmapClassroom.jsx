@@ -33,7 +33,7 @@ export default function RoadmapClassroom(props) {
     const fetchRoamapInClass = async () => {
       const response = await api.get('/classrooms/getRoadmapInClass', { params: { classroomId: classroomId }, withCredentials: true });
       if (response.data[0].roadmapId !== null) {
-        const getRoadmap = await api.get('/roadmaps/getTopicRoadmapByUserId', { params: { id: response.data[0].roadmapId }, withCredentials: true })
+        const getRoadmap = await api.get('/roadmaps/getTopicRoadmapByUserId', { params: { roadmapId: response.data[0].roadmapId }, withCredentials: true })
         setRoadmaps([getRoadmap]);
       }
 

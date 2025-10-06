@@ -15,7 +15,7 @@ class PostController{
         const accountId = req.authenticate.id
         const response  = await PostService.createPost(classroomId,accountId,content);
         const listStudent = await StudentClassroomService.getAll(classroomId);
-        const classroom = await ClassroomService.getRoadmapInClass(accountId,classroomId);
+        const classroom = await ClassroomService.getRoadmapInClass(classroomId);
         //console.log("ssdasd",response.post.id);
         for(const student of listStudent){
             const senderId = accountId;

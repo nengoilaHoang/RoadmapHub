@@ -58,8 +58,8 @@ class RoadmapService {
     async updateRoadmap(accountId, name, nodes, edges){
         return await RoadmapDAO.updateRoadmap(accountId, name, nodes, edges)
     }
-    async getTopicRoadmapByUserId(id){
-        return await RoadmapDAO.getTopicRoadmapByUserId(id);
+    async getTopicRoadmapByUserId(roadmapId){
+        return await RoadmapDAO.getTopicRoadmapByUserId(roadmapId);
     }
 }
 export default new RoadmapService(RoadmapDAO)

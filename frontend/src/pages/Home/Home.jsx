@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useNavigate } from 'react-router-dom';
 import CreateRoadmap from '#components/Roadmap/CreateRoadmap/createRoadmap.jsx';
 import './Home.css';
 import { useState, useEffect } from 'react';
@@ -18,6 +18,9 @@ export default function Home() {
         setOpenCreateClassroom(true);
     }
     const [listLearningClass ,setListLearningClass] = useState([]);
+    const [listTeachingClass, setListTeachingClass] = useState([]);
+    const [myRoadmaps,setMyRoadmaps] = useState([])
+    const navigate = useNavigate();
     const { isLoggedIn, user } = useCheckLogin();
     useEffect(() => {
         const learningClass = async () => {
@@ -27,8 +30,23 @@ export default function Home() {
             //console.log(response.data);
             setListLearningClass(response.data);
         }
+        const teachingClass = async () =>{
+            const response = await api.get('/classrooms/getTeachingClass', {
+                withCredentials: true
+            });
+            setListTeachingClass(response.data);
+        }
+        const myRoadmap = async () =>{
+            const response = await api.get('/roadmaps/getRoadmapByUserId',{withCredentials: true});
+            setMyRoadmaps(response.data.data)
+        }
         learningClass();
+        teachingClass();
+        myRoadmap();
     },[isLoggedIn])
+    const ViewPageRoadmap = (roadmap)=>{
+        navigate(`/roadmap/view/${roadmap.id}`,{ state: roadmap });
+    }
 
     const handleBookmarkToggle = (id, isBookmarked) => {
         //console.log(`Card ${id} bookmarked: ${isBookmarked}`);
@@ -80,17 +98,17 @@ export default function Home() {
     }
     ];
 
-    const teachingClasses = [
-    {
-        id: 5,
-        name: "Gym Class",
-        description: "Fitness training sessions",
-        author: "Quang Bui",
-        learning: 25,
-        teaching: 1,
-        isUserCard: true
-    }
-    ];
+    // const teachingClasses = [
+    // {
+    //     id: 5,
+    //     name: "Gym Class",
+    //     description: "Fitness training sessions",
+    //     author: "Quang Bui",
+    //     learning: 25,
+    //     teaching: 1,
+    //     isUserCard: true
+    // }
+    // ];
 
     const learningClasses = [
     {
@@ -186,8 +204,9 @@ export default function Home() {
                                 <i className="bi bi-map"></i> Your Custom Roadmaps
                             </h3>
                             <div className="roadmap-grid">
-                                {customRoadmaps.map(roadmap => (
-                                    <div key={roadmap.id} className="roadmap-card-wrapper">
+                                {myRoadmaps.map(roadmap => (
+                                    
+                                    <div key={roadmap.id} className="roadmap-card-wrapper"onClick={()=>ViewPageRoadmap(roadmap)}>
                                         <RoadmapCardInHome
                                             id={roadmap.id}
                                             name={roadmap.name}
@@ -200,6 +219,7 @@ export default function Home() {
                                             onBookmarkToggle={handleBookmarkToggle}
                                         />
                                     </div>
+                                    
                                 ))}
                                 <div className="roadmap-card-wrapper">
                                     <button className="btn-add-roadmap" onClick={onCreateRoadmap}>
@@ -216,20 +236,22 @@ export default function Home() {
                                 <i className="bi bi-person-video3"></i> Your Class Teaching
                             </h3>
                             <div className="roadmap-grid">
-                                {teachingClasses.map(roadmap => (
+                                {listTeachingClass.map(roadmap => (
+                                    <a key={roadmap.id} href={`classroom/view/${roadmap.name}/${roadmap.id}`}>
                                     <div key={roadmap.id} className="roadmap-card-wrapper">
                                         <RoadmapCardInHome
                                             id={roadmap.id}
                                             name={roadmap.name}
                                             description={roadmap.description}
                                             author={roadmap.author}
-                                            learning={roadmap.learning}
-                                            teaching={roadmap.teaching}
-                                            isUserCard={false}
-                                            isMarked={roadmap.isMarked}
+                                            learning={""}
+                                            teaching={""}
+                                            isUserCard={true}
+                                            isMarked={""}
                                             onBookmarkToggle={handleBookmarkToggle}
                                         />
                                     </div>
+                                    </a>
                                 ))}
                                 <div className="roadmap-card-wrapper">
                                     <button className="btn-add-roadmap" onClick={onCreateClassroom}>
@@ -247,17 +269,17 @@ export default function Home() {
                             </h3>
                             <div className="roadmap-grid">
                                 {listLearningClass.map(roadmap => (
-                                    <a href={`classroom/view-student/${roadmap.name}/${roadmap.classroomId}`}>
+                                    <a key={roadmap.id} href={`classroom/view-student/${roadmap.name}/${roadmap.classroomId}`}>
                                         <div key={roadmap.id} className="roadmap-card-wrapper">
                                             <RoadmapCardInHome
                                                 id={roadmap.id}
                                                 name={roadmap.name}
                                                 description={roadmap.description}
                                                 author={roadmap.author}
-                                                learning={roadmap.learning}
-                                                teaching={roadmap.teaching}
+                                                learning={""}
+                                                teaching={""}
                                                 isUserCard={true}
-                                                isMarked={roadmap.isMarked}
+                                                isMarked={""}
                                                 onBookmarkToggle={handleBookmarkToggle}
                                             />
                                         </div>

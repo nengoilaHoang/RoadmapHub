@@ -52,8 +52,13 @@ class ClassroomController{
         res.json(response);
     }
     async getLearningClass(req,res){
-        const {accountId} = req.authenticate.id;
+        const accountId = req.authenticate.id;
         const response = await ClassroomService.getLearningClass(accountId);
+        res.json(response);
+    }
+    async getTeachingClass(req,res){
+        const accountId = req.authenticate.id;
+        const response = await ClassroomService.getTeachingClass(accountId);
         res.json(response);
     }
     async checkLearningClass(req,res){

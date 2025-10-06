@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import TopBarView from "#components/Roadmap/TopBarView/TopBarView.jsx"
-import { useParams} from "react-router-dom";
+import { useParams,useLocation} from "react-router-dom";
 import { useCallback } from "react";
 import {
   ReactFlow,
@@ -63,6 +63,8 @@ export default function RoadmapView(){
         const res = await api.post(`checkListAccount/change-item-checklist`,{checkListSelected: node, roadmapId},{withCredentials: true});
         //console.log(res.data);
     }
+    const location = useLocation();
+    const roadmap = location.state;
     useEffect(()=>{
         fetchAPI();
     },[isReload])
@@ -93,7 +95,7 @@ export default function RoadmapView(){
     });
     return(
         <div style={{ display: 'flex',width:'100%', height:'130vh', flexDirection: "column", margin: 0}}>
-            <TopBarView />
+            <TopBarView roadmap={roadmap}/>
             <div style={{ display: 'flex', width:'100%', height:'130vh', flexDirection: "row", margin: 0}}>
                 <ReactFlow
                     nodes={nodes}

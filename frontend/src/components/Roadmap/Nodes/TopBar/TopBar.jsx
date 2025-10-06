@@ -34,7 +34,7 @@ export default function TopBar(props) {
     })
     //console.log("this is your roadmap id: ",roadmap.id)
     if(roadmap.data?.id)
-      navigate(`/roadmap/view/${roadmap.data.id}`);
+      navigate(`/roadmap/view/${roadmap.data.id}`,{state:roadmap.data});
   }
 
   return (

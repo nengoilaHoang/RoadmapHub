@@ -123,9 +123,9 @@ class RoadmapDAO {
         }
         return roadmap;
     }
-    async getTopicRoadmapByUserId(id){
+    async getTopicRoadmapByUserId(roadmapId){
         // await connectDB();
-        const roadmap = await RoadmapSchemaModel.findOne({id:id});
+        const roadmap = await RoadmapSchemaModel.findOne({roadmapId:roadmapId});
         return roadmap;
     }
 }

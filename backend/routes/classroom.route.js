@@ -8,5 +8,6 @@ router.post("/addRoadmapIntoClass",ClassroomController.addRoadmapIntoClass)
 router.get("/getRoadmapInClass",ClassroomController.getRoadmapInClass)
 router.get("/getLearningClass",ClassroomController.getLearningClass);
 router.post("/checkLearningClass",ClassroomController.checkLearningClass);
+router.get("/getTeachingClass",ClassroomController.getTeachingClass);
 // router.get("/getAll",ClassroomController.getAll);
 export default router;

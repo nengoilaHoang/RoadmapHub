@@ -15,7 +15,7 @@ export default function RoadmapStudentClassroom(props) {
     const fetchRoamapInClass = async () => {
       const response = await api.get('/classrooms/getRoadmapInClass', { params: { classroomId: classroomId }, withCredentials: true });
       if (response.data[0].roadmapId !== null) {
-        const getRoadmap = await api.get('/roadmaps/getTopicRoadmapByUserId', { params: { id: response.data[0].roadmapId }, withCredentials: true })
+        const getRoadmap = await api.get('/roadmaps/getTopicRoadmapByUserId', { params: { roadmapId: response.data[0].roadmapId }, withCredentials: true })
         setRoadmaps([getRoadmap]);
       }
 
@@ -38,7 +38,7 @@ export default function RoadmapStudentClassroom(props) {
             setQuizzes(responseQuizById.data[0]);
             return;
           }
-          const response = await api.get('/quizzes/getQuiz',{params:{userCreateQuiz:selectedRoadmap?.data.roadmap.accountId,roadmapId:selectedRoadmap?.data.roadmap.id, classroomId:classroomId}});
+          const response = await api.get('/quizzes/getQuiz',{params:{userCreateQuiz:selectedRoadmap?.data.roadmap.accountId,roadmapId:selectedRoadmap?.data.roadmap.roadmapId, classroomId:classroomId}});
           const quiz = response.data[0];
            if(quiz.userCreateQuiz === user.accountId) setEdit(true);
           setQuizzes({
@@ -82,49 +82,6 @@ export default function RoadmapStudentClassroom(props) {
     setSelectedTopic(tIndex);
     setStep(3);
   };
-  // useEffect(() => {
-  //   if (selectedRoadmap) {
-  //       const fetchAll = async()=>{
-  //       const response = await api.get('/quizzes/getQuiz',{params:{userCreateQuiz:selectedRoadmap?.data.roadmap.accountId,roadmapId:selectedRoadmap?.data.roadmap.id, classroomId:classroomId}});
-  //       //console.log("kkk",response);
-  //       if(response.data === null)
-  //       {
-  //         setQuizzes({
-  //         userCreateQuiz: selectedRoadmap.data.roadmap.accountId,
-  //         userDoQuiz: "",
-  //         roadmapId: selectedRoadmap.data.roadmap.id,
-  //         classroomId:classroomId,
-  //         topics: selectedRoadmap.data.roadmap.nodes
-  //           .filter(t => t.type === "topic")
-  //           .map(node => ({
-  //             topicId: node.id,
-  //             topicName: node.data.label,
-  //             tests: [
-  //               {
-  //                 title: "",
-  //                 startTime: "",
-  //                 endTime: "",
-  //                 duration: 30,
-  //                 questions: [
-  //                   {
-  //                     question: "",
-  //                     answers: [{ text: "", correct: false }]
-  //                   }
-  //                 ]
-  //               }
-  //             ]
-  //           }))
-  //         });
-  //       }
-  //       else{
-  //         setQuizzes(response.data[0]);
-  //       }
-  //     }
-  //     fetchAll();
-      
-  //   }
-    
-  // }, [selectedRoadmap]);
 
   const updateQuiz = async (selectedTopic, quizIndex, updatedQuiz) => {
       const copy = { ...quizzes, userDoQuiz: user.id };
@@ -180,7 +137,7 @@ export default function RoadmapStudentClassroom(props) {
               >
                 {r.data.roadmap.name}
                 <div>
-                  <a href="#">
+                  <a href={`roadmap/view/${r.data.roadmap.id}`}>
                     <button
                   className="btn btn-sm btn-outline-secondary"
                 >

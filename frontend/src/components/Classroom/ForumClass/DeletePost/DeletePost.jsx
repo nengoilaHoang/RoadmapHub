@@ -3,7 +3,8 @@ export default function DeletePost(props) {
     const { post, onClose, handleDeletePost } = props;
     const handleDelete = (e) => {
         e.preventDefault();
-        handleDeletePost(post.postId)
+        handleDeletePost(post.postId);
+        onClose();
     }   
     return (
         <form onSubmit={handleDelete}>

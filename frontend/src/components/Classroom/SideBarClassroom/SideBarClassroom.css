@@ -2,13 +2,13 @@
   width: 250px;
   background-color: white;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
   position: absolute;
   height: 100vh;
   left: 0;
-  top: 115px; /* cách header 115px */
+  top: 90px; /* cách header 115px */
   z-index: 100;
-  overflow-y: auto;
+  border: none;  
+  box-shadow: none;
 }
 .class-selector {
   margin-bottom: 30px;

@@ -2,7 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './TopBarView.css';
 
-export default function TopBarView() {
+export default function TopBarView(props) {
+    const {roadmap} = props 
     return (
         <div className="topbar-container">
             <div className="topbar-navigation">
@@ -14,7 +15,18 @@ export default function TopBarView() {
                     <button className="btn-bookmark">
                         <i className="bi bi-bookmark"></i>
                     </button>
-                    
+                    <div class="dropdown">
+                        <button className="btn-schedule" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical"></i>
+                            Action
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href={`/roadmap/edit/${roadmap.name}/${roadmap.id}`}>Edit</a></li>
+                            <li><a class="dropdown-item" href="#">Delete</a></li>
+                        </ul>
+                    </div>
+
+
                     <button className="btn-schedule">
                         <i className="bi bi-calendar3"></i>
                         Schedule Learning Time

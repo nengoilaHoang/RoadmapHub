@@ -212,6 +212,7 @@ export default function RoadmapEditPage() {
       e.preventDefault();
       //console.log('Nodes:', nodes);
       //console.log('Edges:', edges);
+      console.log()
       const response = await api.post('/roadmaps/edit-nodes',{name:name,nodes:nodes,edges:edges,id:id},{
           withCredentials: true
       });

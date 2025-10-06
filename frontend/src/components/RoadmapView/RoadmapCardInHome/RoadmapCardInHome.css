@@ -76,7 +76,7 @@
   align-items: flex-start;
   justify-content: center;
   animation: fadeInOverlay 150ms ease-out forwards;
-  pointer-events: auto;
+  pointer-events: none;
 }
 
 @keyframes fadeInOverlay {

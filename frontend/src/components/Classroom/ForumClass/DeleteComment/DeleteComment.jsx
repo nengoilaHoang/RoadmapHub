@@ -3,7 +3,8 @@ export default function DeleteComment(props) {
     const { comment, onClose, handleDeleteComment } = props;
     const handleDelete = (e) => {
         e.preventDefault();
-        handleDeleteComment(comment.id)
+        handleDeleteComment(comment.id);
+        onClose();
     }   
     return (
         <form onSubmit={handleDelete}>

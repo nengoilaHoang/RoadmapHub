@@ -21,6 +21,9 @@ class ClassroomService{
     async getLearningClass(accountId){
         return await ClassroomDAO.getLearningClass(accountId);
     }
+    async getTeachingClass(accountId){
+        return await ClassroomDAO.getTeachingClass(accountId);
+    }
     async checkLearningClass(accountId,classroomId){
         return await ClassroomDAO.checkLearningClass(accountId,classroomId);
     }

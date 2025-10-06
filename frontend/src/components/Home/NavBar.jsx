@@ -57,7 +57,7 @@ export default function NavBar() {
     let notificationbutton;
     if (isLoggedIn) { 
         notificationbutton =
-        <div className="dropdown">
+        <div className="dropdown me-3">
                             <button
                                 className="btn btn-dark position-relative"
                                 type="button"

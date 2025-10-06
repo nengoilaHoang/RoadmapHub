@@ -67,7 +67,12 @@ class ClassroomDAO{
         const rows = await db('classroom')
                         .leftJoin('studentclassroom','studentclassroom.classroomId','classroom.id')
                         .select('*')
-                        .where({studentId:accountId});
+                        .where({"studentclassroom.studentId":accountId});
+        return rows;
+    }
+    async getTeachingClass(accountId){
+        const rows = await db('classroom')
+                           .where('teacherId',accountId);
         return rows;
     }
     async checkLearningClass(accountId,classroomId){

@@ -9,7 +9,7 @@ export default function EditPost(props){
   const handleSubtmit = (e)=>{
     e.preventDefault();
     handleEditPost(contentPost,post.postId)
-    setCloseEdit;
+    setCloseEdit();
   }
     return(<>
     <form onSubmit={handleSubtmit}>

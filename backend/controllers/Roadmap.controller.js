@@ -137,8 +137,8 @@ class RoadmapController {
         }
     }
     async getTopicRoadmapByUserId(req,res){
-        const {id} = req.query;
-        const response =  await RoadmapService.getTopicRoadmapByUserId(id);
+        const {roadmapId} = req.query;
+        const response =  await RoadmapService.getTopicRoadmapByUserId(roadmapId);
         res.json({success:true,roadmap:response})
     }
 }
