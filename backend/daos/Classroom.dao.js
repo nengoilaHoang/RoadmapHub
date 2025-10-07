@@ -3,12 +3,12 @@ import Classroom from '../models/Classroom.model.js'
 import db from '../utils/db.js'
 class ClassroomDAO{
     async getNameAll(accountId){
-        const rows = await db('classroom').where({teacherId:accountId});
+        const rows = await db('Classroom').where({teacherId:accountId});
         return rows.map(Classroom.fromRow);
     }
     async getAll() {
-        const rows = await db('post as p')
-            .leftJoin('comment as c', 'c.postId', 'p.id')
+        const rows = await db('Post as p')
+            .leftJoin('Comment as c', 'c.postId', 'p.id')
             .select(
                 'p.id as postId',
                 'p.title',
@@ -19,7 +19,7 @@ class ClassroomDAO{
                 'c.createDate as commentDate',
                 'c.repCommentId'
             )
-            .where('p.classroomId', classroomId)
+            .where('p.ClassroomId', classroomId)
             .orderBy([{ column: 'p.createDate', order: 'desc' }, { column: 'c.createDate', order: 'asc' }]);
 
         return rows;
@@ -29,7 +29,7 @@ class ClassroomDAO{
             const teacherId = accountId;
             const id = genUUID()
             const classroom = new Classroom(id,teacherId,name, description);
-            await db('classroom').insert(classroom);
+            await db('Classroom').insert(classroom);
             return {
                     success:true,
                     classroomId:id,
@@ -38,7 +38,7 @@ class ClassroomDAO{
     }
     async checkClassroom(name,accountId){
             const teacherId = accountId;
-            const exit = await db('classroom').where({name,teacherId}).first();
+            const exit = await db('Classroom').where({name,teacherId}).first();
             if(exit){
                 return {
                     success:false,
@@ -53,31 +53,31 @@ class ClassroomDAO{
             }
     }
     async addRoadmapIntoClass(accountId,roadmapId,classroomId){
-        await db('classroom').where({teacherId:accountId,id:classroomId}).update({roadmapId:roadmapId});
+        await db('Classroom').where({teacherId:accountId,id:classroomId}).update({roadmapId:roadmapId});
         return {
             success:true,
             message:'Add roadmap into classroom successfully'
         }
     }
     async getRoadmapInClass(classroomId){
-        const classroom = await db('classroom').where({id:classroomId});
+        const classroom = await db('Classroom').where({id:classroomId});
         return classroom;
     }
     async getLearningClass(accountId){
-        const rows = await db('classroom')
-                        .leftJoin('studentclassroom','studentclassroom.classroomId','classroom.id')
+        const rows = await db('Classroom')
+                        .leftJoin('StudentClassroom','StudentClassroom.classroomId','Classroom.id')
                         .select('*')
-                        .where({"studentclassroom.studentId":accountId});
+                        .where({"StudentClassroom.studentId":accountId});
         return rows;
     }
     async getTeachingClass(accountId){
-        const rows = await db('classroom')
+        const rows = await db('Classroom')
                            .where('teacherId',accountId);
         return rows;
     }
     async checkLearningClass(accountId,classroomId){
         const studentId = accountId;
-        const check = await db('studentclassroom').where({studentId,classroomId:classroomId}).first();
+        const check = await db('StudentClassroom').where({studentId,classroomId:classroomId}).first();
         if(check){
             return {
                 success:true,

@@ -4,10 +4,10 @@ import db from '../utils/db.js'
 class PostDAO {
     async getPosts(classroomId) {
         //console.log(classroomId);
-        const rows = await db('post as p')
-            .leftJoin('comment as c', 'c.postId', 'p.id')
-            .leftJoin('profile as ap', 'ap.accountId', 'p.accountId')
-            .leftJoin('profile as ac', 'ac.accountId', 'c.accountId')
+        const rows = await db('Post as p')
+            .leftJoin('Comment as c', 'c.postId', 'p.id')
+            .leftJoin('Profile as ap', 'ap.accountId', 'p.accountId')
+            .leftJoin('Profile as ac', 'ac.accountId', 'c.accountId')
             .select(
                 'p.id as postId',
                 'p.content as postContent',
@@ -63,7 +63,7 @@ class PostDAO {
         const now = new Date();
         const formattedDate = now.toISOString().split('T')[0];
         const post = new Post(genUUID(), accountId, classroomId, formattedDate, content);
-        await await db('post').insert(post);
+        await await db('Post').insert(post);
         return ({
             success: true,
             message: "Creating post successfully",
@@ -72,7 +72,7 @@ class PostDAO {
 
     }
     async updatePost( id, content) {
-        await db('post')
+        await db('Post')
             .where({ id: id })
             .update({ content: content });
         return ({
@@ -81,9 +81,9 @@ class PostDAO {
         })
     }
     async deletePost(id) {
-        await db('comment').where({ postId: id })
+        await db('Comment').where({ postId: id })
             .del();
-        await db('post')
+        await db('Post')
             .where({ id: id })
             .del();
 

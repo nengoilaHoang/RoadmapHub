@@ -13,20 +13,20 @@ class NotificationDAO {
             link
         );
         
-        await db('notification').insert(notification);
+        await db('Notification').insert(notification);
         return {
             success: true,
             message: "Notification created successfully"
         };
     }
     async getNotificationsByReceiverId(receiverId) {
-        const rows = await db('notification')
+        const rows = await db('Notification')
             .where({ receiverId: receiverId })
             .orderBy('createDate', 'desc');
         return rows.map(row => Notification.fromRow(row));
     }
     async markAsRead(notificationId) {
-        await db('notification')
+        await db('Notification')
             .where({ id: notificationId })
             .update({ isRead: true });
         return {

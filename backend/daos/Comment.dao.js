@@ -4,7 +4,7 @@ import Comment from '../models/Comment.model.js';
 
 class CommentDAO {
     async getCommentsByPost(postId) {
-        const rows = await db('comment')
+        const rows = await db('Comment')
             .where({ postId })
             .orderBy('createDate', 'asc');
 
@@ -17,7 +17,7 @@ class CommentDAO {
         const formattedDate = now.toISOString().split('T')[0];
         const comment = new Comment(genUUID(),accountId, classroomId, postId,formattedDate, content)
 
-        await db('comment').insert(comment);
+        await db('Comment').insert(comment);
 
         return   ({
             success: true,
@@ -26,7 +26,7 @@ class CommentDAO {
     }
 
     async updateComment(id, content) {
-        await db('comment')
+        await db('Comment')
             .where({ id:id })
             .update({ content:content });
 
@@ -37,7 +37,7 @@ class CommentDAO {
     }
 
     async deleteComment(id) {
-        await db('comment')
+        await db('Comment')
             .where({ id:id })
             .del();
 

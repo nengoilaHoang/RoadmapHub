@@ -6,11 +6,11 @@ import genUUID from '../Helps/genUUID.js';
 
 class AccountDAO {
     async getAccountAll(){
-        const rows = await db('account').select('*');
+        const rows = await db('Account').select('*');
         return rows.map(Account.fromRow);
     }
     async getAccount(email, passWord) {
-        const row = await db('account')
+        const row = await db('Account')
             .where({
                 email: email,
                 password: passWord
@@ -20,7 +20,7 @@ class AccountDAO {
     }
 
     async getPassWord(email) {
-        const row = await db('account')
+        const row = await db('Account')
             .where({ email })
             .select('password')
             .first();
@@ -31,20 +31,20 @@ class AccountDAO {
         try{
             const hashedPassword = await bcrypt.hash(password, 10);
             const account = new Account(genUUID(), username, email, hashedPassword, 1);
-            //console.log("Account to be created:", account);
-            const result = await db('account').insert(account);
+            console.log("Account to be created:", account);
+            const result = await db('Account').insert(account);
             return {
                     success:true,
                     message:'Create account successfully'
             }
         }
         catch(e){
-            //console.log(e);
+            console.log(e);
         }
         
     }
     async checkExitAccountEmail(email){
-        const exit = await db('account').where({email}).first();
+        const exit = await db('Account').where({email}).first();
         if(exit){
             return {
                 success:false,
@@ -59,7 +59,7 @@ class AccountDAO {
         }
     }
     async checkExitAccountUsername(username){
-        const exit = await db('account').where({username}).first();
+        const exit = await db('Account').where({username}).first();
         if(exit){
             return {
                 success:false,
@@ -74,7 +74,7 @@ class AccountDAO {
         }
     }
     async updateAccount(id, passWord) {
-        const rows = await db('account')
+        const rows = await db('Account')
             .where({ id })
             .update({ password:passWord });
         if (rows === 0) {
@@ -83,37 +83,37 @@ class AccountDAO {
         return this.getAccountById(id);
     }
     async deleteAccount(id) {
-        const rows = await db('account').where({ id }).del();
+        const rows = await db('Account').where({ id }).del();
         return rows > 0;
     }
     async getRefreshTokenById(accountId) {
-        const row = await db('account')
+        const row = await db('Account')
             .where({ id: accountId })
             .select('refreshToken')
             .first();
         return row ? row.refreshToken : null;
     }
     async setRefreshToken(accountId, refreshToken) {
-        const rows = await db('account')
+        const rows = await db('Account')
             .where({ id: accountId })
             .update({ refreshToken });
         return rows > 0;
     }
     async getAccountByEmail(email) {
-        const row = await db('account')
+        const row = await db('Account')
             .where({ email })
             .first();
         return row ? Account.fromRow(row) : null;
     }
     async changePassword(email, newPassword) {
         const hashedPassword = await bcrypt.hash(newPassword, 10);
-        const rows = await db('account')
+        const rows = await db('Account')
             .where({ email })
             .update({ password: hashedPassword });
         return rows > 0;
     }
     async changeEmail(oldEmail, newEmail) {
-        const rows = await db('account')
+        const rows = await db('Account')
             .where({ email: oldEmail })
             .update({ email: newEmail });
         return rows > 0;

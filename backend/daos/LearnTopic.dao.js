@@ -6,23 +6,23 @@ class learnTopicDAO{
     //get
     async getLearnTopic(accountId, topicId){
         ////console.log("in DAO: ",accountId, topicId);
-        const learnTopic = await db('learntopic')
+        const learnTopic = await db('LearnTopic')
             .where({accountId: accountId, topicId: topicId})
             .first();
         return learnTopic;
     }
     //CRUD
     async createLearnTopic(learnTopic){
-        await db('learntopic')
+        await db('LearnTopic')
             .insert(learnTopic);
     }
     async updateLearnTopic(learnTopic){
-        await db('learntopic')
+        await db('LearnTopic')
             .where({accountId: learnTopic.accountId, topicId: learnTopic.topicId })
             .update({topicProgress: learnTopic.topicProgress});
     }
     async deleteLearnTopic(learnTopic){
-        await db('learntopic')
+        await db('LearnTopic')
             .where({accountId: learnTopic.accountId, topicId: learnTopic.topicId })
             .delete();
     }

@@ -1,4 +1,5 @@
 import React, { use, useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import api from "#utils/api";
 import TopicRoadmapClassroom from "#components/Classroom/RoadmapClassroom/TopicRoadmapClassroom/TopicRoadmapClassroom.jsx";
 import QuizRoadmapClassroom from "#components/Classroom/RoadmapClassroom/QuizRoadmapClassroom/QuizRoadmapClassroom.jsx";
@@ -11,6 +12,7 @@ export default function RoadmapStudentClassroom(props) {
   const [quizzes, setQuizzes] = useState(null);
   const [user,setUser]=useState({});
   const [edit,setEdit]=useState(false);
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchRoamapInClass = async () => {
       const response = await api.get('/classrooms/getRoadmapInClass', { params: { classroomId: classroomId }, withCredentials: true });
@@ -120,6 +122,9 @@ export default function RoadmapStudentClassroom(props) {
     })
     //console.log(response);
   };
+  const ViewPageRoadmap = (roadmap)=>{
+        navigate(`/roadmap/view/${roadmap.roadmapId}`,{ state: roadmap });
+    }
 
   return (
 
@@ -137,13 +142,14 @@ export default function RoadmapStudentClassroom(props) {
               >
                 {r.data.roadmap.name}
                 <div>
-                  <a href={`roadmap/view/${r.data.roadmap.id}`}>
+
                     <button
                   className="btn btn-sm btn-outline-secondary"
+                  onClick={()=>ViewPageRoadmap(r.data.roadmap)}
                 >
                   Xem Roadmap →
                 </button>
-                  </a>
+                 
                    
                 <button
                   className="btn btn-sm btn-outline-primary"

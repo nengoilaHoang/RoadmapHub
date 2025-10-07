@@ -4,12 +4,12 @@ import Team from '../models/Team.model.js';
 class teamDAO{
     async getTeamByUserId(userId) {
         const rows = 
-        await db('team')
-        .join('teammember', 'team.id', 'teammember.teamId')
-        .join('account', 'teammember.accountId', 'account.id')
-        .where('account.id', userId)
-        .distinct('team.id')
-        .select('team.*');
+        await db('Team')
+        .join('Teammember', 'Team.id', 'TeamMember.teamId')
+        .join('Account', 'TeamMember.accountId', 'Account.id')
+        .where('Account.id', userId)
+        .distinct('Team.id')
+        .select('Team.*');
         //console.log("Account ID:", userId);
         //console.log("Rows:", rows);
         const teams = rows.map(row => Team.teamList(row));

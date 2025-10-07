@@ -9,7 +9,7 @@ class RoadmapDAO {
     //====================my sql
     async createRoadmap(name, description, accountId) {
         const roadmap = new Roadmap(geneUUID(),accountId,null,name, description,null, null, null);
-        await db('roadmap').insert(roadmap);
+        await db('Roadmap').insert(roadmap);
         return {
                 success:true,
                 message:'Create roadmap successfully',
@@ -17,28 +17,28 @@ class RoadmapDAO {
         }
     }
     async editRoadmap(name, description,accountId,roadmapId) {
-        await db('roadmap').where({ accountId:accountId,id:roadmapId }).update({ name:name, description:description });
+        await db('Roadmap').where({ accountId:accountId,id:roadmapId }).update({ name:name, description:description });
         return {
             success: true,
             message: 'Edit roadmap successfully'
         }
     }
     async getRoadmapByAccountIdAndName(accountId, name){
-        const roadmap = await db('roadmap')
+        const roadmap = await db('Roadmap')
             .where({accountId: accountId, name: name})
             .select()
             .first()
         return roadmap
     }
     async deleteRoadmap(name) {
-        await db('roadmap').where({ name }).del();
+        await db('Roadmap').where({ name }).del();
         return {
             success: true,
             message: 'Delete roadmap successfully'
         }
     }
     async checkRoadmap(name,accountId){
-        const exit = await db('roadmap').where({name,accountId}).first();
+        const exit = await db('Roadmap').where({name,accountId}).first();
         if(exit){
             return {
                 success:false,
@@ -57,10 +57,10 @@ class RoadmapDAO {
     //     await roadmap.save();
     // }
     async getRoadmapByUserId(accountId) {
-        const rows = await db('roadmap')
-        .join('account', 'roadmap.accountId', 'account.id')
-        .where('account.id', accountId)
-        .select('roadmap.*');
+        const rows = await db('Roadmap')
+        .join('Account', 'Roadmap.accountId', 'Account.id')
+        .where('Account.id', accountId)
+        .select('Roadmap.*');
         ////console.log("rows: ", rows);
         if (rows.length === 0) {
             return null;
@@ -70,13 +70,13 @@ class RoadmapDAO {
         }
     }
     async getRoadmapByTeamId(teamId) {
-        await db('roadmap')
-        .join('team', 'roadmap.teamId', 'team.id')
-        .where('team.id', teamId)
-        .select('roadmap.*');
+        await db('Roadmap')
+        .join('Team', 'Roadmap.teamId', 'Team.id')
+        .where('Team.id', teamId)
+        .select('Roadmap.*');
     }
     async getRoadmapByName(accountId,name) {
-        const roadmap = await db('roadmap').where({accountId:accountId, name:name }).first();
+        const roadmap = await db('Roadmap').where({accountId:accountId, name:name }).first();
         return roadmap;
     }
 
