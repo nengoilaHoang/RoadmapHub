@@ -54,7 +54,7 @@ class LLMService {
         type: "topic",
         position: { x: baseX, y: baseY },
         data: { 
-          label: nodeObj.data.titleTopic,
+          label: nodeObj.data.label,
           width: 180,
           height: 45
         },
@@ -88,7 +88,7 @@ class LLMService {
             type: "topic",
             position: { x: subX, y: baseY + subY }, // Y của subNode so với topic chính
             data: {
-              label: subNode.titleTopic,
+              label: subNode?.label||subNode?.data?.label,
               width: 180,
               height: 45
             },
@@ -140,21 +140,23 @@ class LLMService {
     CRITICAL OUTPUT RULE:
     Your response must contain ONLY valid JSON. No explanations, no introductory text, no code blocks, no markdown formatting.
     STRUCTURE RULES:
-    The roadmap contains "nodes" array
-    Each node has a "data" object with required fields:
-    "label": short, unique identifier (max 20 chars)
-    "titleTopic": the topic title
-    "descriptionTopic": brief description (max 100 chars)
-    Nodes may contain "subNodes" array (optional)
-    SubNodes have same structure as nodes but cannot contain further subNodes
+    - The roadmap contains "nodes" array
+    - Each node has a "data" object with required fields:
+    - "label": short, unique identifier (max 20 chars)
+    - "titleTopic": the topic title
+    - "descriptionTopic": brief description (max 100 chars)
+    - Nodes may contain "subNodes" array (optional)
+    - SubNodes have same structure as nodes but cannot contain further subNodes
     CONTENT RULES:
-    Generate topics relevant to the requested theme
-    Use concise, professional language
-    Avoid redundant or overly similar topics
+    - Generate topics relevant to the requested theme
+    - Use concise, professional language
+    - Avoid redundant or overly similar topics
+    - Each topic (node) is numbered sequentially as 1, 2, 3, ... and each subtopic (subNode) follows the format of its parent topic number, such as 1.1, 1.2, 2.1, etc. The 'label' field remains the short, unique identifier, but the numbering must appear before the 'titleTopic' to indicate hierarchy. Example: 'titleTopic': '1. Warm-up and Stretching', subTopic: '1.1 Treadmill Workout'.
     SCOPE RULES:
-    Main topics only: Generate exactly 8-10 nodes without subNodes
-    Main topics with subtopics: Generate exactly 4-5 nodes, each with 1-3 subNodes
-    If request is ambiguous, default to main topics only
+    - Main topics only: Generate exactly 8-10 nodes without subNodes
+    - Main topics with subtopics: Generate exactly 4-5 nodes, each with 1-3 subNodes
+    - If request is ambiguous, default to main topics only
+    
     OUTPUT FORMAT:
     Start immediately with { and end with }
 
@@ -162,12 +164,12 @@ class LLMService {
       "nodes": [
         {
           "data": {
-            "label": "Warm-up",
+            "label": "1 Warm-up",
             "titleTopic": "Warm-up and Stretching",
             "descriptionTopic": "Essential exercises to prepare for your workout",
             "subNodes": [
               {
-                "label": "Treadmill",
+                "label": "1.1 Treadmill",
                 "titleTopic": "Treadmill Workout",
                 "descriptionTopic": "Effective treadmill exercises for cardio"
               }
@@ -186,7 +188,7 @@ class LLMService {
           { role: "system", content: systemPrompt },
           { role: "user", content: text } 
         ],
-        temperature: 0.8,
+        temperature: 0,
         top_k: 40,
         top_p: 0.95,
         repeat_penalty: 1.1,
@@ -200,68 +202,55 @@ class LLMService {
   editRoadmapCase = async(text, nodes, edges) => {
     const systemPrompt=
     `
-    You are a JSON roadmap generator. Follow all rules strictly.
+    You are a JSON-only generator.
+    ====================
+    OUTPUT RULES:
+    ====================
+    1. Output ONLY a single JSON ARRAY of strings.
+      Example:
+      ["2.1 Common Words","2.2 Word Families","2.3 Collocations","2.4 Slang and Informal Words"]
 
-    INPUT DESCRIPTION:
-    You are given:
-    - "nodes": an array of objects, each containing "id" and "data" (where "data.label" and "data.titleTopic" provide clues about the topic)
-    - "edges": an array of objects, each with "source" and "target" (representing directional relationships between nodes)
+    2. Each item in the array must:
+      - Be a string.
+      - Start with "2." followed by a number (e.g., "2.1", "2.2", ...).
+      - Contain a short descriptive topic name (2–5 words).
 
-    Your task is to analyze these inputs:
-    1. Use the text in "data.label" or "data.titleTopic" to understand what each node represents.
-    2. Use the "edges" to infer hierarchical or logical relationships (source → target means parent → child).
-    3. If relationships make sense (e.g., one topic can logically group others), organize output into main topics with "subNodes".
-    4. If no clear hierarchy exists, output all nodes as main topics only.
+    3. The array must contain between 3 and 5 items.
+    4. Output MUST:
+      - Start with '[' and end with ']'.
+      - Be valid JSON (parsable by JSON.parse).
+      - Contain no explanations, no markdown, no text outside the array.
 
-    CRITICAL OUTPUT RULE:
-    Your response must contain ONLY valid JSON. No explanations, no introductory text, no code blocks, no markdown formatting.
+    5. If you cannot comply, output [].
 
-    STRUCTURE RULES:
-    The roadmap contains a "nodes" array.
-    Each node has a "data" object with required fields:
-    - "label": short, unique identifier (max 20 chars)
-    - "titleTopic": the topic title
-    - "descriptionTopic": brief description (max 100 chars)
-    Nodes may contain a "subNodes" array (optional)
-    SubNodes have the same structure as nodes but cannot contain further subNodes.
-
-    CONTENT RULES:
-    Generate topics relevant to the input theme inferred from the given nodes.
-    Use concise, professional language.
-    Avoid redundant or overly similar topics.
-
-    SCOPE RULES:
-    - If hierarchy is detected → Generate exactly 4–5 main nodes, each with 1–3 subNodes.
-    - If no hierarchy → Generate exactly 8–10 main nodes without subNodes.
-
-    OUTPUT FORMAT:
-    Start immediately with { and end with }.
+    ====================
+    CONTEXT (for understanding):
+    ====================
+    You are expanding a JSON roadmap that looks like this:
 
     {
       "nodes": [
-        {
-          "data": {
-            "label": "Warm-up",
-            "titleTopic": "Warm-up and Stretching",
-            "descriptionTopic": "Essential exercises to prepare for your workout",
-            "subNodes": [
-              {
-                "label": "Treadmill",
-                "titleTopic": "Treadmill Workout",
-                "descriptionTopic": "Effective treadmill exercises for cardio"
-              }
-            ]
-          }
-        }
+        { "data": { "label": "1 Fundamentals", "titleTopic": "", "descriptionTopic": "" } },
+        { "data": { "label": "2 Vocabulary", "titleTopic": "", "descriptionTopic": "" } },
+        { "data": { "label": "3 Pronunciation", "titleTopic": "", "descriptionTopic": "" } },
+        ...
       ]
     }
 
-    input
-    input:
-    nodes: ${JSON.stringify(nodes, null, 2)}
-    edges: ${JSON.stringify(edges, null, 2)}
+    Each "label" represents a topic in numeric order.  
+    You only need to create new sublabels for topic "2 Vocabulary" (e.g., 2.1, 2.2, 2.3...).
+
+    ========================
+    Here are the current roadmap nodes:
+    ========================
+    ${JSON.stringify(nodes, null, 2)}
+    ====================
+    YOUR RESPONSE:
+    ====================
+    Output the array only.
+
     `
-    console.log(systemPrompt);
+    //console.log(systemPrompt);
     const response = await fetch("http://127.0.0.1:1234/v1/chat/completions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -275,6 +264,185 @@ class LLMService {
         top_k: 40,
         top_p: 0.95,
         repeat_penalty: 1.1,
+        min_p:0.05
+        }),
+      });
+      const data = await response.json();
+      const jsonResponse = data?.choices?.[0]?.message?.content;
+      //console.log(jsonResponse);
+      return jsonResponse;
+  }
+  editRoadmapCaseStep2 = async(nodes, changedData, text) => {
+    const systemPrompt=
+    `
+You are a JSON-only generator.
+
+TASK:
+- Build a single JSON object with key "nodes".
+- Each node represents a topic in a roadmap.
+- You are given existing nodes and a few new subtopic labels to add.
+
+====================
+STRUCTURE RULES:
+====================
+1. The JSON must follow EXACTLY this structure:
+
+{
+  "nodes": [
+    {
+      "data": {
+        "label": "1 Fundamentals",
+        "titleTopic": "",
+        "descriptionTopic": ""
+      }
+    },
+    {
+      "data": {
+        "label": "1.1 Example Topic",
+        "titleTopic": "",
+        "descriptionTopic": ""
+      }
+    },
+    ...
+  ]
+}
+
+2. Each "data" object must include:
+   - "label": string
+   - "titleTopic": string (can be empty)
+   - "descriptionTopic": string (can be empty)
+
+3. DO NOT include:
+   - id
+   - parent_id
+   - subNodes
+   - metadata
+   - explanations, comments, or markdown
+
+4. Output MUST:
+   - Start with '{' and end with '}'.
+   - Be valid JSON (parsable by JSON.parse).
+   - Contain no text outside the JSON.
+
+5. Preserve all existing nodes.
+   Insert new nodes for topic 2 (Vocabulary) using the labels you are given.
+   Place them right after the "2 Vocabulary" node.
+
+6. Maintain numeric order of labels (1.x before 2, 2.x after 2, etc.).
+========================
+Here are the current roadmap nodes:
+========================
+${JSON.stringify(nodes, null, 2)}
+data need to change
+${changedData}
+====================
+EXAMPLE OUTPUT:
+====================
+{
+  "nodes": [
+    { "data": { "label": "1 Fundamentals", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "1.1 Treadmill", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "1.2 Stretching", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "2 Vocabulary", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "2.1 Common Words", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "2.2 Word Families", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "3 Pronunciation", "titleTopic": "", "descriptionTopic": "" } }
+  ]
+}
+    `
+    //console.log(systemPrompt);
+    const response = await fetch("http://127.0.0.1:1234/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "meta-llama-3-8b-instruct",
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: text } 
+        ],
+        temperature: 0,
+        top_k: 40,
+        top_p: 0.95,
+        repeat_penalty: 1.1,
+        min_p: 0.05
+        }),
+      });
+      const data = await response.json();
+      const jsonResponse = data?.choices?.[0]?.message?.content;
+      //console.log(jsonResponse);
+      return jsonResponse;
+  }
+  editRoadmapCaseStep3 = async(nodes) => {
+    const systemPrompt=
+    `
+    You are a precise JSON hierarchy builder. 
+Your task is to convert a flat list of nodes into a nested JSON structure based on their numeric "label" patterns.
+
+RULES (follow strictly):
+1. Input JSON always has the form:
+   {
+     "nodes": [
+       { "data": { "label": "1 Fundamentals", "titleTopic": "", "descriptionTopic": "" } },
+       { "data": { "label": "1.1 Treadmill", "titleTopic": "", "descriptionTopic": "" } },
+       { "data": { "label": "1.2 Stretching", "titleTopic": "", "descriptionTopic": "" } },
+       { "data": { "label": "2 Vocabulary", "titleTopic": "", "descriptionTopic": "" } },
+       ...
+     ]
+   }
+here is in put
+${JSON.stringify(nodes, null, 2)}
+2. The "label" determines the hierarchy:
+   - A label with one number (e.g. '1', '2', '3') is a **main topic**.
+   - A label with two numbers (e.g. '1.1', '1.2') is a **sub-topic of the first number**.
+   - You may assume there are no deeper levels (like 1.1.1).
+
+3. Your output must be valid JSON, exactly like this format:
+   {
+     "nodes": [
+       {
+         "data": {
+           "label": "1 Fundamentals",
+           "titleTopic": "",
+           "descriptionTopic": "",
+           "subNodes": [
+             {
+               "label": "1.1 Treadmill",
+               "titleTopic": "",
+               "descriptionTopic": ""
+             },
+             {
+               "label": "1.2 Stretching",
+               "titleTopic": "",
+               "descriptionTopic": ""
+             }
+           ]
+         }
+       },
+       {
+         "data": {
+           "label": "2 Vocabulary",
+           "titleTopic": "",
+           "descriptionTopic": "",
+           "subNodes": []
+         }
+       }
+     ]
+   }
+    `
+    //console.log(systemPrompt);
+    const response = await fetch("http://127.0.0.1:1234/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "meta-llama-3-8b-instruct",
+        messages: [
+          { role: "system", content: systemPrompt }
+        ],
+        temperature: 0,
+        top_k: 40,
+        top_p: 0.95,
+        repeat_penalty: 1.1,
+        min_p: 0.05
         }),
       });
       const data = await response.json();
@@ -343,18 +511,29 @@ class LLMService {
       else if(intent === "Edit roadmap"){
         responseText="Đã sửa roadmap thành công. Bạn có thể xem nơi phần DEMO"
         const basicRoadmapForm = this.revertToBasicForm(nodes, edges)
-        const rawJsonResopnse = await this.editRoadmapCase(text, basicRoadmapForm.nodes, basicRoadmapForm.edges)
-        const jsonResponse = await this.getJsonInResponse(rawJsonResopnse);
-        const roadampDemo = this.convertToFlow(jsonResponse.nodes);
+        //console.log("input nodes", JSON.stringify(basicRoadmapForm.nodes, null, 2))
+        const rawJsonResopnseStep1 = await this.editRoadmapCase(text, basicRoadmapForm.nodes, basicRoadmapForm.edges);
+        //console.log("rawJsonResopnseStep1: ", rawJsonResopnseStep1);
+        // const jsonResponseStep1 = await this.getJsonInResponse(rawJsonResopnseStep1);
+        const rawJsonResopnseStep2 = await this.editRoadmapCaseStep2(basicRoadmapForm.nodes, rawJsonResopnseStep1, text);
+        //console.log("rawJsonResopnseStep2: ", rawJsonResopnseStep2);
+        const jsonResponseStep2 = await this.getJsonInResponse(rawJsonResopnseStep2);
+        const rawJsonResopnseStep3 = await this.editRoadmapCaseStep3(jsonResponseStep2);
+        //console.log("rawJsonResopnseStep3: ", rawJsonResopnseStep3);
+        const jsonResponseStep3 = await this.getJsonInResponse(rawJsonResopnseStep3);
+        const roadampDemo = this.convertToFlow(jsonResponseStep3.nodes);
         safeNodes = roadampDemo?.nodes;
         safeEdges = roadampDemo?.edges;
       }
       else if(intent === "Edit demo"){
         responseText="Đã sửa tiếp roadmap mẫu thành công. Bạn có thể xem nơi phần DEMO"
         const basicRoadmapForm = this.revertToBasicForm(safeNodes, safeEdges)
-        const rawJsonResopnse = await this.editRoadmapCase(text, basicRoadmapForm.nodes, basicRoadmapForm.edges)
-        const jsonResponse = await this.getJsonInResponse(rawJsonResopnse);
-        const roadampDemo = this.convertToFlow(jsonResponse.nodes);
+        const rawJsonResopnseStep1 = await this.editRoadmapCase(text, basicRoadmapForm.nodes, basicRoadmapForm.edges);
+        const rawJsonResopnseStep2 = await this.editRoadmapCaseStep2(basicRoadmapForm.nodes, rawJsonResopnseStep1, text);
+        const jsonResponseStep2 = await this.getJsonInResponse(rawJsonResopnseStep2);
+        const rawJsonResopnseStep3 = await this.editRoadmapCaseStep3(jsonResponseStep2);
+        const jsonResponseStep3 = await this.getJsonInResponse(rawJsonResopnseStep3);
+        const roadampDemo = this.convertToFlow(jsonResponseStep3.nodes);
         safeNodes = roadampDemo?.nodes;
         safeEdges = roadampDemo?.edges;
       }
