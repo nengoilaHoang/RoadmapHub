@@ -33,7 +33,7 @@ export default defineConfig({
     proxy: {
             '/api': {
                 //target: 'http://app:5000', // Dùng cho docker
-                target: 'http://localhost:5000', // Dùng cho local
+                target: 'https://roadmaphub.onrender.com', // Dùng cho local
                 changeOrigin: true,
                 secure: false,
             }
