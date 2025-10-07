@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link,useNavigate } from 'react-router-dom';
-import CreateRoadmap from '#components/Roadmap/CreateRoadmap/createRoadmap.jsx';
+import CreateRoadmap from '#components/Roadmap/CreateRoadmap/CreateRoadmap.jsx';
 import './Home.css';
 import { useState, useEffect } from 'react';
 import { useCheckLogin } from '#hooks/userCheckLogin.jsx';
