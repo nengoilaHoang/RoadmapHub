@@ -4,7 +4,7 @@ dotenv.config();
 //import auRoutes from './routes/auth.route.js'
 import auRoutes from './routes/auth.route.js'
 import profileRoute from './routes/profile.route.js'
-import roadmapRoutes from './routes/Roadmap.route.js'
+import roadmapRoutes from './routes/roadmap.route.js'
 import teamRoutes from './routes/team.route.js'
 import friendRoutes from './routes/friend.route.js'
 import checkListAccountRoutes from './routes/checkListAccount.route.js'
