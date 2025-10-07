@@ -56,7 +56,7 @@ app.use('/api/notifications', notificationRoutes);
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000", // FE port
+    origin: "https://roadmap-v01-x8sp.vercel.app", // FE port
     credentials: true
   }
 });
