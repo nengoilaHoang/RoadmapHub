@@ -30,7 +30,7 @@ app.get('/', (req, res) => {
   res.send('Hello World')
 })
 app.use(cors({
-  origin: "https://roadmap-v01-x8sp.vercel.app/", // FE port
+  origin: "https://roadmap-v01-x8sp.vercel.app", // FE port
   credentials: true
 }));
 app.use(express.json())
