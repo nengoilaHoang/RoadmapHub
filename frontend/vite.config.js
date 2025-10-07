@@ -38,5 +38,12 @@ export default defineConfig({
                 secure: false,
             }
     }
-  }
+  },
+  preview: {
+    host: '0.0.0.0', // 👈 cho phép Render truy cập
+    port: 4173, // 👈 cổng preview (Render sẽ override bằng $PORT)
+    allowedHosts: [
+      'roadmaphub-2.onrender.com', // 👈 cho phép mọi subdomain Render (vd: roadmaphub-2.onrender.com)
+    ],
+  },
 })
