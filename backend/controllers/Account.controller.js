@@ -133,7 +133,7 @@ class AccountController {
             // Generate a reset token
             const resetToken = jwt.sign({ email: account.email}, process.env.JWT_SECRET, { expiresIn: '1h' });
             // Send the reset link via email
-            const resetLink = `http://localhost:3000/reset-password/${resetToken}/${email}`;
+            const resetLink = `https://roadmap-v01-x8sp.vercel.app/reset-password/${resetToken}/${email}`;
             const html = `
                 <h1>Password Reset</h1>
                 <p>Hi ${account.fullname},</p>
@@ -200,7 +200,7 @@ class AccountController {
                     <h1>Email Verification</h1>
                     <p>Hi! You have recently registered on our website.</p>
                     <p>Please click the link below to verify your email:</p>
-                    <a href="http://localhost:5000/api/accounts/verify/${token}">Verify Email</a>
+                    <a href="https://roadmaphub.onrender.com/api/accounts/verify/${token}">Verify Email</a>
                     <p>This link will expire in 10 minutes.</p>
                 `
             const success = SendEmail({to:email,html:html});
@@ -340,7 +340,7 @@ class AccountController {
             const pinToken = jwt.sign({pin}, process.env.JWT_SECRET, { expiresIn: '10m' });
             const verifyText = `here is your pin ${pin} to change email`
             const verifyHtml =
-            `<p>here is your link to change email <a href="http://localhost:3000/change-email/verify/${pinToken}/${oldEmail}/${newEmail}">click here</a></p>
+            `<p>here is your link to change email <a href="https://roadmap-v01-x8sp.vercel.app/change-email/verify/${pinToken}/${oldEmail}/${newEmail}">click here</a></p>
             <p>please open this link in the browser where you are logged in</p>`
             SendEmail({to: oldEmail, text: verifyText})
             SendEmail({to: newEmail, html: verifyHtml})
@@ -385,7 +385,7 @@ class AccountController {
             //console.log("Payload:", payload);
             const verifyToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
             const toEmail = req.authenticate.email;
-            const html = `<p>here is your link to delete account <a href="http://localhost:3000/delete-account/verify/${verifyToken}/${toEmail}">click here</a></p>`
+            const html = `<p>here is your link to delete account <a href="https://roadmap-v01-x8sp.vercel.app/delete-account/verify/${verifyToken}/${toEmail}">click here</a></p>`
             SendEmail({to: toEmail, html: html})
             return res.status(200).json({ status: true, message: "Verification email sent successfully" });
         }
