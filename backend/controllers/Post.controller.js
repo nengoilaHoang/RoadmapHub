@@ -24,7 +24,8 @@ class PostController{
             const truncated = truncateWords(plainText, 20);
             //console.log("truncated",truncated);
             const notificationContent = `Lớp ${classroom[0].name}: ${truncated}`;
-            const link = `http://localhost:3000/classroom/view-student/${classroom[0].name}/${classroomId}#post-${response.post.id}`;
+            //const link = `http://localhost:3000/classroom/view-student/${classroom[0].name}/${classroomId}#post-${response.post.id}`;
+            const link = `https://matches-bits-alter-thomas.trycloudflare.com//classroom/view-student/${classroom[0].name}/${classroomId}#post-${response.post.id}`;
             await NotificationService.createNotification(receiverId,senderId,notificationContent,link);
         }
         const io = req.app.get("io");

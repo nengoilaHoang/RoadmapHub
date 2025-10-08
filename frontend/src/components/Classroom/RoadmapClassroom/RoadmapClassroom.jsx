@@ -167,7 +167,7 @@ export default function RoadmapClassroom(props) {
               }}
             >
               <option value="">Select Roadmaps</option>
-              {myRoadmaps.map((r) => (
+              {myRoadmaps?.map((r) => (
                 <option key={r.id} value={r.id}>{r.name}</option>
               ))}
             </select>

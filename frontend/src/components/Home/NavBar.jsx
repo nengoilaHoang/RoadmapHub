@@ -33,7 +33,7 @@ export default function NavBar() {
     useEffect(() => {
         getNotifications();
         socket.on('newNotification', (data) => {
-            //console.log("New notification received via socket:", data);
+            console.log("New notification received via socket:", data);
             getNotifications();
         });
         return () => {

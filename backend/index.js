@@ -62,7 +62,8 @@ app.use('/api/notifications', notificationRoutes);
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000", // FE port
+    // origin: "http://localhost:3000", // FE port
+    origin: "https://matches-bits-alter-thomas.trycloudflare.com/", // FE port
     credentials: true
   }
 });

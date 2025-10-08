@@ -130,7 +130,7 @@ export default function RoadmapStudentClassroom(props) {
           <h2 className="text-center mb-3">📌 List Roadmaps</h2>
 
           <ul className="list-group">
-            {roadmaps.map((r) => (
+            {roadmaps?.map((r) => (
               <li
                 key={r.id}
                 className="list-group-item d-flex justify-content-between align-items-center"

@@ -294,7 +294,7 @@ export default function Home() {
                                 <i className="bi bi-lightbulb"></i> Recommended Roadmaps
                             </h3>
                             <div className="roadmap-grid">
-                                {recommendedRoadmaps.map(roadmap => (
+                                {recommendedRoadmaps?.map(roadmap => (
                                     <div key={roadmap.id} className="roadmap-card-wrapper">
                                         <RoadmapCardInHome
                                             id={roadmap.id}
