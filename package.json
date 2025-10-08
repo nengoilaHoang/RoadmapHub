@@ -1,5 +1,17 @@
 {
   "dependencies": {
-    "buffer": "^6.0.3"
-  }
+    "buffer": "^6.0.3",
+    "express": "^5.1.0",
+    "http-proxy-middleware": "^3.0.5"
+  },
+  "name": "roadmaphub---copy",
+  "version": "1.0.0",
+  "description": "RoadmapHub là một nền tảng hỗ trợ xây dựng và quản lý lộ trình học tập hoặc dự án, giúp người dùng dễ dàng theo dõi tiến độ và hoàn thành mục tiêu.",
+  "main": "proxy.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

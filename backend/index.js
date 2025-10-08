@@ -25,6 +25,12 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 
 const app = express()
+
+app.use((req, res, next) => {
+  console.log(`📡 [Backend 5000] ${req.method} ${req.originalUrl}`);
+  next();
+});
+
 app.use(cookieParser());
 app.get('/', (req, res) => {
   res.send('Hello World')
