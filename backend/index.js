@@ -29,8 +29,16 @@ app.use(cookieParser());
 app.get('/', (req, res) => {
   res.send('Hello World')
 })
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://lucrecia-elmy-legalistically.ngrok-free.dev"
+];
+// app.use(cors({
+//   origin: "http://localhost:3000", // FE port
+//   credentials: true
+// }));
 app.use(cors({
-  origin: "http://localhost:3000", // FE port
+  origin: allowedOrigins, // FE port
   credentials: true
 }));
 app.use(express.json())
@@ -56,7 +64,7 @@ app.use('/api/notifications', notificationRoutes);
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000", // FE port
+    origin: allowedOrigins, // FE port
     credentials: true
   }
 });

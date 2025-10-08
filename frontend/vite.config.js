@@ -37,6 +37,9 @@ export default defineConfig({
                 changeOrigin: true,
                 secure: false,
             }
-    }
+    },
+    allowedHosts: [
+  'lucrecia-elmy-legalistically.ngrok-free.dev'
+]
   }
 })
