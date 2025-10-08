@@ -59,7 +59,7 @@ class AccountController {
                     return res.status(200).json({status: true, message: "Login successful", account, hashedPin, encodeToken, encodeRefreshToken});
                 }
                 ////console.log("this is token aaa:", token);
-                res.cookie("token", token, { httpOnly: true,secure: false,sameSite: "lax" });
+                res.cookie("token", token, { httpOnly: true,secure: true,sameSite: "None" });
                 return res.status(200).json({status: true, message: "Login successful", account, token});
 
             }
