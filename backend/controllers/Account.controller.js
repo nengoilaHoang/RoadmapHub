@@ -78,8 +78,8 @@ class AccountController {
             ////console.log("Login successful", { decodedToken });
             res.cookie("token", decodedToken, {
                 httpOnly: true,
-                secure: false,
-                sameSite: "lax",
+                secure: true,
+                sameSite: "None"
             });
             return res.status(200).json({ status: true, message: "Login successful", decodedToken });
         }
@@ -167,7 +167,7 @@ class AccountController {
                 };
                 // Ký token (expiresIn = thời hạn, ví dụ 1h)
                 const accessToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
-                res.cookie("token", accessToken, { httpOnly: true, sameSite: "lax" });
+                res.cookie("token", accessToken, { httpOnly: true, secure: true,sameSite: "None" });
                 ////console.log("this is password:", req.body.password);
                 await AccountService.changePassword(email, req.body.password);
             return res.status(200).json({ status: true, message: "Token is valid" });
@@ -240,8 +240,8 @@ class AccountController {
                 fullname: newaccount.fullname
             };
             const newToken = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
-            res.cookie("token", newToken, { httpOnly: true,sameSite: "lax" }); 
-            res.redirect('http://localhost:3000/')
+            res.cookie("token", newToken, { httpOnly: true,secure: true,sameSite: "None"}); 
+            res.redirect('https://roadmap-v01-x8sp.vercel.app')
             // res.send("Email verifified successfully");
             // //console.log(response)
             
@@ -278,7 +278,7 @@ class AccountController {
                 // Ký token (expiresIn = thời hạn, ví dụ 1h)
             const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '10m' });
             ////console.log("this is token in signupGG: ",token);
-            res.cookie("token", token, { httpOnly: true,sameSite: "lax" }); 
+            res.cookie("token", token, { httpOnly: true,secure: true,sameSite: "None" }); 
             res.json ({
                 success:true,
                 message:'Sign up with google successfully',
