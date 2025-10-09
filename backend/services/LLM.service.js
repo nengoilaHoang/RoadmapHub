@@ -335,18 +335,19 @@ data need to change
 ${changedData}
 ====================
 EXAMPLE OUTPUT:
-====================
 {
   "nodes": [
-    { "data": { "label": "1 Fundamentals", "titleTopic": "", "descriptionTopic": "" } },
-    { "data": { "label": "1.1 Treadmill", "titleTopic": "", "descriptionTopic": "" } },
-    { "data": { "label": "1.2 Stretching", "titleTopic": "", "descriptionTopic": "" } },
-    { "data": { "label": "2 Vocabulary", "titleTopic": "", "descriptionTopic": "" } },
-    { "data": { "label": "2.1 Common Words", "titleTopic": "", "descriptionTopic": "" } },
-    { "data": { "label": "2.2 Word Families", "titleTopic": "", "descriptionTopic": "" } },
-    { "data": { "label": "3 Pronunciation", "titleTopic": "", "descriptionTopic": "" } }
+    { "data": { "label": "1 Overview", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "1.1 Introduction", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "1.2 Basic Concepts", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "2 Core Topics", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "2.1 Subtopic A", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "2.2 Subtopic B", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "3 Advanced Topics", "titleTopic": "", "descriptionTopic": "" } }
   ]
 }
+
+This roadmap may belong to any field (math, computer science, etc.), not only English learning.
     `
     //console.log(systemPrompt);
     const response = await fetch(`${process.env.LM_HOST_URL}/v1/chat/completions`, {
