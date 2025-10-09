@@ -24,7 +24,7 @@ class PostController{
             const truncated = truncateWords(plainText, 20);
             //console.log("truncated",truncated);
             const notificationContent = `Lớp ${classroom[0].name}: ${truncated}`;
-            const link = `https://roadmaphub.onrender.com/classroom/view-student/${classroom[0].name}/${classroomId}#post-${response.post.id}`;
+            const link = `https://roadmap-v01-x8sp.vercel.app/classroom/view-student/${classroom[0].name}/${classroomId}#post-${response.post.id}`;
             await NotificationService.createNotification(receiverId,senderId,notificationContent,link);
         }
         const io = req.app.get("io");
