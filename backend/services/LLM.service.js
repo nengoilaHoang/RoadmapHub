@@ -238,8 +238,6 @@ class LLMService {
     }
 
     Each "label" represents a topic in numeric order.  
-    You only need to create new sublabels for topic "2 Vocabulary" (e.g., 2.1, 2.2, 2.3...).
-
     ========================
     Here are the current roadmap nodes:
     ========================
