@@ -204,7 +204,7 @@ export default function Home() {
                                 <i className="bi bi-map"></i> Your Custom Roadmaps
                             </h3>
                             <div className="roadmap-grid">
-                                {myRoadmaps.map(roadmap => (
+                                {myRoadmaps?.map(roadmap => (
                                     
                                     <div key={roadmap.id} className="roadmap-card-wrapper"onClick={()=>ViewPageRoadmap(roadmap)}>
                                         <RoadmapCardInHome
@@ -236,7 +236,7 @@ export default function Home() {
                                 <i className="bi bi-person-video3"></i> Your Class Teaching
                             </h3>
                             <div className="roadmap-grid">
-                                {listTeachingClass.map(roadmap => (
+                                {listTeachingClass?.map(roadmap => (
                                     <a key={roadmap.id} href={`classroom/view/${roadmap.name}/${roadmap.id}`}>
                                     <div key={roadmap.id} className="roadmap-card-wrapper">
                                         <RoadmapCardInHome
@@ -268,7 +268,7 @@ export default function Home() {
                                 <i className="bi bi-mortarboard"></i> Your Class Learning
                             </h3>
                             <div className="roadmap-grid">
-                                {listLearningClass.map(roadmap => (
+                                {listLearningClass?.map(roadmap => (
                                     <a key={roadmap.id} href={`classroom/view-student/${roadmap.name}/${roadmap.classroomId}`}>
                                         <div key={roadmap.id} className="roadmap-card-wrapper">
                                             <RoadmapCardInHome
