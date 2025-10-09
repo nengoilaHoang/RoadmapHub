@@ -203,51 +203,42 @@ class LLMService {
     const systemPrompt=
     `
     You are a JSON-only generator.
-    ====================
-    OUTPUT RULES:
-    ====================
-    1. Output ONLY a single JSON ARRAY of strings.
-      Example:
-      ["2.1 Common Words","2.2 Word Families","2.3 Collocations","2.4 Slang and Informal Words"]
+====================
+OUTPUT RULES:
+====================
+1. Output ONLY a single JSON ARRAY of strings.
+   Example:
+   ["2.1 Subtopic A","2.2 Subtopic B","2.3 Subtopic C","2.4 Subtopic D"]
 
-    2. Each item in the array must:
-      - Be a string.
-      - Start with "2." followed by a number (e.g., "2.1", "2.2", ...).
-      - Contain a short descriptive topic name (2–5 words).
+2. Each item in the array must:
+   - Be a string.
+   - Start with "2." followed by a number (e.g., "2.1", "2.2", ...).
+   - Contain a short descriptive topic name (2–5 words).
 
-    3. The array must contain between 3 and 5 items.
-    4. Output MUST:
-      - Start with '[' and end with ']'.
-      - Be valid JSON (parsable by JSON.parse).
-      - Contain no explanations, no markdown, no text outside the array.
+3. The array must contain between 3 and 5 items.
+4. Output MUST:
+   - Start with '[' and end with ']'.
+   - Be valid JSON (parsable by JSON.parse).
+   - Contain no explanations, no markdown, no text outside the array.
 
-    5. If you cannot comply, output [].
+5. If you cannot comply, output [].
 
-    ====================
-    CONTEXT (for understanding):
-    ====================
-    You are expanding a JSON roadmap that looks like this:
+====================
+CONTEXT (for understanding):
+====================
+You are expanding a JSON roadmap of topics.
+Each topic is represented by a numeric label (e.g., "1", "2", "2.1", etc.).
+The roadmap can belong to **any domain** (e.g., mathematics, computer science, fitness, etc.).
+You must generate subtopics that match the theme of the provided nodes.
 
-    {
-      "nodes": [
-        { "data": { "label": "1 Fundamentals", "titleTopic": "", "descriptionTopic": "" } },
-        { "data": { "label": "2 Vocabulary", "titleTopic": "", "descriptionTopic": "" } },
-        { "data": { "label": "3 Pronunciation", "titleTopic": "", "descriptionTopic": "" } },
-        ...
-      ]
-    }
-
-    Each "label" represents a topic in numeric order.  
-    You only need to create new sublabels for topic "2 Vocabulary" (e.g., 2.1, 2.2, 2.3...).
-
-    ========================
-    Here are the current roadmap nodes:
-    ========================
-    ${JSON.stringify(nodes, null, 2)}
-    ====================
-    YOUR RESPONSE:
-    ====================
-    Output the array only.
+========================
+Here are the current roadmap nodes:
+========================
+${JSON.stringify(nodes, null, 2)}
+====================
+YOUR RESPONSE:
+====================
+Output the array only.
 
     `
     //console.log(systemPrompt);
@@ -325,8 +316,8 @@ STRUCTURE RULES:
    - Contain no text outside the JSON.
 
 5. Preserve all existing nodes.
-   Insert new nodes for topic 2 (Vocabulary) using the labels you are given.
-   Place them right after the "2 Vocabulary" node.
+   Insert new nodes for topic need to change using the labels you are given.
+   Place them right after the topic node.
 
 6. Maintain numeric order of labels (1.x before 2, 2.x after 2, etc.).
 ========================
@@ -337,18 +328,19 @@ data need to change
 ${changedData}
 ====================
 EXAMPLE OUTPUT:
-====================
 {
   "nodes": [
-    { "data": { "label": "1 Fundamentals", "titleTopic": "", "descriptionTopic": "" } },
-    { "data": { "label": "1.1 Treadmill", "titleTopic": "", "descriptionTopic": "" } },
-    { "data": { "label": "1.2 Stretching", "titleTopic": "", "descriptionTopic": "" } },
-    { "data": { "label": "2 Vocabulary", "titleTopic": "", "descriptionTopic": "" } },
-    { "data": { "label": "2.1 Common Words", "titleTopic": "", "descriptionTopic": "" } },
-    { "data": { "label": "2.2 Word Families", "titleTopic": "", "descriptionTopic": "" } },
-    { "data": { "label": "3 Pronunciation", "titleTopic": "", "descriptionTopic": "" } }
+    { "data": { "label": "1 Overview", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "1.1 Introduction", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "1.2 Basic Concepts", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "2 Core Topics", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "2.1 Subtopic A", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "2.2 Subtopic B", "titleTopic": "", "descriptionTopic": "" } },
+    { "data": { "label": "3 Advanced Topics", "titleTopic": "", "descriptionTopic": "" } }
   ]
 }
+
+This roadmap may belong to any field (math, computer science, etc.), not only English learning.
     `
     //console.log(systemPrompt);
     const response = await fetch(`${process.env.LM_HOST_URL}/v1/chat/completions`, {
