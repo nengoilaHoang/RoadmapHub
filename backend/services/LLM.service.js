@@ -323,8 +323,8 @@ STRUCTURE RULES:
    - Contain no text outside the JSON.
 
 5. Preserve all existing nodes.
-   Insert new nodes for topic 2 (Vocabulary) using the labels you are given.
-   Place them right after the "2 Vocabulary" node.
+   Insert new nodes for topic need to change using the labels you are given.
+   Place them right after the topic node.
 
 6. Maintain numeric order of labels (1.x before 2, 2.x after 2, etc.).
 ========================
