@@ -179,7 +179,7 @@ class LLMService {
       ]
     }
     `
-    const response = await fetch("https://santo-nonductile-agelessly.ngrok-free.dev/v1/chat/completions", {
+    const response = await fetch(`${process.env.LM_HOST_URL}/v1/chat/completions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -251,7 +251,7 @@ class LLMService {
 
     `
     //console.log(systemPrompt);
-    const response = await fetch("https://santo-nonductile-agelessly.ngrok-free.dev/v1/chat/completions", {
+    const response = await fetch(`${process.env.LM_HOST_URL}/v1/chat/completions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -351,7 +351,7 @@ EXAMPLE OUTPUT:
 }
     `
     //console.log(systemPrompt);
-    const response = await fetch("https://santo-nonductile-agelessly.ngrok-free.dev/v1/chat/completions", {
+    const response = await fetch(`${process.env.LM_HOST_URL}/v1/chat/completions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -430,7 +430,7 @@ ${JSON.stringify(nodes, null, 2)}
    }
     `
     //console.log(systemPrompt);
-    const response = await fetch("https://santo-nonductile-agelessly.ngrok-free.dev/v1/chat/completions", {
+    const response = await fetch(`${process.env.LM_HOST_URL}/v1/chat/completions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -484,7 +484,7 @@ ${JSON.stringify(nodes, null, 2)}
       Message: "Có nên thêm phần đồ họa vào roadmap?" → Other
       Message: "Gợi ý cách sắp xếp các topic" → Other
       `;
-      const response = await fetch("https://santo-nonductile-agelessly.ngrok-free.dev/v1/chat/completions", {
+      const response = await fetch(`${process.env.LM_HOST_URL}/v1/chat/completions`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
