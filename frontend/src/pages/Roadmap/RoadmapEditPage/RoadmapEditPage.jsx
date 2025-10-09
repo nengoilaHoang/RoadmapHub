@@ -186,7 +186,24 @@ export default function RoadmapEditPage() {
       })
       //console.log(res.data)
       if(res.data.status==="success"){
-        setNodes(res.data.roadmap?.nodes);
+        const nodesWithHandlers = res.data.roadmap?.nodes.map((node) => ({
+        ...node,
+        data: {
+          ...node.data,
+          onResize: (id, w, h) => {
+            setNodes((nds) =>
+              nds.map((n) =>
+                n.id === id
+                  ? { ...n, data: { ...n.data, width: w, height: h } }
+                  : n
+              )
+            );
+          },
+        },
+      }));
+
+      setNodes(nodesWithHandlers);
+        // setNodes(res.data.roadmap?.nodes);
         setEdges(res.data.roadmap?.edges);
       }
   };
