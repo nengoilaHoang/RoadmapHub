@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./ForgotPassword.css";
+import "./forgotPassword.css";
 import api from "../../../utils/api";
 
 function ForgotPassword() {
@@ -17,17 +17,17 @@ function ForgotPassword() {
 
     try {
       // Simulate sending a reset link
-      await api.post("/auth/forgot-password",
-          { email }, // body
-          {
-              headers: {
-                  "Content-Type": "application/json",
-              },
-              withCredentials: true
-          }
-        );
-    }
-    catch (err) {
+      await api.post(
+        "/auth/forgot-password",
+        { email }, // body
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+    } catch (err) {
       console.error("Error sending reset link:", err);
       setError("Failed to send reset link. Please try again later.");
     }
@@ -36,7 +36,10 @@ function ForgotPassword() {
   return (
     <div className="forgot-container">
       <div className="forgot-left">
-        <img src="https://cdn-icons-png.flaticon.com/512/6195/6195696.png" alt="Forgot Password" />
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/6195/6195696.png"
+          alt="Forgot Password"
+        />
       </div>
 
       <div className="forgot-right">

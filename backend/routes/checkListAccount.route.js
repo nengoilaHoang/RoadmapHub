@@ -1,5 +1,8 @@
 import express from 'express';
-const router = express.Router();
 import CheckListAccountController from '../controllers/CheckListAccount.controller.js';
-router.post('/change-item-checklist', CheckListAccountController.changeItemCheckList);
+import requireAuth from '../middlewares/RequireAuth.js';
+const router = express.Router();
+
+// Require authentication for checklist operations
+router.post('/change-item-checklist', requireAuth, CheckListAccountController.changeItemCheckList);
 export default router;

@@ -2,93 +2,104 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useCheckLogin } from "../../hooks/userCheckLogin";
 import "./home.css";
-import socket from '#utils/socket';
-import api from '#utils/api.js'
-import { useState,useEffect } from "react";
+import socket from "#utils/socket";
+import api from "#utils/api.js";
+import { logoutAndRedirect } from "#utils/logout.js";
+import { useState, useEffect } from "react";
 export default function NavBar() {
-    const navigate = useNavigate();
-    const { isLoggedIn, profile } = useCheckLogin();
-    function onLogin() {navigate('/login')}
-    function onSignup() {navigate('/signup')}
-    const [notifications, setNotifications] = useState([]);
-    const [unreadCount, setUnreadCount] = useState(0);
-    async function onLogout() {
-        await api.post(`/accounts/logout`,{}, {
-            headers: {
-                "Content-Type": "application/json",
-            },
-            withCredentials: true
-        });
-        navigate("/login");
-        window.location.reload();
+  const navigate = useNavigate();
+  const { isLoggedIn, profile } = useCheckLogin();
+  function onLogin() {
+    navigate("/login");
+  }
+  function onSignup() {
+    navigate("/signup");
+  }
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+  async function onLogout() {
+    await logoutAndRedirect(navigate);
+  }
+  const getNotifications = async () => {
+    const response = await api.get("/notifications/receiver", {
+      withCredentials: true,
+    });
+    //console.log("Notifications:", response.data);
+    setNotifications(response.data);
+    setUnreadCount(response.data.filter((notif) => !notif.isRead).length);
+  };
+  useEffect(() => {
+    getNotifications();
+    socket.on("newNotification", (data) => {
+      //console.log("New notification received via socket:", data);
+      getNotifications();
+    });
+    return () => {
+      socket.off("newNotification");
+    };
+  }, []);
+  const markAsRead = async (notificationId) => {
+    try {
+      const response = await api.put(
+        `/notifications/markAsRead`,
+        {
+          notificationId: notificationId,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      getNotifications();
+      //console.log("Mark as read response:", response.data);
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
     }
-    const getNotifications = async () => {
-            const response = await api.get('/notifications/receiver', {
-                        withCredentials: true
-            });
-            //console.log("Notifications:", response.data);
-            setNotifications(response.data);
-            setUnreadCount(response.data.filter(notif => !notif.isRead).length);
-        }
-    useEffect(() => {
-        getNotifications();
-        socket.on('newNotification', (data) => {
-            //console.log("New notification received via socket:", data);
-            getNotifications();
-        });
-        return () => {
-            socket.off('newNotification');
-        };
-    }, []);
-    const markAsRead = async (notificationId) => {
-        try {
-            const response = await api.put(`/notifications/markAsRead`, {
-                notificationId: notificationId
-            }, {
-                withCredentials: true
-            });
-            getNotifications();
-            //console.log("Mark as read response:", response.data);
-        }
-        catch (error) {
-            console.error("Error marking notification as read:", error);
-        }
-    }
-    let notificationbutton;
-    if (isLoggedIn) { 
-        notificationbutton =
-        <div className="dropdown me-3">
-                            <button
-                                className="btn btn-dark position-relative"
-                                type="button"
-                                data-bs-toggle="dropdown"
-                                aria-expanded="false"
-                            >
-                                <i className="bi bi-bell-fill fs-5"></i>
-                                {unreadCount > 0 && (
-                                    <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                        {unreadCount}
-                                    </span>
-                                )}
-                            </button>
-                            <ul className="dropdown-menu dropdown-menu-dark" style={{minWidth: '300px'}}>
-                                {notifications.length > 0 ? (
-                                    notifications.map((notif, index) => (
-                                        <li key={index}>
-                                            <a className={`dropdown-item ${!notif.read ? 'fw-bold' : ''}`} href={notif.link} onClick={() => markAsRead(notif.id)}>
-                                                {notif.content}
-                                                {/* <small className="text-muted d-block">
+  };
+  let notificationbutton;
+  if (isLoggedIn) {
+    notificationbutton = (
+      <div className="dropdown me-3">
+        <button
+          className="btn btn-dark position-relative"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <i className="bi bi-bell-fill fs-5"></i>
+          {unreadCount > 0 && (
+            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {unreadCount}
+            </span>
+          )}
+        </button>
+        <ul
+          className="dropdown-menu dropdown-menu-dark"
+          style={{ minWidth: "300px" }}
+        >
+          {notifications.length > 0 ? (
+            notifications.map((notif, index) => (
+              <li key={index}>
+                <a
+                  className={`dropdown-item ${!notif.read ? "fw-bold" : ""}`}
+                  href={notif.link}
+                  onClick={() => markAsRead(notif.id)}
+                >
+                  {notif.content}
+                  {/* <small className="text-muted d-block">
                                                     {new Date(notif.createDate).toLocaleString()}
                                                 </small> */}
-                                            </a>
-                                        </li>
-                                    ))
-                                ) : (
-                                    <li><span className="dropdown-item">Không có thông báo</span></li>
-                                )}
-                            </ul>
-        </div>
-    }
+                </a>
+              </li>
+            ))
+          ) : (
+            <li>
+              <span className="dropdown-item">Không có thông báo</span>
+            </li>
+          )}
+        </ul>
+      </div>
+    );
+  }
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark px-2 py-3">
       <div className="container d-flex align-items-center justify-content-between">
@@ -152,7 +163,10 @@ export default function NavBar() {
                 style={{ width: "60px", height: "60px" }}
               >
                 <img
-                  src={profile.avatar || "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/avatar-trang-66.jpg"}
+                  src={
+                    profile.avatar ||
+                    "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/03/avatar-trang-66.jpg"
+                  }
                   alt="User Avatar"
                   className="w-100 h-100"
                   style={{ objectFit: "cover" }}

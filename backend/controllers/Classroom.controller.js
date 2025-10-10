@@ -12,12 +12,7 @@ class ClassroomController{
                 }
     }
     async checkYourClassroom(req,res){
-            if(req.authenticate?.id == null){
-                res.json({
-                    success:false,
-                    message:"Classroom is not yours"
-                });
-            }
+            // req.authenticate exists from requireAuth middleware
             const{name} = req.body;
             const accountId = req.authenticate.id
             const responseCheck = await ClassroomService.checkClassroom(name, accountId);
@@ -62,12 +57,7 @@ class ClassroomController{
         res.json(response);
     }
     async checkLearningClass(req,res){
-        if(req.authenticate?.id == null){
-            res.json({
-                success:false,
-                message:"You are not learning this class"
-            });
-        }
+        // req.authenticate exists from requireAuth middleware
         const {classroomId} = req.body;
         const accountId = req.authenticate.id
         //console.log("sss",accountId,classroomId)
