@@ -3,52 +3,62 @@ import { useNavigate } from "react-router-dom";
 import { useCheckLogin } from "../../hooks/userCheckLogin";
 import "./home.css";
 import socket from "#utils/socket";
+import { connectSocket, disconnectSocket } from "#utils/socketHelper";
 import api from "#utils/api.js";
 import { logoutAndRedirect } from "#utils/logout.js";
 import { useState, useEffect } from "react";
+
 export default function NavBar() {
   const navigate = useNavigate();
   const { isLoggedIn, profile } = useCheckLogin();
+
   function onLogin() {
     navigate("/login");
   }
+
   function onSignup() {
     navigate("/signup");
   }
+
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+
   async function onLogout() {
+    disconnectSocket(); // Disconnect socket before logout
     await logoutAndRedirect(navigate);
   }
+
   const getNotifications = async () => {
-    const response = await api.get("/notifications/receiver", {
-      withCredentials: true,
-    });
+    // Backend tự động lấy user info từ token
+    const response = await api.get("/notifications/receiver");
     //console.log("Notifications:", response.data);
     setNotifications(response.data);
     setUnreadCount(response.data.filter((notif) => !notif.isRead).length);
   };
+
   useEffect(() => {
-    getNotifications();
-    socket.on("newNotification", (data) => {
-      //console.log("New notification received via socket:", data);
+    // Only connect socket if user is logged in
+    if (isLoggedIn) {
+      connectSocket(); // Connect socket with JWT token
       getNotifications();
-    });
+
+      // Listen for new notifications
+      socket.on("newNotification", (data) => {
+        console.log("📬 New notification received via socket:", data);
+        getNotifications();
+      });
+    }
+
     return () => {
       socket.off("newNotification");
     };
-  }, []);
+  }, [isLoggedIn]);
   const markAsRead = async (notificationId) => {
     try {
-      const response = await api.put(
-        `/notifications/markAsRead`,
-        {
-          notificationId: notificationId,
-        },
-        {
-          withCredentials: true,
-        }
-      );
+      // Backend tự động lấy user info từ token
+      const response = await api.put(`/notifications/markAsRead`, {
+        notificationId: notificationId,
+      });
       getNotifications();
       //console.log("Mark as read response:", response.data);
     } catch (error) {

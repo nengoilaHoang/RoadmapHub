@@ -86,7 +86,7 @@ app.set("io", io);
 // Socket.IO middleware - Verify JWT token
 io.use((socket, next) => {
   const token = socket.handshake.auth.token;
-  
+
   if (!token) {
     return next(new Error("Authentication error: No token provided"));
   }
@@ -103,10 +103,22 @@ io.use((socket, next) => {
   }
 });
 
+// Map to store userId -> socketId
+const userSockets = new Map();
+
 io.on("connection", (socket) => {
   console.log(`🔌 User connected: ${socket.userEmail} (${socket.id})`);
 
+  // Store user socket mapping
+  userSockets.set(socket.userId, socket.id);
+  console.log(`📝 User socket mapped: ${socket.userId} -> ${socket.id}`);
+
   socket.on("disconnect", () => {
     console.log(`🔌 User disconnected: ${socket.userEmail} (${socket.id})`);
+    // Remove user socket mapping
+    userSockets.delete(socket.userId);
   });
 });
+
+// Make userSockets available to controllers
+app.set("userSockets", userSockets);

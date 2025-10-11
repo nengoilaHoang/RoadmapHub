@@ -30,11 +30,11 @@ export default function RoadmapClassroom(props) {
   useEffect(() => {
     const fetchRoamapInClass = async () => {
       const response = await api.get("/classrooms/getRoadmapInClass", {
-        params: { classroomId: classroomId }
+        params: { classroomId: classroomId },
       });
       if (response.data[0].roadmapId !== null) {
         const getRoadmap = await api.get("/roadmaps/getTopicRoadmapByUserId", {
-          params: { roadmapId: response.data[0].roadmapId }
+          params: { roadmapId: response.data[0].roadmapId },
         });
         setRoadmaps([getRoadmap]);
       }
@@ -43,12 +43,12 @@ export default function RoadmapClassroom(props) {
   }, []);
   const handleAddRoadmap = async () => {
     if (selectedRoadmap !== null) {
-      const response = await api.post(
-        "/classrooms/addRoadmapIntoClass",
-        { classroomId: classroomId, roadmapId: selectedRoadmap.id }
-      );
+      const response = await api.post("/classrooms/addRoadmapIntoClass", {
+        classroomId: classroomId,
+        roadmapId: selectedRoadmap.id,
+      });
       const getRoadmap = await api.get("/roadmaps/getTopicRoadmapByUserId", {
-        params: { id: selectedRoadmap.id }
+        params: { id: selectedRoadmap.id },
       });
       setRoadmaps([getRoadmap]);
     }
@@ -117,10 +117,7 @@ export default function RoadmapClassroom(props) {
       copy.topics[index].tests = [...copy.topics[index].tests, newQuiz];
     }
     setQuizzes(copy);
-    const response = await api.post(
-      "/quizzes/updateQuiz",
-      { quiz: copy }
-    );
+    const response = await api.post("/quizzes/updateQuiz", { quiz: copy });
     //console.log(response);
   };
   const updateQuiz = async (selectedTopic, quizIndex, updatedQuiz) => {
@@ -133,10 +130,7 @@ export default function RoadmapClassroom(props) {
       copy.topics[index].tests[quizIndex] = updatedQuiz;
     }
     setQuizzes(copy);
-    const response = await api.post(
-      "/quizzes/updateQuiz",
-      { quiz: copy }
-    );
+    const response = await api.post("/quizzes/updateQuiz", { quiz: copy });
     //console.log(response);
   };
   const removeQuiz = async (selectedTopic, quizIndex) => {
@@ -148,10 +142,7 @@ export default function RoadmapClassroom(props) {
       copy.topics[index].tests.splice(quizIndex, 1);
     }
     setQuizzes(copy);
-    const response = await api.post(
-      "/quizzes/updateQuiz",
-      { quiz: copy }
-    );
+    const response = await api.post("/quizzes/updateQuiz", { quiz: copy });
     //console.log(response);
   };
 

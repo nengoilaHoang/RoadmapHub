@@ -78,11 +78,11 @@ api.interceptors.response.use(
       try {
         // Gọi API refresh token
         console.log("🔄 Calling refresh token API...");
-        const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-        const response = await axios.post(
-          `${baseURL}/auth/refresh-token`,
-          { refreshToken: refreshToken }
-        );
+        const baseURL =
+          import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+        const response = await axios.post(`${baseURL}/auth/refresh-token`, {
+          refreshToken: refreshToken,
+        });
 
         console.log("✅ Refresh token response:", response.data);
 

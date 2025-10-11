@@ -22,6 +22,9 @@ class PostController {
     );
     const listStudent = await StudentClassroomService.getAll(classroomId);
     const classroom = await ClassroomService.getRoadmapInClass(classroomId);
+    const io = req.app.get("io");
+    const userSockets = req.app.get("userSockets");
+
     //console.log("ssdasd",response.post.id);
     for (const student of listStudent) {
       const senderId = accountId;
@@ -31,20 +34,35 @@ class PostController {
       //console.log("truncated",truncated);
       const notificationContent = `Lớp ${classroom[0].name}: ${truncated}`;
       const link = `${process.env.FRONTEND_URL}/classroom/view-student/${classroom[0].name}/${classroomId}#post-${response.post.id}`;
+
+      // Create notification in database
       await NotificationService.createNotification(
         receiverId,
         senderId,
         notificationContent,
         link
       );
+
+      // Send real-time notification to specific user via Socket.IO
+      const socketId = userSockets.get(receiverId);
+      if (socketId) {
+        io.to(socketId).emit("newNotification", {
+          receiverId,
+          senderId,
+          content: notificationContent,
+          link,
+          message: "Có bài đăng mới từ giáo viên",
+        });
+        console.log(
+          `📬 Notification sent to user ${receiverId} via socket ${socketId}`
+        );
+      } else {
+        console.log(
+          `⚠️ User ${receiverId} is not connected, notification saved to DB only`
+        );
+      }
     }
-    const io = req.app.get("io");
-    io.emit("newNotification", {
-      classroomId,
-      accountId,
-      content,
-      message: "Có bài đăng mới từ giáo viên",
-    });
+
     res.json(response);
   }
   async updatePost(req, res) {
