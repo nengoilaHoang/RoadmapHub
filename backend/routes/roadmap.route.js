@@ -37,6 +37,10 @@ router.get(
 );
 
 // Public route (không cần authentication)
-router.get("/view/:roadmapId", RoadmapController.viewRoadmapPublic);
+router.get(
+  "/view/:roadmapId",
+  requireAuth,
+  RoadmapController.viewRoadmapPublic
+);
 
 export default router;

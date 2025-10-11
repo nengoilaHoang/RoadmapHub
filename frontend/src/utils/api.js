@@ -1,8 +1,8 @@
 import axios from "axios";
 
-// Tạo axios instance
+// Tạo axios instance với baseURL từ environment variable
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000/api",
 });
 
 // Flag để tránh multiple refresh requests
@@ -79,8 +79,9 @@ api.interceptors.response.use(
       try {
         // Gọi API refresh token
         console.log("🔄 Calling refresh token API...");
+        const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
         const response = await axios.post(
-          "http://localhost:5000/api/auth/refresh-token",
+          `${baseURL}/auth/refresh-token`,
           { refreshToken: refreshToken }
         );
 

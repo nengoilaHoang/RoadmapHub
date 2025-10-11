@@ -24,6 +24,7 @@ import LLMRoutes from "./routes/LLM.route.js";
 import oauth2Routes from "./routes/oauth2.route.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import jwt from "jsonwebtoken";
 
 const app = express();
 
@@ -38,7 +39,7 @@ app.get("/", (req, res) => {
 });
 app.use(
   cors({
-    origin: "http://localhost:3000", // FE port
+    origin: process.env.FRONTEND_URL || "http://localhost:3000", // FE port
     credentials: true,
   })
 );
@@ -66,7 +67,7 @@ app.use("/api/oauth2", oauth2Routes); // OAuth2 routes
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:3000", // FE port
+    origin: process.env.FRONTEND_URL || "http://localhost:3000", // FE port
     credentials: true,
   },
 });
@@ -79,11 +80,33 @@ httpServer.listen(process.env.PORT, async () => {
   await connectDB();
   //console.log(`Server is running at http://localhost:${process.env.PORT}`)
 });
+
 app.set("io", io);
+
+// Socket.IO middleware - Verify JWT token
+io.use((socket, next) => {
+  const token = socket.handshake.auth.token;
+  
+  if (!token) {
+    return next(new Error("Authentication error: No token provided"));
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    socket.userId = decoded.id;
+    socket.userEmail = decoded.email;
+    console.log(`✅ Socket authenticated for user: ${decoded.email}`);
+    next();
+  } catch (err) {
+    console.log("❌ Socket authentication failed:", err.message);
+    return next(new Error("Authentication error: Invalid token"));
+  }
+});
+
 io.on("connection", (socket) => {
-  //console.log("a user connected:", socket.id);
+  console.log(`🔌 User connected: ${socket.userEmail} (${socket.id})`);
 
   socket.on("disconnect", () => {
-    //console.log("user disconnected:", socket.id);
+    console.log(`🔌 User disconnected: ${socket.userEmail} (${socket.id})`);
   });
 });

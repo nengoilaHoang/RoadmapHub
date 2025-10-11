@@ -14,16 +14,14 @@ export default function RoadmapClassroom(props) {
   const [edit, setEdit] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
-      const response = await api.get("/roadmaps/getRoadmapByUserId", {
-        withCredentials: true,
-      });
+      // Backend tự động lấy user info từ token
+      const response = await api.get("/roadmaps/getRoadmapByUserId");
       setMyRoadmaps(response.data.data);
     };
     fetchData();
     const fetchInfor = async () => {
-      const response = await api.get("/profiles/get-profile", {
-        withCredentials: true,
-      });
+      // Backend tự động lấy user info từ token
+      const response = await api.get("/profiles/get-profile");
       setUser(response.data?.profile);
     };
 
@@ -32,13 +30,11 @@ export default function RoadmapClassroom(props) {
   useEffect(() => {
     const fetchRoamapInClass = async () => {
       const response = await api.get("/classrooms/getRoadmapInClass", {
-        params: { classroomId: classroomId },
-        withCredentials: true,
+        params: { classroomId: classroomId }
       });
       if (response.data[0].roadmapId !== null) {
         const getRoadmap = await api.get("/roadmaps/getTopicRoadmapByUserId", {
-          params: { roadmapId: response.data[0].roadmapId },
-          withCredentials: true,
+          params: { roadmapId: response.data[0].roadmapId }
         });
         setRoadmaps([getRoadmap]);
       }
@@ -49,14 +45,10 @@ export default function RoadmapClassroom(props) {
     if (selectedRoadmap !== null) {
       const response = await api.post(
         "/classrooms/addRoadmapIntoClass",
-        { classroomId: classroomId, roadmapId: selectedRoadmap.id },
-        {
-          withCredentials: true,
-        }
+        { classroomId: classroomId, roadmapId: selectedRoadmap.id }
       );
       const getRoadmap = await api.get("/roadmaps/getTopicRoadmapByUserId", {
-        params: { id: selectedRoadmap.id },
-        withCredentials: true,
+        params: { id: selectedRoadmap.id }
       });
       setRoadmaps([getRoadmap]);
     }
@@ -127,10 +119,7 @@ export default function RoadmapClassroom(props) {
     setQuizzes(copy);
     const response = await api.post(
       "/quizzes/updateQuiz",
-      { quiz: copy },
-      {
-        withCredentials: true,
-      }
+      { quiz: copy }
     );
     //console.log(response);
   };
@@ -146,10 +135,7 @@ export default function RoadmapClassroom(props) {
     setQuizzes(copy);
     const response = await api.post(
       "/quizzes/updateQuiz",
-      { quiz: copy },
-      {
-        withCredentials: true,
-      }
+      { quiz: copy }
     );
     //console.log(response);
   };
@@ -164,10 +150,7 @@ export default function RoadmapClassroom(props) {
     setQuizzes(copy);
     const response = await api.post(
       "/quizzes/updateQuiz",
-      { quiz: copy },
-      {
-        withCredentials: true,
-      }
+      { quiz: copy }
     );
     //console.log(response);
   };
@@ -204,22 +187,23 @@ export default function RoadmapClassroom(props) {
           </div>
 
           <ul className="list-group">
-            {roadmaps.map((r) => (
-              <li
-                key={r.id}
-                className="list-group-item d-flex justify-content-between align-items-center"
-              >
-                {r.data.roadmap.name}
-                <button
-                  className="btn btn-sm btn-outline-primary"
-                  onClick={() => {
-                    handleSelectRoadmap(r);
-                  }}
+            {roadmaps !== undefined &&
+              roadmaps.map((r) => (
+                <li
+                  key={r.id}
+                  className="list-group-item d-flex justify-content-between align-items-center"
                 >
-                  Xem Topics →
-                </button>
-              </li>
-            ))}
+                  {r.data.roadmap.name}
+                  <button
+                    className="btn btn-sm btn-outline-primary"
+                    onClick={() => {
+                      handleSelectRoadmap(r);
+                    }}
+                  >
+                    Xem Topics →
+                  </button>
+                </li>
+              ))}
           </ul>
         </>
       )}

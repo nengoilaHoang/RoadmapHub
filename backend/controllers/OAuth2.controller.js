@@ -170,14 +170,6 @@ class OAuth2Controller {
         ? refreshTokenResult.refreshToken.token
         : null;
 
-      // Set cookie
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-        maxAge: 3600000, // 1 hour
-      });
-
       // STEP 7: Trả về response
       return res.status(200).json({
         success: true,

@@ -29,6 +29,7 @@ import RoadmapSearchPage from "#pages/Roadmap/RoadmapSearchPage/RoadmapSearchPag
 import ClassroomView from "#/pages/Classroom/ClassromView.jsx";
 import StudentClassroomView from "#pages/StudentClassroom/StudentClassroomView.jsx";
 import GoogleOAuth2Callback from "#pages/Auth/GoogleOAuth2Callback.jsx";
+import EmailVerifySuccess from "#pages/Auth/EmailVerifySuccess.jsx";
 function App() {
   const router = createBrowserRouter(
     [
@@ -47,6 +48,7 @@ function App() {
           { path: "search/:query", element: <RoadmapSearchPage /> },
           { path: "signup", element: <SignUp /> },
           { path: "verify/:email", element: <VerifyEmail /> },
+          { path: "auth/verify-success", element: <EmailVerifySuccess /> },
           { path: "login", element: <Login /> },
           { path: "login/verify", element: <LoginVerify /> },
           { path: "auth/google/callback", element: <GoogleOAuth2Callback /> },
