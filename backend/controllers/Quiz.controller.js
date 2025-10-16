@@ -13,7 +13,7 @@ class QuizController{
     }
     async getQuizById (req,res){
         const {roadmapId,classroomId} = req.query;
-        const userDoQuiz = req.authenticate;
+        const userDoQuiz = req.authenticate.id;
         const response = await QuizService.getQuizById({userDoQuiz,roadmapId,classroomId});
         res.json(response);
     }

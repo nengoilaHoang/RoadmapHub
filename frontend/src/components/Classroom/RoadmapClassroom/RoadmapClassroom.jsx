@@ -67,7 +67,7 @@ export default function RoadmapClassroom(props) {
         const response = await api.get("/quizzes/getQuiz", {
           params: {
             userCreateQuiz: selectedRoadmap?.data.roadmap.accountId,
-            roadmapId: selectedRoadmap?.data.roadmap.id,
+            roadmapId: selectedRoadmap?.data.roadmap.roadmapId,
             classroomId: classroomId,
           },
         });
@@ -77,7 +77,7 @@ export default function RoadmapClassroom(props) {
         if (response.data.length === 0) {
           setQuizzes({
             userCreateQuiz: selectedRoadmap.data.roadmap.accountId,
-            roadmapId: selectedRoadmap.data.roadmap.id,
+            roadmapId: selectedRoadmap.data.roadmap.roadmapId,
             classroomId: classroomId,
             topics: selectedRoadmap.data.roadmap.nodes
               .filter((t) => t.type === "topic")

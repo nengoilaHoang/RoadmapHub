@@ -165,7 +165,7 @@ export default function Home() {
   ];
   return (
     <>
-      {isLoggedIn && (
+      {isLoggedIn ? (
         <div className="home-container">
           <div className="profile-header">
             <div className="profile-info">
@@ -327,7 +327,101 @@ export default function Home() {
             </div>
           </div>
         </div>
-      )}
+      ):(
+                <div className="landing-page">
+                    <section className="hero-section">
+                        <div className="hero-content">
+                            <h1>Welcome to RoadmapHub</h1>
+                            <p className="hero-subtitle">Create, Share, and Learn with Interactive Learning Roadmaps</p>
+                            <div className="hero-buttons">
+                                <Link to="/login" className="btn btn-primary btn-lg">Get Started</Link>
+                                <Link to="/login" className="btn btn-outline-light btn-lg">Explore Roadmaps</Link>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="features-section">
+                        <h2>Why Choose RoadmapHub?</h2>
+                        <div className="features-grid">
+                            <div className="feature-card">
+                                <i className="bi bi-map-fill"></i>
+                                <h3>Custom Learning Paths</h3>
+                                <p>Create personalized roadmaps tailored to your learning goals</p>
+                            </div>
+                            <div className="feature-card">
+                                <i className="bi bi-people-fill"></i>
+                                <h3>Interactive Classrooms</h3>
+                                <p>Join virtual classrooms and learn with others</p>
+                            </div>
+                            <div className="feature-card">
+                                <i className="bi bi-graph-up"></i>
+                                <h3>Track Progress</h3>
+                                <p>Monitor your learning journey with detailed analytics</p>
+                            </div>
+                            <div className="feature-card">
+                                <i className="bi bi-share-fill"></i>
+                                <h3>Share Knowledge</h3>
+                                <p>Contribute and share your expertise with the community</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="showcase-section">
+                        <h2>Popular Learning Paths</h2>
+                        <div className="showcase-grid">
+                            {recommendedRoadmaps.slice(0, 3).map((roadmap) => (
+                                <div key={roadmap.id} className="showcase-card">
+                                    <h3>{roadmap.name}</h3>
+                                    <p>{roadmap.description}</p>
+                                    <div className="showcase-stats">
+                                        <span><i className="bi bi-people"></i> {roadmap.learning} Learners</span>
+                                        <span><i className="bi bi-star-fill"></i> {roadmap.teaching} Reviews</span>
+                                    </div>
+                                    <Link to="/login" className="btn btn-outline-primary">Start Learning</Link>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+
+                    <section className="cta-section">
+                        <div className="cta-content">
+                            <h2>Ready to Start Your Learning Journey?</h2>
+                            <p>Join thousands of learners and create your first roadmap today.</p>
+                            <Link to="/signup" className="btn btn-primary btn-lg">Sign Up Now</Link>
+                        </div>
+                    </section>
+
+                    <section className="testimonials-section">
+                        <h2>What Our Users Say</h2>
+                        <div className="testimonials-grid">
+                            <div className="testimonial-card">
+                                <div className="testimonial-content">
+                                    <p>"RoadmapHub helped me structure my learning path and achieve my goals faster."</p>
+                                </div>
+                                <div className="testimonial-author">
+                                    <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="User" />
+                                    <div>
+                                        <h4>John Doe</h4>
+                                        <p>Software Developer</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="testimonial-card">
+                                <div className="testimonial-content">
+                                    <p>"The interactive classrooms and community support made learning enjoyable."</p>
+                                </div>
+                                <div className="testimonial-author">
+                                    <img src="https://randomuser.me/api/portraits/women/1.jpg" alt="User" />
+                                    <div>
+                                        <h4>Jane Smith</h4>
+                                        <p>UX Designer</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            )}
 
       {openCreateRoadmap && (
         <CreateRoadmap

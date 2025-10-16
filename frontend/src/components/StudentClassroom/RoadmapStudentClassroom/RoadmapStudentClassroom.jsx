@@ -34,7 +34,7 @@ export default function RoadmapStudentClassroom(props) {
   useEffect(() => {
       if (selectedRoadmap) {
           const fetchAll = async()=>{
-          const responseQuizById = await api.get('/quizzes/getQuizById',{params:{roadmapId:selectedRoadmap?.data.roadmap.id, classroomId:classroomId}});
+          const responseQuizById = await api.get('/quizzes/getQuizById',{params:{roadmapId:selectedRoadmap?.data.roadmap.roadmapId, classroomId:classroomId}});
           if(responseQuizById.data.length !== 0)
           {
             setQuizzes(responseQuizById.data[0]);
