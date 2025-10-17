@@ -33,18 +33,54 @@ export default function RoadmapStudentClassroom(props) {
   }, [])
   useEffect(() => {
       if (selectedRoadmap) {
-          const fetchAll = async()=>{
+                  const fetchAll = async()=>{
           const responseQuizById = await api.get('/quizzes/getQuizById',{params:{roadmapId:selectedRoadmap?.data.roadmap.roadmapId, classroomId:classroomId}});
-          if(responseQuizById.data.length !== 0)
-          {
-            setQuizzes(responseQuizById.data[0]);
-            return;
-          }
+          const userQuiz = responseQuizById.data[0];
           const response = await api.get('/quizzes/getQuiz',{params:{userCreateQuiz:selectedRoadmap?.data.roadmap.accountId,roadmapId:selectedRoadmap?.data.roadmap.roadmapId, classroomId:classroomId}});
           const quiz = response.data[0];
            if(quiz.userCreateQuiz === user.accountId) setEdit(true);
+          if(responseQuizById.data.length !== 0)
+          { 
+          const mergedTopic = quiz.topics.map(topic => {
+            const userTopic = userQuiz?.topics.find(t => t.topicId === topic.topicId);
+            const tests = topic.tests.map(test => {
+              const userTest = userTopic?.tests.find(t => t.title === test.title);
+              if (userTest) {
+                return userTest;
+              }
+              else{
+                return {
+                  title: test .title,
+                  startTime: test.startTime,
+                  endTime: test.endTime,
+                  duration: test.duration,
+                  durationDo: 0,
+                  point: 0,
+                  submit: false,
+                  questions: test.questions.map(q => ({
+                                        question: q.question,
+                                        answers: q.answers.map(ans => ({
+                                            text: ans.text,
+                                            correct: ans.correct,
+                                            userChoose: false // thêm field mới
+                                        }))
+                                    }))
+                }
+              }
+            });
+              return{
+                topicId: topic.topicId,
+                topicName: topic.topicName,
+                tests: tests
+              }
+          });
+          const mergedQuiz = { ...userQuiz, topics: mergedTopic };
+
+          setQuizzes(mergedQuiz);
+        }
+        else{
           setQuizzes({
-            userDoQuiz: user.id,          // id user đang làm bài
+            userDoQuiz: user.accountId,          // id user đang làm bài
             roadmapId: quiz.roadmapId,
             classroomId: quiz.classroomId,
             topics: quiz.topics.map(topic => ({
@@ -69,7 +105,7 @@ export default function RoadmapStudentClassroom(props) {
             }))
           }))
           });
-
+        }
         }
         fetchAll();
         
@@ -86,7 +122,7 @@ export default function RoadmapStudentClassroom(props) {
   };
 
   const updateQuiz = async (selectedTopic, quizIndex, updatedQuiz) => {
-      const copy = { ...quizzes, userDoQuiz: user.id };
+      const copy = { ...quizzes, userDoQuiz: user.accountId };
       const index = copy.topics.findIndex(topic => topic.topicId === selectedTopic.id);
 
       if (index !== -1) {
@@ -101,7 +137,7 @@ export default function RoadmapStudentClassroom(props) {
     
   };
   const submitQuiz = async (selectedTopic, quizIndex,timeLeft) => {
-      const copy = { ...quizzes, userDoQuiz: user.id };
+      const copy = { ...quizzes, userDoQuiz: user.accountId };
       const index = copy.topics.findIndex(topic => topic.topicId === selectedTopic.id);
       if (index !== -1) {
         copy.topics[index].tests[quizIndex].durationDo = copy.topics[index].tests[quizIndex].duration * 60 - timeLeft;
